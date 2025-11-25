@@ -361,23 +361,35 @@ const Home = () => {
               <span className="w-1 h-8 bg-blue-600 rounded-full"></span>
               发现推荐
             </h2>
-            <div className="flex gap-2">
-              {[1, 2, 3].map((page) => (
-                <button
-                  key={page}
-                  onClick={() => setCurrentPage(page)}
-                  className={`
-                    w-10 h-10 rounded-lg font-medium transition-all
-                    ${currentPage === page 
-                      ? 'bg-blue-600 text-white shadow-md' 
-                      : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
-                    }
-                  `}
-                >
-                  {page}
-                </button>
-              ))}
+            <div className="flex items-center gap-4">
+              <div className="flex gap-2">
+                {[1, 2, 3].map((page) => (
+                  <button
+                    key={page}
+                    onClick={() => setCurrentPage(page)}
+                    className={`
+                      w-10 h-10 rounded-lg font-medium transition-all
+                      ${currentPage === page 
+                        ? 'bg-blue-600 text-white shadow-md' 
+                        : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                      }
+                    `}
+                  >
+                    {page}
+                  </button>
+                ))}
+              </div>
+              <a 
+                href="/discovery" 
+                className="text-blue-600 text-sm hover:text-blue-700 font-medium flex items-center gap-1 group"
+              >
+                查看更多 
+                <ChevronRight size={18} className="group-hover:translate-x-1 transition-transform" />
+              </a>
             </div>
+          </div>
+          
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           </div>
           
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">

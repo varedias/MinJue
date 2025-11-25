@@ -1,6 +1,6 @@
 import React from 'react';
 import { Outlet, Link, useLocation, useNavigate } from 'react-router-dom';
-import { Home, ShoppingBag, Search, User, LogIn, UserPlus, Store, Truck } from 'lucide-react';
+import { Home, ShoppingBag, Search, User, LogIn, UserPlus, Store, Truck, Compass } from 'lucide-react';
 import Footer from './Footer';
 
 const Layout = () => {
@@ -37,6 +37,7 @@ const Layout = () => {
           </div>
           <nav className="hidden md:flex space-x-8">
             <Link to="/" className={`${isActive('/') ? 'text-blue-600' : 'text-gray-500'} hover:text-blue-600 font-medium`}>首页</Link>
+            <Link to="/discovery" className={`${isActive('/discovery') ? 'text-blue-600' : 'text-gray-500'} hover:text-blue-600 font-medium`}>发现</Link>
             <Link to="/leasing" className={`${isActive('/leasing') ? 'text-blue-600' : 'text-gray-500'} hover:text-blue-600 font-medium`}>租赁</Link>
             <Link to="/select" className={`${isActive('/select') ? 'text-blue-600' : 'text-gray-500'} hover:text-blue-600 font-medium`}>选设备</Link>
             <button 
@@ -70,9 +71,9 @@ const Layout = () => {
           <Home size={24} />
           <span className="text-xs mt-1">首页</span>
         </Link>
-        <Link to="/leasing" className={`flex flex-col items-center ${isActive('/leasing') ? 'text-blue-600' : 'text-gray-400'}`}>
-          <ShoppingBag size={24} />
-          <span className="text-xs mt-1">租赁</span>
+        <Link to="/discovery" className={`flex flex-col items-center ${isActive('/discovery') ? 'text-blue-600' : 'text-gray-400'}`}>
+          <Compass size={24} />
+          <span className="text-xs mt-1">发现</span>
         </Link>
         <Link to="/select" className={`flex flex-col items-center ${isActive('/select') ? 'text-blue-600' : 'text-gray-400'}`}>
           <Search size={24} />

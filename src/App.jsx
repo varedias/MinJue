@@ -6,6 +6,7 @@ import Leasing from './pages/Leasing';
 import SelectEquipment from './pages/SelectEquipment';
 import PersonalCenter from './pages/PersonalCenter';
 import ContentDetail from './pages/ContentDetail';
+import Discovery from './pages/Discovery';
 
 function App() {
   return (
@@ -17,6 +18,7 @@ function App() {
           <Route path="select" element={<SelectEquipment />} />
           <Route path="profile" element={<PersonalCenter />} />
           <Route path="content/:id" element={<ContentDetail />} />
+          <Route path="discovery" element={<Discovery />} />
         </Route>
       </Routes>
     </Router>
