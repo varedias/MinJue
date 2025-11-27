@@ -18,7 +18,7 @@ const ContentDetail = () => {
       likes: 892,
       duration: '12:35',
       thumbnail: 'https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?auto=format&fit=crop&w=800&q=80',
-      videoUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ',
+      videoUrl: 'https://www.youtube.com/embed/ScMzIvxBSi4',  // Sample Tech Video
       description: '本视频详细展示了AI视觉检测技术在PCB电路板生产线上的实际应用，包括焊点检测、元器件定位、表面缺陷识别等多个环节。',
       content: `
         <h2>视频概述</h2>

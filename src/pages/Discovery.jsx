@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Play, Eye, ThumbsUp, Star, Clock, User, TrendingUp, Calendar, MessageSquare } from 'lucide-react';
 
 const Discovery = () => {
+  const navigate = useNavigate();
   const [activeCategory, setActiveCategory] = useState('all');
   const [sortBy, setSortBy] = useState('hot');
 
@@ -434,6 +436,7 @@ const Discovery = () => {
           {displayVideos.map((video) => (
             <div
               key={video.id}
+              onClick={() => navigate(`/content/${video.id}`)}
               className="bg-white rounded-xl overflow-hidden hover:shadow-xl transition-all duration-300 cursor-pointer group"
             >
               {/* 视频封面 */}
