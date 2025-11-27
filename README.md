@@ -1,5 +1,113 @@
-# Vue 3 + Vite
+# Minjue - B2B工业设备商城平台
 
-This template should help get you started developing with Vue 3 in Vite. The template uses Vue 3 `<script setup>` SFCs, check out the [script setup docs](https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup) to learn more.
+一个基于React + Vite + Tailwind CSS构建的B2B工业设备宣传与电商平台。
 
-Learn more about IDE Support for Vue in the [Vue Docs Scaling up Guide](https://vuejs.org/guide/scaling-up/tooling.html#ide-support).
+## 功能特性
+
+### 核心模块
+- **首页**: 企业级产品分类展示、优选商品、优质供应商推荐
+- **发现**: Bilibili风格的视频内容平台,包含设备测评、操作教程等
+- **租赁**: 融资租赁和经营租赁双模式,支持设备租赁业务
+- **商城**: 完整的电商功能,商品浏览、筛选、排序
+- **会员中心**: 个人信息管理
+
+### 电商功能
+- **商品详情页**: 
+  - 多图展示、规格参数、用户评价
+  - 立即购买、加入购物车
+  - 供应商信息卡片
+  - 相关产品推荐
+
+- **供应商详情页**:
+  - 企业资质展示(ISO认证、荣誉证书等)
+  - 企业数据统计
+  - 全部商品展示
+  - 用户评价和企业动态
+  - 在线咨询功能
+
+- **商品分类**:
+  - 12大类工业设备分类
+  - AI视觉检测、工业相机、镜头光源、机器人等
+  - 多级分类展示
+
+### 交互功能
+- 商品卡片点击跳转到详情页
+- 供应商卡片点击跳转到供应商店铺
+- 网格/列表视图切换
+- 商品筛选和排序
+- 响应式设计,支持移动端
+
+## 技术栈
+
+- **框架**: React 19.2.0
+- **构建工具**: Vite 7.2.4
+- **样式**: Tailwind CSS 4.1.17
+- **路由**: React Router DOM 7.9.6
+- **图标**: Lucide React 0.554.0
+
+## 安装运行
+
+```bash
+# 安装依赖
+npm install
+
+# 启动开发服务器
+npm run dev
+
+# 构建生产版本
+npm run build
+```
+
+## 页面路由
+
+- `/` - 首页
+- `/discovery` - 发现页(视频内容)
+- `/leasing` - 租赁页
+- `/mall` - 商城页
+- `/product/:id` - 商品详情页
+- `/supplier/:id` - 供应商详情页
+- `/profile` - 个人中心
+- `/content/:id` - 内容详情页(视频/文章)
+
+## 最新更新
+
+### v2.0 - 电商功能完善 (2024-01-20)
+- ✅ 新增商城页面,支持商品浏览和筛选
+- ✅ 新增商品详情页,包含完整产品信息
+- ✅ 新增供应商详情页,展示企业资质和产品
+- ✅ 首页商品和供应商卡片支持点击跳转
+- ✅ 导航栏更新:"选设备"改为"商城"
+- ✅ 支持网格和列表视图切换
+
+### v1.0 - 基础功能 (2024-01-15)
+- ✅ 首页产品分类展示
+- ✅ 发现页视频内容
+- ✅ 租赁页双模式(融资/经营)
+- ✅ 响应式布局设计
+
+## 项目结构
+
+```
+src/
+├── components/
+│   ├── Layout.jsx          # 主布局和导航
+│   └── Footer.jsx          # 页脚组件
+├── pages/
+│   ├── Home.jsx            # 首页
+│   ├── Discovery.jsx       # 发现页
+│   ├── Leasing.jsx         # 租赁页
+│   ├── Mall.jsx            # 商城页 (新)
+│   ├── ProductDetail.jsx   # 商品详情 (新)
+│   ├── SupplierDetail.jsx  # 供应商详情 (新)
+│   └── PersonalCenter.jsx  # 个人中心
+├── App.jsx                 # 路由配置
+└── main.jsx               # 应用入口
+```
+
+## 开发团队
+
+深圳智视科技有限公司
+
+## License
+
+MIT

@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Search, ChevronRight, Play, FileText, Eye, ThumbsUp, Star, Building2, ShoppingCart, Clock, ChevronDown, Menu, X } from 'lucide-react';
 
 const Home = () => {
+  const navigate = useNavigate();
   const [currentPage, setCurrentPage] = useState(1);
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -447,20 +449,24 @@ const Home = () => {
 
         {/* 优选商品模块 */}
         <div className="bg-white rounded-xl shadow-lg p-8 mb-8">
-          <div className="flex items-center justify-between mb-6">
-            <h2 className="text-2xl font-bold text-gray-900 flex items-center gap-3">
-              <span className="w-1 h-8 bg-blue-600 rounded-full"></span>
-              优选商品
-            </h2>
-            <a href="#" className="text-blue-600 text-sm hover:text-blue-700 font-medium flex items-center gap-1 group">
+          <div className="flex items-center justify-between mb-4">
+            <div>
+              <h2 className="text-2xl font-bold text-gray-900 flex items-center gap-3">
+                <span className="w-1 h-8 bg-blue-600 rounded-full"></span>
+                优选商品
+              </h2>
+              <p className="text-sm text-gray-500 mt-2 ml-5">以下价格仅供参考,实际价格请联系供应商议价</p>
+            </div>
+            <button onClick={() => navigate('/mall')} className="text-blue-600 text-sm hover:text-blue-700 font-medium flex items-center gap-1 group">
               查看更多 
               <ChevronRight size={18} className="group-hover:translate-x-1 transition-transform" />
-            </a>
+            </button>
           </div>
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-5">
             {featuredProducts.map((product) => (
               <div 
-                key={product.id} 
+                key={product.id}
+                onClick={() => navigate(`/product/${product.id}`)}
                 className="border border-gray-200 rounded-lg p-4 hover:shadow-xl hover:border-blue-300 transition-all cursor-pointer group"
               >
                 <div className="h-36 bg-gray-100 rounded-lg mb-3 overflow-hidden">
@@ -503,7 +509,8 @@ const Home = () => {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {qualitySuppliers.map((supplier) => (
               <div 
-                key={supplier.id} 
+                key={supplier.id}
+                onClick={() => navigate(`/supplier/${supplier.id}`)}
                 className="border border-gray-200 rounded-xl p-6 hover:shadow-xl hover:border-blue-300 transition-all cursor-pointer group"
               >
                 <div className="flex gap-4">

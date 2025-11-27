@@ -1,6 +1,6 @@
 import React from 'react';
 import { Outlet, Link, useLocation, useNavigate } from 'react-router-dom';
-import { Home, ShoppingBag, Search, User, LogIn, UserPlus, Store, Truck, Compass } from 'lucide-react';
+import { Home, ShoppingBag, Search, User, LogIn, UserPlus, Store, Truck, Compass, ShoppingCart } from 'lucide-react';
 import Footer from './Footer';
 
 const Layout = () => {
@@ -39,7 +39,7 @@ const Layout = () => {
             <Link to="/" className={`${isActive('/') ? 'text-blue-600' : 'text-gray-500'} hover:text-blue-600 font-medium`}>首页</Link>
             <Link to="/discovery" className={`${isActive('/discovery') ? 'text-blue-600' : 'text-gray-500'} hover:text-blue-600 font-medium`}>发现</Link>
             <Link to="/leasing" className={`${isActive('/leasing') ? 'text-blue-600' : 'text-gray-500'} hover:text-blue-600 font-medium`}>租赁</Link>
-            <Link to="/select" className={`${isActive('/select') ? 'text-blue-600' : 'text-gray-500'} hover:text-blue-600 font-medium`}>选设备</Link>
+            <Link to="/mall" className={`${isActive('/mall') ? 'text-blue-600' : 'text-gray-500'} hover:text-blue-600 font-medium`}>商城</Link>
             <button 
               onClick={() => navigate('/profile')}
               className={`${isActive('/profile') ? 'text-blue-600' : 'text-gray-500'} hover:text-blue-600 font-medium`}
@@ -75,9 +75,9 @@ const Layout = () => {
           <Compass size={24} />
           <span className="text-xs mt-1">发现</span>
         </Link>
-        <Link to="/select" className={`flex flex-col items-center ${isActive('/select') ? 'text-blue-600' : 'text-gray-400'}`}>
-          <Search size={24} />
-          <span className="text-xs mt-1">选设备</span>
+        <Link to="/mall" className={`flex flex-col items-center ${isActive('/mall') ? 'text-blue-600' : 'text-gray-400'}`}>
+          <ShoppingCart size={24} />
+          <span className="text-xs mt-1">商城</span>
         </Link>
         <Link to="/profile" className={`flex flex-col items-center ${isActive('/profile') ? 'text-blue-600' : 'text-gray-400'}`}>
           <User size={24} />
