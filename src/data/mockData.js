@@ -4,6 +4,34 @@
 export const products = [
   {
     id: 1,
+    name: '民崛智能模具视觉监测装置 MJ-VIS-A8',
+    nameEn: 'Minjue Smart Mold Vision Monitoring System MJ-VIS-A8',
+    price: 35800,
+    image: 'https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=400',
+    category: 'ai-vision',
+    rating: 4.9,
+    sales: 856,
+    supplier: '民崛智能科技有限公司',
+    supplierEn: 'Minjue Intelligent Technology Co., Ltd',
+    tags: ['模具监测', '视觉检测', '智能识别'],
+    description: '专业模具视觉监测系统，实时监控模具状态，AI智能识别异常'
+  },
+  {
+    id: 2,
+    name: '牧河自动化上料机 MH-FL-200',
+    nameEn: 'Muhe Automation Feeder MH-FL-200',
+    price: 18900,
+    image: 'https://images.unsplash.com/photo-1581092160562-40aa08e78837?w=400',
+    category: 'automation',
+    rating: 4.8,
+    sales: 1234,
+    supplier: '牧河自动化设备有限公司',
+    supplierEn: 'Muhe Automation Equipment Co., Ltd',
+    tags: ['自动上料', '高效稳定', '包邮'],
+    description: '全自动上料系统，适用于各类生产线，提升生产效率'
+  },
+  {
+    id: 3,
     name: '海康威视AI视觉检测系统 VIS-2000',
     nameEn: 'Hikvision AI Vision Inspection System VIS-2000',
     price: 28900,
@@ -17,7 +45,7 @@ export const products = [
     description: '2D+3D双模式, 深度学习算法, 0.1mm精度'
   },
   {
-    id: 2,
+    id: 4,
     name: 'Basler ace系列工业相机套装',
     nameEn: 'Basler ace Series Industrial Camera Kit',
     price: 4299,
@@ -31,7 +59,7 @@ export const products = [
     description: '200万像素, GigE接口, 含镜头'
   },
   {
-    id: 3,
+    id: 5,
     name: 'CCS LED环形光源 LDR2-100',
     nameEn: 'CCS LED Ring Light LDR2-100',
     price: 680,
@@ -45,7 +73,7 @@ export const products = [
     description: '高亮度, 可调光, 多种规格'
   },
   {
-    id: 4,
+    id: 6,
     name: '基恩士3D激光轮廓仪',
     nameEn: 'Keyence 3D Laser Profiler',
     price: 15800,
@@ -140,6 +168,36 @@ export const discoveryContent = [
 export const suppliers = [
   { 
     id: 1, 
+    name: '民崛智能科技有限公司', 
+    nameEn: 'Minjue Intelligent Technology Co., Ltd',
+    mainProducts: '模具视觉监测装置、智能检测系统', 
+    mainProductsEn: 'Mold Vision Monitoring, Smart Inspection Systems',
+    years: 10, 
+    certifications: ['ISO9001', '高新技术企业', 'CE认证'], 
+    certificationsEn: ['ISO9001', 'High-Tech Enterprise', 'CE'],
+    rating: 4.9, 
+    orders: 856, 
+    logo: 'https://ui-avatars.com/api/?name=MJ&background=6366F1&color=fff',
+    description: '专注于模具行业智能化解决方案，提供模具视觉监测、缺陷检测等智能装备。拥有完整的研发、生产、售后体系。',
+    descriptionEn: 'Focus on intelligent solutions for mold industry, providing mold vision monitoring, defect detection equipment. Complete R&D, production and after-sales system.'
+  },
+  { 
+    id: 2, 
+    name: '牧河自动化设备有限公司', 
+    nameEn: 'Muhe Automation Equipment Co., Ltd',
+    mainProducts: '自动上料机、输送系统', 
+    mainProductsEn: 'Auto Feeders, Conveyor Systems',
+    years: 8, 
+    certifications: ['ISO9001', 'CE认证', '安全生产认证'], 
+    certificationsEn: ['ISO9001', 'CE', 'Safety Cert'],
+    rating: 4.8, 
+    orders: 1234, 
+    logo: 'https://ui-avatars.com/api/?name=MH&background=10B981&color=fff',
+    description: '专业自动化上料设备制造商，产品广泛应用于电子、塑料、五金等行业。提供定制化自动化解决方案。',
+    descriptionEn: 'Professional automation feeder manufacturer, products widely used in electronics, plastics, hardware industries. Providing customized automation solutions.'
+  },
+  { 
+    id: 3, 
     name: '深圳智视科技有限公司', 
     nameEn: 'Shenzhen Smart Vision Tech',
     mainProducts: 'AI视觉检测系统', 
@@ -154,7 +212,7 @@ export const suppliers = [
     descriptionEn: 'Focusing on industrial AI vision inspection solutions with self-developed deep learning algorithm platform.'
   },
   { 
-    id: 2, 
+    id: 4, 
     name: '杭州精准视觉设备厂', 
     nameEn: 'Hangzhou Precision Vision Factory',
     mainProducts: '工业相机及镜头', 
@@ -169,7 +227,7 @@ export const suppliers = [
     descriptionEn: 'Leading domestic industrial camera manufacturer, products widely used in electronics, automotive, pharmaceutical industries.'
   },
   { 
-    id: 3, 
+    id: 5, 
     name: '上海光源智能装备', 
     nameEn: 'Shanghai Light Source Intelligent',
     mainProducts: '机器视觉光源', 
@@ -184,7 +242,7 @@ export const suppliers = [
     descriptionEn: 'Professional R&D and production of machine vision LED lighting, providing customized lighting solutions.'
   },
   { 
-    id: 4, 
+    id: 6, 
     name: '北京博视自动化技术', 
     nameEn: 'Beijing BoShi Automation',
     mainProducts: '自动化检测方案', 
@@ -204,6 +262,40 @@ export const suppliers = [
 export const procurements = [
   { 
     id: 1, 
+    title: '采购模具视觉监测装置5套用于注塑生产线', 
+    titleEn: 'Procuring 5 sets of Mold Vision Monitoring for Injection Line',
+    quantity: '5套', 
+    quantityEn: '5 Sets',
+    budget: '20-25万', 
+    budgetEn: '200k-250k',
+    deadline: '10天', 
+    deadlineEn: '10 Days',
+    location: '浙江宁波', 
+    locationEn: 'Ningbo, ZJ',
+    time: '1小时前',
+    timeEn: '1h ago',
+    description: '需要采购模具视觉监测系统，用于注塑模具实时监控，要求能够识别模具表面缺陷、磨损情况，支持AI智能分析。',
+    descriptionEn: 'Need mold vision monitoring systems for injection mold real-time monitoring, capable of identifying surface defects and wear, supporting AI analysis.'
+  },
+  { 
+    id: 2, 
+    title: '求购自动上料机8台配套生产线改造', 
+    titleEn: 'Buying 8 Auto Feeders for Production Line Upgrade',
+    quantity: '8台', 
+    quantityEn: '8 Units',
+    budget: '12-15万', 
+    budgetEn: '120k-150k',
+    deadline: '15天', 
+    deadlineEn: '15 Days',
+    location: '江苏苏州', 
+    locationEn: 'Suzhou, JS',
+    time: '3小时前',
+    timeEn: '3h ago',
+    description: '工厂升级改造需要，采购全自动上料机，要求稳定性高，能够适配现有生产线，支持多种物料规格。',
+    descriptionEn: 'Factory upgrade needed, procuring fully automatic feeders, high stability required, compatible with existing lines, supporting various material specs.'
+  },
+  { 
+    id: 3, 
     title: '求购10台2D视觉检测设备用于手机屏幕检测', 
     titleEn: 'Buying 10 units of 2D Vision Inspection for Phone Screens',
     quantity: '10台', 
@@ -220,7 +312,7 @@ export const procurements = [
     descriptionEn: 'Urgently need to purchase a batch of 2D vision equipment for phone screen surface scratch and dead pixel detection. Requirement: accuracy 0.01mm, speed <1s/pcs.'
   },
   { 
-    id: 2, 
+    id: 4, 
     title: '采购工业相机500万像素GigE接口50套', 
     titleEn: 'Procuring 50 sets of 5MP GigE Industrial Cameras',
     quantity: '50套', 
