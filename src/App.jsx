@@ -20,6 +20,9 @@ import LayoutEn from './components/LayoutEn';
 import HomeEn from './pages/HomeEn';
 import LoginEn from './pages/LoginEn';
 import SearchResults from './pages/SearchResults';
+import Suppliers from './pages/Suppliers';
+import ProcurementDetail from './pages/ProcurementDetail';
+import SelectEquipment from './pages/SelectEquipment';
 
 function App() {
   return (
@@ -35,6 +38,9 @@ function App() {
             <Route index element={<HomeEn />} />
             <Route path="login" element={<LoginEn />} />
             <Route path="search" element={<SearchResults />} />
+            <Route path="suppliers" element={<Suppliers />} />
+            <Route path="procurement/:id" element={<ProcurementDetail />} />
+            <Route path="select-equipment" element={<SelectEquipment />} />
             <Route path="discovery" element={<Discovery />} />
             <Route path="leasing" element={<Leasing />} />
             <Route path="mall" element={<Mall />} />
@@ -52,6 +58,9 @@ function App() {
           <Route path="/" element={<Layout />}>
             <Route index element={<Home />} />
             <Route path="search" element={<SearchResults />} />
+            <Route path="suppliers" element={<Suppliers />} />
+            <Route path="procurement/:id" element={<ProcurementDetail />} />
+            <Route path="select-equipment" element={<SelectEquipment />} />
             <Route path="leasing" element={<Leasing />} />
             <Route path="mall" element={<Mall />} />
             <Route path="product/:id" element={<ProductDetail />} />

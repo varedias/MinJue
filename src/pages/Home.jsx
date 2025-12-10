@@ -1,12 +1,15 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Search, ChevronRight, Play, FileText, Eye, ThumbsUp, Star, Building2, ShoppingCart, Clock, ChevronDown, Menu, X } from 'lucide-react';
+import { suppliers, procurements } from '../data/mockData';
+import AIAssistantFloat, { AIAssistantButton } from '../components/AIAssistantFloat';
 
 const Home = () => {
   const navigate = useNavigate();
   const [currentPage, setCurrentPage] = useState(1);
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isAIAssistantOpen, setIsAIAssistantOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
 
   const handleSearch = () => {
@@ -196,24 +199,6 @@ const Home = () => {
     { id: 4, name: 'Basler ace系列相机+镜头套装', price: '4,299', unit: '套', specs: '200万像素 | GigE接口', sales: 1023, rating: 4.6, image: 'https://images.unsplash.com/photo-1581092918056-0c4c3acd3789?auto=format&fit=crop&w=300&q=80' },
     { id: 5, name: 'CCS LED环形光源 LDR2系列', price: '680', unit: '个', specs: '高亮度 | 可调光', sales: 2340, rating: 4.8, image: 'https://images.unsplash.com/photo-1581093458791-9d58b3fbbd0d?auto=format&fit=crop&w=300&q=80' },
     { id: 6, name: 'Matrox Imaging 图像采集卡', price: '6,500', unit: '张', specs: '4路输入 | PCIe x4', sales: 445, rating: 4.5, image: 'https://images.unsplash.com/photo-1581094271901-8022df4466f9?auto=format&fit=crop&w=300&q=80' },
-  ];
-
-  // 优质供应商数据
-  const qualitySuppliers = [
-    { id: 1, name: '深圳智视科技有限公司', mainProducts: 'AI视觉检测系统', years: 8, certifications: ['ISO9001', '高新技术企业'], rating: 4.9, orders: 1234, logo: 'https://ui-avatars.com/api/?name=ZS&background=0D8ABC&color=fff' },
-    { id: 2, name: '杭州精准视觉设备厂', mainProducts: '工业相机及镜头', years: 12, certifications: ['CE认证', 'ISO14001'], rating: 4.8, orders: 2156, logo: 'https://ui-avatars.com/api/?name=JZ&background=22C55E&color=fff' },
-    { id: 3, name: '上海光源智能装备', mainProducts: '机器视觉光源', years: 6, certifications: ['3C认证', '专利20+'], rating: 4.7, orders: 987, logo: 'https://ui-avatars.com/api/?name=GY&background=F59E0B&color=fff' },
-    { id: 4, name: '北京博视自动化技术', mainProducts: '自动化检测方案', years: 15, certifications: ['ISO9001', '军工资质'], rating: 5.0, orders: 3456, logo: 'https://ui-avatars.com/api/?name=BS&background=EF4444&color=fff' },
-  ];
-
-  // 最新采购数据
-  const latestProcurements = [
-    { id: 1, title: '求购10台2D视觉检测设备用于手机屏幕检测', quantity: '10台', budget: '15-20万', deadline: '7天', location: '广东深圳', time: '2小时前' },
-    { id: 2, title: '采购工业相机500万像素GigE接口50套', quantity: '50套', budget: '面议', deadline: '15天', location: '江苏苏州', time: '5小时前' },
-    { id: 3, title: '寻3D激光扫描系统用于汽车零件检测', quantity: '3套', budget: '80-100万', deadline: '30天', location: '上海', time: '1天前' },
-    { id: 4, title: '长期采购LED环形光源各种规格', quantity: '长期', budget: '按批次', deadline: '长期有效', location: '浙江杭州', time: '2天前' },
-    { id: 5, title: '求购OCR字符识别系统及配套软件', quantity: '5套', budget: '10-15万', deadline: '10天', location: '湖北武汉', time: '3天前' },
-    { id: 6, title: '采购表面缺陷检测系统用于钢板生产线', quantity: '2套', budget: '面议', deadline: '20天', location: '河北唐山', time: '4天前' },
   ];
 
   const currentDiscoveryContent = allDiscoveryContent[currentPage - 1] || [];
@@ -520,13 +505,13 @@ const Home = () => {
               <span className="w-1 h-8 bg-blue-600 rounded-full"></span>
               优质供应商
             </h2>
-            <a href="#" className="text-blue-600 text-sm hover:text-blue-700 font-medium flex items-center gap-1 group">
+            <button onClick={() => navigate('/suppliers')} className="text-blue-600 text-sm hover:text-blue-700 font-medium flex items-center gap-1 group">
               更多供应商 
               <ChevronRight size={18} className="group-hover:translate-x-1 transition-transform" />
-            </a>
+            </button>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {qualitySuppliers.map((supplier) => (
+            {suppliers.map((supplier) => (
               <div 
                 key={supplier.id}
                 onClick={() => navigate(`/supplier/${supplier.id}`)}
@@ -577,13 +562,13 @@ const Home = () => {
               <span className="w-1 h-8 bg-blue-600 rounded-full"></span>
               最新采购
             </h2>
-            <a href="#" className="text-blue-600 text-sm hover:text-blue-700 font-medium flex items-center gap-1 group">
+            <button onClick={() => navigate('/suppliers')} className="text-blue-600 text-sm hover:text-blue-700 font-medium flex items-center gap-1 group">
               查看全部 
               <ChevronRight size={18} className="group-hover:translate-x-1 transition-transform" />
-            </a>
+            </button>
           </div>
           <div className="space-y-4">
-            {latestProcurements.map((procurement) => (
+            {procurements.map((procurement) => (
               <div 
                 key={procurement.id} 
                 className="border border-gray-200 rounded-xl p-5 hover:shadow-xl hover:border-blue-300 transition-all cursor-pointer group"
@@ -615,10 +600,22 @@ const Home = () => {
                   </span>
                 </div>
                 <div className="flex gap-3 pt-2">
-                  <button className="flex-1 px-5 py-2 bg-gradient-to-r from-blue-600 to-blue-700 text-white text-sm font-medium rounded-lg hover:from-blue-700 hover:to-blue-800 transition-all shadow-md">
+                  <button 
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      navigate(`/procurement/${procurement.id}`);
+                    }}
+                    className="flex-1 px-5 py-2 bg-gradient-to-r from-blue-600 to-blue-700 text-white text-sm font-medium rounded-lg hover:from-blue-700 hover:to-blue-800 transition-all shadow-md"
+                  >
                     我要报价
                   </button>
-                  <button className="flex-1 px-5 py-2 border-2 border-gray-300 text-gray-700 text-sm font-medium rounded-lg hover:border-blue-600 hover:text-blue-600 hover:bg-blue-50 transition-all">
+                  <button 
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      navigate(`/procurement/${procurement.id}`);
+                    }}
+                    className="flex-1 px-5 py-2 border-2 border-gray-300 text-gray-700 text-sm font-medium rounded-lg hover:border-blue-600 hover:text-blue-600 hover:bg-blue-50 transition-all"
+                  >
                     查看详情
                   </button>
                 </div>
@@ -627,6 +624,17 @@ const Home = () => {
           </div>
         </div>
       </div>
+
+      {/* AI助手悬浮按钮 */}
+      {!isAIAssistantOpen && (
+        <AIAssistantButton onClick={() => setIsAIAssistantOpen(true)} />
+      )}
+
+      {/* AI助手悬浮窗 */}
+      <AIAssistantFloat 
+        isOpen={isAIAssistantOpen} 
+        onClose={() => setIsAIAssistantOpen(false)} 
+      />
     </div>
   );
 };

@@ -1,12 +1,14 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Search, Filter, Star, MessageCircle, Eye, TrendingUp, Package, Grid3x3, List } from 'lucide-react';
+import AIAssistantFloat, { AIAssistantButton } from '../components/AIAssistantFloat';
 
 const Mall = () => {
   const navigate = useNavigate();
   const [viewMode, setViewMode] = useState('grid'); // grid or list
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [sortBy, setSortBy] = useState('hot');
+  const [isAIAssistantOpen, setIsAIAssistantOpen] = useState(false);
 
   // 商品分类
   const categories = [
@@ -600,6 +602,17 @@ const Mall = () => {
           </div>
         </div>
       </div>
+
+      {/* AI助手悬浮按钮 */}
+      {!isAIAssistantOpen && (
+        <AIAssistantButton onClick={() => setIsAIAssistantOpen(true)} />
+      )}
+
+      {/* AI助手悬浮窗 */}
+      <AIAssistantFloat 
+        isOpen={isAIAssistantOpen} 
+        onClose={() => setIsAIAssistantOpen(false)} 
+      />
     </div>
   );
 };
