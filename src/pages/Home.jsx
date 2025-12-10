@@ -398,7 +398,7 @@ const Home = () => {
             {currentDiscoveryContent.map((item) => (
               <div 
                 key={item.id} 
-                onClick={() => window.location.href = `/content/${item.id}`}
+                onClick={() => navigate(`/content/${item.id}`)}
                 className="group border border-gray-200 rounded-xl overflow-hidden hover:shadow-xl hover:border-blue-300 transition-all cursor-pointer"
               >
                 <div className="relative h-48 bg-gray-100 overflow-hidden">

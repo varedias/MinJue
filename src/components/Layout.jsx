@@ -1,13 +1,23 @@
 import React from 'react';
 import { Outlet, Link, useLocation, useNavigate } from 'react-router-dom';
-import { Home, ShoppingBag, Search, User, LogIn, UserPlus, Store, Truck, Compass, ShoppingCart } from 'lucide-react';
+import { Home, ShoppingBag, Search, User, LogIn, UserPlus, Store, Truck, Compass, ShoppingCart, LogOut } from 'lucide-react';
 import Footer from './Footer';
+import { useAuth } from '../context/AuthContext';
 
 const Layout = () => {
   const location = useLocation();
   const navigate = useNavigate();
+  const { user, logout } = useAuth();
 
   const isActive = (path) => location.pathname === path;
+
+  const handleProtectedNavigation = (path) => {
+    if (!user) {
+      navigate('/login');
+    } else {
+      navigate(path);
+    }
+  };
 
   return (
     <div className="flex flex-col min-h-screen bg-gray-50 text-gray-900 font-sans">
@@ -15,17 +25,38 @@ const Layout = () => {
       <div className="bg-gray-100 border-b border-gray-200 text-xs text-gray-600">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-8 flex items-center justify-between">
           <div className="flex items-center space-x-2">
-            <button className="text-blue-600 hover:underline flex items-center gap-1">
-              <LogIn size={12} /> 登录
-            </button>
+            {user ? (
+              <>
+                <span className="text-blue-600 flex items-center gap-1">
+                  <User size={12} /> {user.name}
+                </span>
+                <span className="text-gray-300">|</span>
+                <button onClick={logout} className="hover:text-blue-600 flex items-center gap-1">
+                  <LogOut size={12} /> 退出
+                </button>
+              </>
+            ) : (
+              <>
+                <Link to="/login" className="text-blue-600 hover:underline flex items-center gap-1">
+                  <LogIn size={12} /> 登录
+                </Link>
+                <span className="text-gray-300">|</span>
+                <button className="hover:text-blue-600 flex items-center gap-1">
+                  <UserPlus size={12} /> 免费注册
+                </button>
+              </>
+            )}
             <span className="text-gray-300">|</span>
-            <button className="hover:text-blue-600 flex items-center gap-1">
-              <UserPlus size={12} /> 免费注册
+            <button 
+              onClick={() => handleProtectedNavigation('/profile')}
+              className="hover:text-blue-600 flex items-center gap-1"
+            >
+              <Store size={12} /> 免费开店
             </button>
           </div>
           <div className="hidden md:flex space-x-4">
-            <a href="#" className="hover:text-blue-600">帮助中心</a>
-            <a href="#" className="hover:text-blue-600">联系客服</a>
+            <Link to="/help" className="hover:text-blue-600">帮助中心</Link>
+            <Link to="/contact" className="hover:text-blue-600">联系客服</Link>
           </div>
         </div>
       </div>
@@ -33,7 +64,7 @@ const Layout = () => {
       <header className="bg-white shadow-sm sticky top-0 z-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
           <div className="flex items-center">
-            <span className="text-2xl font-bold text-blue-600 tracking-tighter">TECH-EQUIP</span>
+            <span className="text-2xl font-bold text-blue-600 tracking-tighter">懂视帝</span>
           </div>
           <nav className="hidden md:flex space-x-8">
             <Link to="/" className={`${isActive('/') ? 'text-blue-600' : 'text-gray-500'} hover:text-blue-600 font-medium`}>首页</Link>
@@ -41,18 +72,23 @@ const Layout = () => {
             <Link to="/leasing" className={`${isActive('/leasing') ? 'text-blue-600' : 'text-gray-500'} hover:text-blue-600 font-medium`}>租赁</Link>
             <Link to="/mall" className={`${isActive('/mall') ? 'text-blue-600' : 'text-gray-500'} hover:text-blue-600 font-medium`}>商城</Link>
             <button 
-              onClick={() => navigate('/profile')}
-              className={`${isActive('/profile') ? 'text-blue-600' : 'text-gray-500'} hover:text-blue-600 font-medium`}
-            >
-              免费开店
-            </button>
-            <button 
-              onClick={() => navigate('/profile')}
+              onClick={() => handleProtectedNavigation('/profile')}
               className="text-gray-500 hover:text-blue-600 font-medium"
             >
               供应中心
             </button>
-            <Link to="/profile" className={`${isActive('/profile') ? 'text-blue-600' : 'text-gray-500'} hover:text-blue-600 font-medium`}>会员中心</Link>
+            <button 
+              onClick={() => handleProtectedNavigation('/profile')}
+              className={`${isActive('/profile') ? 'text-blue-600' : 'text-gray-500'} hover:text-blue-600 font-medium`}
+            >
+              会员中心
+            </button>
+            <button 
+              onClick={() => handleProtectedNavigation('/user-info')}
+              className={`${isActive('/user-info') ? 'text-blue-600' : 'text-gray-500'} hover:text-blue-600 font-medium`}
+            >
+              个人中心
+            </button>
           </nav>
           <div className="md:hidden">
             {/* Mobile menu button placeholder */}

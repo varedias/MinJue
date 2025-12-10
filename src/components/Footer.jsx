@@ -7,7 +7,7 @@ const Footer = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
           <div>
-            <h3 className="text-xl font-bold mb-4 text-blue-400">TECH-EQUIP</h3>
+            <h3 className="text-xl font-bold mb-4 text-blue-400">懂视帝</h3>
             <p className="text-gray-400 text-sm leading-relaxed">
               专注于AI视觉检测设备领域的专业服务平台，为您提供最优质的设备租赁、买卖及技术咨询服务。
             </p>
@@ -64,7 +64,7 @@ const Footer = () => {
         </div>
         
         <div className="border-t border-gray-800 pt-8 text-center text-gray-500 text-sm">
-          <p>&copy; 2025 TECH-EQUIP. All rights reserved. 沪ICP备12345678号</p>
+          <p>&copy; 2025 懂视帝. All rights reserved. 沪ICP备12345678号</p>
         </div>
       </div>
     </footer>

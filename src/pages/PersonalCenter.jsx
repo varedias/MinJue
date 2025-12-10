@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Package, Store, MessageSquare, FileText, ShoppingCart, BarChart3, Settings, Plus, Search, Eye, Edit, Trash2 } from 'lucide-react';
 
 const PersonalCenter = () => {
+  const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState('overview');
 
   // 模拟数据
@@ -233,7 +235,10 @@ const PersonalCenter = () => {
                         <span className={`px-3 py-1 rounded-full text-xs font-medium ${inquiry.status === '待回复' ? 'bg-orange-100 text-orange-700' : 'bg-green-100 text-green-700'}`}>
                           {inquiry.status}
                         </span>
-                        <button className="px-4 py-2 bg-blue-600 text-white text-sm rounded hover:bg-blue-700">
+                        <button 
+                          onClick={() => navigate(`/inquiry/${inquiry.id}`)}
+                          className="px-4 py-2 bg-blue-600 text-white text-sm rounded hover:bg-blue-700"
+                        >
                           {inquiry.status === '待回复' ? '立即回复' : '查看详情'}
                         </button>
                       </div>
