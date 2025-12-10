@@ -7,6 +7,19 @@ const Home = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
+
+  const handleSearch = () => {
+    if (searchQuery.trim()) {
+      navigate(`/search?q=${encodeURIComponent(searchQuery)}`);
+    }
+  };
+
+  const handleKeyDown = (e) => {
+    if (e.key === 'Enter') {
+      handleSearch();
+    }
+  };
 
   // 完整的设备分类数据
   const equipmentCategories = [
@@ -215,11 +228,17 @@ const Home = () => {
               <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400" size={20} />
               <input
                 type="text"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                onKeyDown={handleKeyDown}
                 placeholder="搜索设备分类、产品型号、供应商..."
                 className="w-full bg-gray-50 text-gray-900 rounded-lg py-4 pl-12 pr-4 border border-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               />
             </div>
-            <button className="bg-gradient-to-r from-blue-600 to-blue-700 text-white px-10 py-4 rounded-lg font-medium hover:from-blue-700 hover:to-blue-800 transition-all shadow-md">
+            <button 
+              onClick={handleSearch}
+              className="bg-gradient-to-r from-blue-600 to-blue-700 text-white px-10 py-4 rounded-lg font-medium hover:from-blue-700 hover:to-blue-800 transition-all shadow-md"
+            >
               搜索
             </button>
           </div>

@@ -1,6 +1,6 @@
 import React from 'react';
 import { Outlet, Link, useLocation, useNavigate } from 'react-router-dom';
-import { Home, ShoppingBag, Search, User, LogIn, UserPlus, Store, Truck, Compass, ShoppingCart, LogOut } from 'lucide-react';
+import { Home, ShoppingBag, Search, User, LogIn, UserPlus, Store, Truck, Compass, ShoppingCart, LogOut, Globe } from 'lucide-react';
 import Footer from './Footer';
 import { useAuth } from '../context/AuthContext';
 
@@ -8,8 +8,17 @@ const Layout = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const { user, logout } = useAuth();
+  const [searchQuery, setSearchQuery] = React.useState('');
 
   const isActive = (path) => location.pathname === path;
+
+  const handleSearch = (e) => {
+    e.preventDefault();
+    if (searchQuery.trim()) {
+      navigate(`/search?q=${encodeURIComponent(searchQuery)}`);
+      setSearchQuery('');
+    }
+  };
 
   const handleProtectedNavigation = (path) => {
     if (!user) {
@@ -53,6 +62,10 @@ const Layout = () => {
             >
               <Store size={12} /> 免费开店
             </button>
+            <span className="text-gray-300">|</span>
+            <Link to="/en" className="hover:text-blue-600 flex items-center gap-1 text-indigo-600 font-medium">
+              <Globe size={12} /> 跨境服务
+            </Link>
           </div>
           <div className="hidden md:flex space-x-4">
             <Link to="/help" className="hover:text-blue-600">帮助中心</Link>
@@ -66,7 +79,22 @@ const Layout = () => {
           <div className="flex items-center">
             <span className="text-2xl font-bold text-blue-600 tracking-tighter">懂视帝</span>
           </div>
-          <nav className="hidden md:flex space-x-8">
+          
+          {/* Search Bar */}
+          <form onSubmit={handleSearch} className="hidden lg:flex items-center relative mx-8 flex-grow max-w-md">
+            <input
+              type="text"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              placeholder="搜索商品、内容..."
+              className="bg-gray-50 border border-gray-200 rounded-full py-2 pl-4 pr-10 text-sm focus:outline-none focus:border-blue-500 w-full transition-all"
+            />
+            <button type="submit" className="absolute right-3 text-gray-400 hover:text-blue-600">
+              <Search size={18} />
+            </button>
+          </form>
+
+          <nav className="hidden md:flex space-x-6">
             <Link to="/" className={`${isActive('/') ? 'text-blue-600' : 'text-gray-500'} hover:text-blue-600 font-medium`}>首页</Link>
             <Link to="/discovery" className={`${isActive('/discovery') ? 'text-blue-600' : 'text-gray-500'} hover:text-blue-600 font-medium`}>发现</Link>
             <Link to="/leasing" className={`${isActive('/leasing') ? 'text-blue-600' : 'text-gray-500'} hover:text-blue-600 font-medium`}>租赁</Link>
