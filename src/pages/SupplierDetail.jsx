@@ -1,132 +1,99 @@
 import React, { useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { MapPin, Calendar, Award, Star, Phone, Mail, MessageCircle, Building, Users, Package, TrendingUp, Shield, ChevronRight, Heart, ArrowLeft } from 'lucide-react';
+import { suppliers, products } from '../data/mockData';
 
 const SupplierDetail = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState('products');
 
-  // 供应商详细信息
+  // 从mockData获取供应商信息
+  const supplierData = suppliers.find(s => s.id === parseInt(id));
+  
+  // 如果找不到供应商，显示错误
+  if (!supplierData) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-center">
+          <h2 className="text-2xl font-bold text-gray-900 mb-4">供应商不存在</h2>
+          <button onClick={() => navigate('/suppliers')} className="text-blue-600 hover:text-blue-700">
+            返回供应商列表
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  // 获取该供应商的产品
+  const supplierProducts = products.filter(p => p.supplier === supplierData.name);
+
+  // 供应商详细信息（使用mockData的数据）
   const supplier = {
-    id: parseInt(id),
-    name: '深圳智视科技有限公司',
-    logo: 'https://ui-avatars.com/api/?name=ZS&background=0D8ABC&color=fff&size=200',
+    id: supplierData.id,
+    name: supplierData.name,
+    logo: supplierData.logo,
     banner: 'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=1200&h=300&fit=crop',
-    rating: 4.9,
-    reviewCount: 2345,
-    years: 8,
-    location: '广东省深圳市南山区科技园',
-    founded: '2016年',
-    employees: '200-500人',
-    type: '有限责任公司',
-    registered: '5000万元',
-    responseRate: 98,
-    responseTime: '2小时内',
-    description: '深圳智视科技有限公司成立于2016年,是一家专注于工业视觉检测系统研发、生产和销售的高新技术企业。公司拥有强大的研发团队和完善的售后服务体系,产品广泛应用于电子、汽车、医疗等行业。',
-    certifications: [
-      { name: 'ISO9001质量管理体系', image: 'https://via.placeholder.com/150x200?text=ISO9001' },
-      { name: 'ISO14001环境管理体系', image: 'https://via.placeholder.com/150x200?text=ISO14001' },
-      { name: '高新技术企业证书', image: 'https://via.placeholder.com/150x200?text=High-Tech' },
-      { name: 'CE认证证书', image: 'https://via.placeholder.com/150x200?text=CE' }
-    ],
+    rating: supplierData.rating,
+    reviewCount: supplierData.orders,
+    years: supplierData.years,
+    location: supplierData.location || '中国',
+    founded: supplierData.founded || `${new Date().getFullYear() - supplierData.years}年`,
+    employees: supplierData.employees || '50-100人',
+    type: supplierData.type || '有限责任公司',
+    registered: supplierData.registered || '1000万元',
+    responseRate: supplierData.responseRate || 95,
+    responseTime: supplierData.responseTime || '3小时内',
+    description: supplierData.detailDescription || supplierData.description,
+    certifications: supplierData.certifications.map((cert, index) => ({
+      name: cert,
+      image: `https://via.placeholder.com/150x200?text=${cert}`
+    })),
     stats: {
-      products: 156,
-      followers: 12456,
-      sales: 45678,
-      satisfaction: 99.2
+      products: supplierProducts.length,
+      followers: Math.floor(supplierData.orders * 5.2),
+      sales: supplierData.orders * 12,
+      satisfaction: (supplierData.rating / 5 * 100).toFixed(1)
     },
-    contact: {
-      phone: '400-888-8888',
+    contact: supplierData.contact || {
+      phone: '400-xxx-xxxx',
       mobile: '138****8888',
-      email: 'contact@zhishi-tech.com',
-      wechat: 'zhishi_tech',
-      address: '深圳市南山区科技园南区深圳湾科技生态园10栋A座8楼'
+      email: 'contact@company.com',
+      wechat: 'company_official',
+      address: supplierData.location || '中国'
     },
     advantages: [
       {
         icon: Award,
         title: '品质保证',
-        desc: '所有产品均通过ISO质量认证'
+        desc: '所有产品均通过质量认证'
       },
       {
         icon: Shield,
         title: '售后无忧',
-        desc: '7天无理由退换,2年质保'
+        desc: '提供专业售后服务'
       },
       {
         icon: TrendingUp,
         title: '技术领先',
-        desc: '拥有50+项发明专利'
+        desc: '持续技术创新'
       },
       {
         icon: Users,
         title: '专业团队',
-        desc: '200+专业技术人员'
+        desc: '经验丰富的技术团队'
       }
     ],
-    products: [
-      {
-        id: 1,
-        name: '海康威视AI视觉检测系统 VIS-2000',
-        price: 28900,
-        originalPrice: 35000,
-        image: 'https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=400',
-        rating: 4.9,
-        sales: 1245,
-        tags: ['热销', '包邮']
-      },
-      {
-        id: 5,
-        name: '大华智能相机 DH-IPC-AI',
-        price: 6800,
-        originalPrice: 8200,
-        image: 'https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=400',
-        rating: 4.9,
-        sales: 1567,
-        tags: ['新品', '包邮']
-      },
-      {
-        id: 9,
-        name: '康耐视In-Sight 3D视觉传感器',
-        price: 15800,
-        originalPrice: 18900,
-        image: 'https://images.unsplash.com/photo-1581092160562-40aa08e78837?w=400',
-        rating: 4.8,
-        sales: 867,
-        tags: ['进口', '包邮']
-      },
-      {
-        id: 13,
-        name: 'AI缺陷检测软件套装',
-        price: 12000,
-        originalPrice: 15000,
-        image: 'https://images.unsplash.com/photo-1581092918056-0c4c3acd3789?w=400',
-        rating: 4.8,
-        sales: 2345,
-        tags: ['热销', '正版']
-      },
-      {
-        id: 14,
-        name: '工业级3D扫描仪',
-        price: 45000,
-        originalPrice: 52000,
-        image: 'https://images.unsplash.com/photo-1581092160607-ee22621dd758?w=400',
-        rating: 4.9,
-        sales: 456,
-        tags: ['高精度', '包邮']
-      },
-      {
-        id: 15,
-        name: '智能视觉分拣系统',
-        price: 68000,
-        originalPrice: 78000,
-        image: 'https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=400',
-        rating: 5.0,
-        sales: 234,
-        tags: ['定制', '包安装']
-      }
-    ],
+    products: supplierProducts.map(p => ({
+      id: p.id,
+      name: p.name,
+      price: p.price,
+      originalPrice: Math.floor(p.price * 1.2),
+      image: p.image,
+      rating: p.rating,
+      sales: p.sales,
+      tags: p.tags
+    })),
     reviews: [
       {
         id: 1,

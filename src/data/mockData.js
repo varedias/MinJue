@@ -14,10 +14,66 @@ export const products = [
     supplier: '民崛智能科技有限公司',
     supplierEn: 'Minjue Intelligent Technology Co., Ltd',
     tags: ['模具监测', '视觉检测', '智能识别'],
-    description: '专业模具视觉监测系统，实时监控模具状态，AI智能识别异常'
+    description: '专业模具视觉监测系统，实时监控模具状态，AI智能识别异常，适用于注塑、压铸等行业'
   },
   {
     id: 2,
+    name: '民崛智能模具保护监视器 MJ-MP-PRO',
+    nameEn: 'Minjue Mold Protection Monitor MJ-MP-PRO',
+    price: 28900,
+    image: 'https://images.unsplash.com/photo-1581092918056-0c4c3acd3789?w=400',
+    category: 'ai-vision',
+    rating: 4.9,
+    sales: 1023,
+    supplier: '民崛智能科技有限公司',
+    supplierEn: 'Minjue Intelligent Technology Co., Ltd',
+    tags: ['模具保护', '实时监控', '高性价比'],
+    description: '实时监控模具运行状态，自动检测异常，防止模具损坏，降低生产成本'
+  },
+  {
+    id: 3,
+    name: '民崛智能缺陷检测系统 MJ-QC-3000',
+    nameEn: 'Minjue Defect Detection System MJ-QC-3000',
+    price: 42000,
+    image: 'https://images.unsplash.com/photo-1581092160562-40aa08e78837?w=400',
+    category: 'ai-vision',
+    rating: 4.8,
+    sales: 645,
+    supplier: '民崛智能科技有限公司',
+    supplierEn: 'Minjue Intelligent Technology Co., Ltd',
+    tags: ['缺陷检测', 'AI算法', '高精度'],
+    description: '采用深度学习算法，精准识别产品表面缺陷，检测精度高达99.5%'
+  },
+  {
+    id: 4,
+    name: '民崛智能注塑机监控系统 MJ-IM-500',
+    nameEn: 'Minjue Injection Machine Monitoring MJ-IM-500',
+    price: 25800,
+    image: 'https://images.unsplash.com/photo-1581093458791-9d58b3fbbd0d?w=400',
+    category: 'ai-vision',
+    rating: 4.7,
+    sales: 532,
+    supplier: '民崛智能科技有限公司',
+    supplierEn: 'Minjue Intelligent Technology Co., Ltd',
+    tags: ['注塑监控', '智能分析', '数据统计'],
+    description: '实时监控注塑机运行参数，智能分析生产数据，提升生产效率'
+  },
+  {
+    id: 5,
+    name: '民崛智能视觉定位系统 MJ-POS-200',
+    nameEn: 'Minjue Vision Positioning System MJ-POS-200',
+    price: 32600,
+    image: 'https://images.unsplash.com/photo-1516035069371-29a1b244cc32?w=400',
+    category: 'ai-vision',
+    rating: 4.8,
+    sales: 723,
+    supplier: '民崛智能科技有限公司',
+    supplierEn: 'Minjue Intelligent Technology Co., Ltd',
+    tags: ['视觉定位', '高精度', '自动化'],
+    description: '高精度视觉定位系统，定位精度±0.02mm，适用于自动化生产线'
+  },
+  {
+    id: 6,
     name: '牧河自动化上料机 MH-FL-200',
     nameEn: 'Muhe Automation Feeder MH-FL-200',
     price: 18900,
@@ -31,7 +87,7 @@ export const products = [
     description: '全自动上料系统，适用于各类生产线，提升生产效率'
   },
   {
-    id: 3,
+    id: 7,
     name: '海康威视AI视觉检测系统 VIS-2000',
     nameEn: 'Hikvision AI Vision Inspection System VIS-2000',
     price: 28900,
@@ -45,7 +101,7 @@ export const products = [
     description: '2D+3D双模式, 深度学习算法, 0.1mm精度'
   },
   {
-    id: 4,
+    id: 8,
     name: 'Basler ace系列工业相机套装',
     nameEn: 'Basler ace Series Industrial Camera Kit',
     price: 4299,
@@ -59,7 +115,7 @@ export const products = [
     description: '200万像素, GigE接口, 含镜头'
   },
   {
-    id: 5,
+    id: 9,
     name: 'CCS LED环形光源 LDR2-100',
     nameEn: 'CCS LED Ring Light LDR2-100',
     price: 680,
@@ -73,7 +129,7 @@ export const products = [
     description: '高亮度, 可调光, 多种规格'
   },
   {
-    id: 6,
+    id: 10,
     name: '基恩士3D激光轮廓仪',
     nameEn: 'Keyence 3D Laser Profiler',
     price: 15800,
@@ -179,7 +235,21 @@ export const suppliers = [
     orders: 856, 
     logo: 'https://ui-avatars.com/api/?name=MJ&background=6366F1&color=fff',
     description: '专注于模具行业智能化解决方案，提供模具视觉监测、缺陷检测等智能装备。拥有完整的研发、生产、售后体系。',
-    descriptionEn: 'Focus on intelligent solutions for mold industry, providing mold vision monitoring, defect detection equipment. Complete R&D, production and after-sales system.'
+    descriptionEn: 'Focus on intelligent solutions for mold industry, providing mold vision monitoring, defect detection equipment. Complete R&D, production and after-sales system.',
+    website: 'https://min-jue.com/',
+    location: '浙江省宁波市',
+    founded: '2014年',
+    employees: '50-100人',
+    type: '有限责任公司',
+    registered: '1000万元',
+    responseRate: 99,
+    responseTime: '1小时内',
+    contact: {
+      phone: '400-xxx-xxxx',
+      email: 'info@min-jue.com',
+      address: '浙江省宁波市'
+    },
+    detailDescription: '民崛智能科技有限公司是一家专业从事模具智能化监测设备研发、生产和销售的高新技术企业。公司成立于2014年，总部位于浙江省宁波市。\n\n公司主营产品包括模具视觉监测装置、智能缺陷检测系统、模具保护监视器等。产品广泛应用于注塑、压铸、冲压等模具行业，帮助企业实现生产过程的智能化监控，提高生产效率，降低不良率。\n\n民崛智能拥有完整的研发、生产、销售和售后服务体系，产品已获得多项国家专利，通过了ISO9001质量管理体系认证和CE认证。公司始终坚持以客户需求为导向，为客户提供优质的产品和专业的技术服务。'
   },
   { 
     id: 2, 
@@ -194,7 +264,20 @@ export const suppliers = [
     orders: 1234, 
     logo: 'https://ui-avatars.com/api/?name=MH&background=10B981&color=fff',
     description: '专业自动化上料设备制造商，产品广泛应用于电子、塑料、五金等行业。提供定制化自动化解决方案。',
-    descriptionEn: 'Professional automation feeder manufacturer, products widely used in electronics, plastics, hardware industries. Providing customized automation solutions.'
+    descriptionEn: 'Professional automation feeder manufacturer, products widely used in electronics, plastics, hardware industries. Providing customized automation solutions.',
+    location: '江苏省苏州市',
+    founded: '2016年',
+    employees: '30-50人',
+    type: '有限责任公司',
+    registered: '500万元',
+    responseRate: 97,
+    responseTime: '2小时内',
+    contact: {
+      phone: '400-xxx-xxxx',
+      email: 'contact@muhe-auto.com',
+      address: '江苏省苏州市工业园区'
+    },
+    detailDescription: '牧河自动化设备有限公司专注于为制造企业提供自动化上料解决方案。公司产品包括震动盘、直振送料器、螺旋上料机等多种自动上料设备，适用于电子、塑料、五金、食品等多个行业。\n\n公司拥有专业的技术团队和完善的售后服务体系，可根据客户需求提供定制化解决方案。产品以高稳定性、高效率著称，深受客户信赖。'
   },
   { 
     id: 3, 
@@ -209,7 +292,20 @@ export const suppliers = [
     orders: 1234, 
     logo: 'https://ui-avatars.com/api/?name=ZS&background=0D8ABC&color=fff',
     description: '专注于工业AI视觉检测解决方案，拥有自主研发的深度学习算法平台。',
-    descriptionEn: 'Focusing on industrial AI vision inspection solutions with self-developed deep learning algorithm platform.'
+    descriptionEn: 'Focusing on industrial AI vision inspection solutions with self-developed deep learning algorithm platform.',
+    location: '广东省深圳市南山区',
+    founded: '2016年',
+    employees: '200-500人',
+    type: '有限责任公司',
+    registered: '5000万元',
+    responseRate: 98,
+    responseTime: '2小时内',
+    contact: {
+      phone: '400-888-8888',
+      email: 'contact@zhishi-tech.com',
+      address: '深圳市南山区科技园南区深圳湾科技生态园10栋A座8楼'
+    },
+    detailDescription: '深圳智视科技有限公司成立于2016年,是一家专注于工业视觉检测系统研发、生产和销售的高新技术企业。公司拥有强大的研发团队和完善的售后服务体系,产品广泛应用于电子、汽车、医疗等行业。'
   },
   { 
     id: 4, 
@@ -224,7 +320,20 @@ export const suppliers = [
     orders: 2156, 
     logo: 'https://ui-avatars.com/api/?name=JZ&background=22C55E&color=fff',
     description: '国内领先的工业相机制造商，产品广泛应用于电子、汽车、医药等行业。',
-    descriptionEn: 'Leading domestic industrial camera manufacturer, products widely used in electronics, automotive, pharmaceutical industries.'
+    descriptionEn: 'Leading domestic industrial camera manufacturer, products widely used in electronics, automotive, pharmaceutical industries.',
+    location: '浙江省杭州市',
+    founded: '2012年',
+    employees: '100-200人',
+    type: '有限责任公司',
+    registered: '2000万元',
+    responseRate: 96,
+    responseTime: '3小时内',
+    contact: {
+      phone: '400-xxx-xxxx',
+      email: 'sales@jzvision.com',
+      address: '杭州市滨江区'
+    },
+    detailDescription: '杭州精准视觉设备厂是国内领先的工业相机制造商，产品广泛应用于电子、汽车、医药等行业。拥有完整的产品线和专业的技术支持团队。'
   },
   { 
     id: 5, 
@@ -239,7 +348,20 @@ export const suppliers = [
     orders: 987, 
     logo: 'https://ui-avatars.com/api/?name=GY&background=F59E0B&color=fff',
     description: '专业研发生产机器视觉LED光源，提供定制化光源解决方案。',
-    descriptionEn: 'Professional R&D and production of machine vision LED lighting, providing customized lighting solutions.'
+    descriptionEn: 'Professional R&D and production of machine vision LED lighting, providing customized lighting solutions.',
+    location: '上海市浦东新区',
+    founded: '2018年',
+    employees: '30-50人',
+    type: '有限责任公司',
+    registered: '800万元',
+    responseRate: 95,
+    responseTime: '4小时内',
+    contact: {
+      phone: '400-xxx-xxxx',
+      email: 'info@gylight.com',
+      address: '上海市浦东新区'
+    },
+    detailDescription: '上海光源智能装备专业研发生产机器视觉LED光源，提供定制化光源解决方案。产品质量稳定，性能优异。'
   },
   { 
     id: 6, 
@@ -254,7 +376,20 @@ export const suppliers = [
     orders: 3456, 
     logo: 'https://ui-avatars.com/api/?name=BS&background=EF4444&color=fff',
     description: '资深自动化系统集成商，服务于航空航天、军工等高端制造领域。',
-    descriptionEn: 'Senior automation system integrator, serving aerospace, military and other high-end manufacturing fields.'
+    descriptionEn: 'Senior automation system integrator, serving aerospace, military and other high-end manufacturing fields.',
+    location: '北京市海淀区',
+    founded: '2009年',
+    employees: '500+人',
+    type: '有限责任公司',
+    registered: '10000万元',
+    responseRate: 99,
+    responseTime: '1小时内',
+    contact: {
+      phone: '400-xxx-xxxx',
+      email: 'service@boshi-auto.com',
+      address: '北京市海淀区中关村'
+    },
+    detailDescription: '北京博视自动化技术是资深自动化系统集成商，服务于航空航天、军工等高端制造领域。拥有丰富的项目经验和专业的技术团队。'
   },
 ];
 
