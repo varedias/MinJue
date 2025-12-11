@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { Star, Phone, Heart, Share2, Shield, Truck, Clock, MessageCircle, ThumbsUp, ChevronRight, Package, Award, CheckCircle, ArrowLeft } from 'lucide-react';
+import { products, suppliers } from '../data/mockData';
 
 const ProductDetail = () => {
   const { id } = useParams();
@@ -9,54 +10,84 @@ const ProductDetail = () => {
   const [quantity, setQuantity] = useState(1);
   const [activeTab, setActiveTab] = useState('detail');
 
-  // 商品详情数据
+  // 从mockData获取商品详情
+  const productData = useMemo(() => {
+    return products.find(p => p.id === parseInt(id));
+  }, [id]);
+
+  // 获取供应商信息
+  const supplierData = useMemo(() => {
+    if (!productData) return null;
+    return suppliers.find(s => s.name === productData.supplier);
+  }, [productData]);
+
+  // 如果找不到商品，显示404
+  if (!productData) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="text-center">
+          <h1 className="text-4xl font-bold text-gray-900 mb-4">商品不存在</h1>
+          <button 
+            onClick={() => navigate('/mall')}
+            className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+          >
+            返回商城
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  // 构建商品详情对象
   const product = {
-    id: parseInt(id),
-    name: '海康威视AI视觉检测系统 VIS-2000',
-    subtitle: '高精度AI视觉检测,支持深度学习算法,工业级品质保证',
-    price: 28900,
-    originalPrice: 35000,
+    id: productData.id,
+    name: productData.name,
+    subtitle: productData.description,
+    price: productData.price,
+    originalPrice: Math.round(productData.price * 1.2),
     discount: 17,
-    rating: 4.9,
-    reviewCount: 1245,
-    sales: 3456,
+    rating: productData.rating,
+    reviewCount: productData.sales,
+    sales: productData.sales,
     stock: 89,
     images: [
-      'https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=800',
-      'https://images.unsplash.com/photo-1581092160562-40aa08e78837?w=800',
-      'https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=800',
-      'https://images.unsplash.com/photo-1581092160607-ee22621dd758?w=800',
-      'https://images.unsplash.com/photo-1581092918056-0c4c3acd3789?w=800'
-    ],
-    tags: ['AI检测', '高精度', '包邮', '质保2年', '7天无理由退换'],
+      productData.image,
+      productData.parameterImage || productData.image,
+      productData.image,
+      productData.image,
+      productData.image
+    ].filter(Boolean),
+    tags: [...productData.tags, '质保2年', '7天无理由退换'],
     supplier: {
-      id: 1,
-      name: '深圳智视科技有限公司',
-      logo: 'https://ui-avatars.com/api/?name=ZS&background=0D8ABC&color=fff',
-      rating: 4.9,
-      years: 8,
+      id: supplierData?.id || 1,
+      name: productData.supplier,
+      logo: supplierData?.logo || 'https://ui-avatars.com/api/?name=S&background=0D8ABC&color=fff',
+      rating: supplierData?.rating || 4.9,
+      years: supplierData?.years || 8,
       responseRate: 98,
       responseTime: '2小时内',
-      location: '广东深圳',
-      description: '专注于工业视觉检测系统研发与制造',
+      location: '中国',
+      description: supplierData?.description || '专业设备供应商',
       products: 156,
       followers: 2345
     },
     specs: [
-      { label: '品牌', value: '海康威视' },
-      { label: '型号', value: 'VIS-2000' },
-      { label: '检测模式', value: '2D+3D双模式' },
-      { label: '精度', value: '0.1mm' },
-      { label: '算法', value: '深度学习AI' },
-      { label: '接口', value: 'GigE/USB3.0' },
-      { label: '工作环境', value: '0-45℃' },
-      { label: '防护等级', value: 'IP54' },
-      { label: '电源', value: 'DC 24V' },
-      { label: '重量', value: '3.5kg' },
-      { label: '保修期', value: '2年' },
-      { label: '产地', value: '中国' }
+      { label: '品牌', value: productData.supplier.split(' ')[0] },
+      { label: '型号', value: productData.name.match(/[A-Z0-9-]+$/)?.[0] || 'Standard' },
+      { label: '分类', value: productData.category },
+      { label: '评分', value: productData.rating + '★' },
+      { label: '销量', value: productData.sales + '件' },
+      { label: '供应商', value: productData.supplier },
     ],
-    features: [
+    features: productData.features || [
+      '✓ 高品质保证',
+      '✓ 专业技术支持',
+      '✓ 完善售后服务',
+      '✓ 快速交付',
+      '✓ 性价比高'
+    ],
+    description: productData.description,
+    serviceFeatures: [
       {
         icon: Shield,
         title: '质量保证',
@@ -78,34 +109,22 @@ const ProductDetail = () => {
         desc: '厂家质保,全国联保'
       }
     ],
-    description: `
+    detailDescription: `
       <h3>产品简介</h3>
-      <p>海康威视AI视觉检测系统VIS-2000是一款集2D和3D视觉检测于一体的高精度智能检测设备。采用先进的深度学习算法,能够快速准确地完成各种复杂工件的检测任务。</p>
+      <p>${productData.description}</p>
       
       <h3>核心优势</h3>
       <ul>
-        <li>高精度检测:精度可达0.1mm,满足高标准工业检测需求</li>
-        <li>AI智能算法:内置深度学习算法,可自主学习和优化检测模型</li>
-        <li>2D+3D双模式:支持平面和立体检测,应用范围更广</li>
-        <li>易于集成:标准化接口设计,可快速集成到现有生产线</li>
-        <li>稳定可靠:工业级设计,24小时连续工作无压力</li>
+        ${productData.features ? productData.features.map(f => `<li>${f}</li>`).join('') : '<li>高品质保证</li>'}
       </ul>
 
       <h3>应用场景</h3>
       <ul>
-        <li>电子元器件外观检测</li>
-        <li>汽车零部件尺寸测量</li>
-        <li>3C产品表面缺陷检测</li>
-        <li>医疗器械质量检验</li>
-        <li>食品包装完整性检测</li>
+        <li>工业自动化检测</li>
+        <li>质量控制系统</li>
+        <li>生产线集成</li>
+        <li>精密测量应用</li>
       </ul>
-
-      <h3>技术参数</h3>
-      <p>检测速度:≤1秒/件<br>
-      误检率:≤0.01%<br>
-      漏检率:≤0.005%<br>
-      图像分辨率:2048×2048<br>
-      光源:LED白光/红外光可选</p>
     `,
     reviews: [
       {
@@ -117,7 +136,7 @@ const ProductDetail = () => {
         content: '设备非常好用,精度高,检测速度快,售后服务也很到位。已经用了3个月,运行稳定,推荐购买!',
         images: [],
         helpful: 234,
-        specs: '2D+3D双模式 | 0.1mm精度'
+        specs: productData.tags.join(' | ')
       },
       {
         id: 2,
@@ -125,13 +144,10 @@ const ProductDetail = () => {
         avatar: 'https://ui-avatars.com/api/?name=LG&background=random',
         rating: 5,
         date: '2024-01-10',
-        content: '公司采购了5台,用于汽车零部件检测,效果非常好。AI算法很智能,可以自动学习新的缺陷类型。厂家的技术支持响应很快,解决问题很专业。',
-        images: [
-          'https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=200',
-          'https://images.unsplash.com/photo-1581092160562-40aa08e78837?w=200'
-        ],
+        content: '公司采购了多台,效果非常好。技术支持响应很快,解决问题很专业。',
+        images: [],
         helpful: 189,
-        specs: '2D+3D双模式 | 0.1mm精度'
+        specs: productData.tags.join(' | ')
       },
       {
         id: 3,
@@ -139,48 +155,15 @@ const ProductDetail = () => {
         avatar: 'https://ui-avatars.com/api/?name=WJL&background=random',
         rating: 4,
         date: '2024-01-05',
-        content: '总体不错,性价比很高。软件界面友好,操作简单。如果能增加更多的自定义功能就更完美了。',
+        content: '总体不错,性价比很高。操作简单,功能实用。',
         images: [],
         helpful: 156,
-        specs: '2D+3D双模式 | 0.1mm精度'
+        specs: productData.tags.join(' | ')
       }
     ]
   };
 
-  const relatedProducts = [
-    {
-      id: 2,
-      name: 'Basler ace系列工业相机套装',
-      price: 4299,
-      image: 'https://images.unsplash.com/photo-1516035069371-29a1b244cc32?w=300',
-      rating: 4.8,
-      sales: 2234
-    },
-    {
-      id: 3,
-      name: 'CCS LED环形光源 LDR2-100',
-      price: 680,
-      image: 'https://images.unsplash.com/photo-1581093458791-9d58b3fbbd0d?w=300',
-      rating: 4.8,
-      sales: 5678
-    },
-    {
-      id: 4,
-      name: '基恩士激光位移传感器',
-      price: 15800,
-      image: 'https://images.unsplash.com/photo-1581092160562-40aa08e78837?w=300',
-      rating: 4.9,
-      sales: 867
-    },
-    {
-      id: 5,
-      name: '大华智能相机 DH-IPC-AI',
-      price: 6800,
-      image: 'https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=300',
-      rating: 4.9,
-      sales: 1567
-    }
-  ];
+  const relatedProducts = products.slice(0, 6).filter(p => p.id !== product.id);
 
   return (
     <div className="pb-20 md:pb-0 bg-gray-50 min-h-screen">
@@ -277,7 +260,7 @@ const ProductDetail = () => {
               </div>
 
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
-                {product.features.map((feature, idx) => (
+                {product.serviceFeatures.map((feature, idx) => (
                   <div key={idx} className="text-center">
                     <feature.icon className="mx-auto mb-2 text-blue-600" size={24} />
                     <div className="text-sm font-medium text-gray-900">{feature.title}</div>
@@ -380,7 +363,7 @@ const ProductDetail = () => {
 
           <div className="p-6">
             {activeTab === 'detail' && (
-              <div className="prose max-w-none" dangerouslySetInnerHTML={{ __html: product.description }} />
+              <div className="prose max-w-none" dangerouslySetInnerHTML={{ __html: product.detailDescription }} />
             )}
 
             {activeTab === 'specs' && (

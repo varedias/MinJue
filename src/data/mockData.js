@@ -7,73 +7,72 @@ export const products = [
     name: '民崛智能模具视觉监测装置 MJ-VIS-A8',
     nameEn: 'Minjue Smart Mold Vision Monitoring System MJ-VIS-A8',
     price: 35800,
-    image: 'https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=400',
+    image: '/MinJue/products/minjue-product-1.png',
+    parameterImage: '/MinJue/products/1-parameter.jpg',
     category: 'ai-vision',
     rating: 4.9,
     sales: 856,
     supplier: '民崛智能科技有限公司',
     supplierEn: 'Minjue Intelligent Technology Co., Ltd',
     tags: ['模具监测', '视觉检测', '智能识别'],
-    description: '专业模具视觉监测系统，实时监控模具状态，AI智能识别异常，适用于注塑、压铸等行业'
+    description: '专业模具视觉监测系统，实时监控模具状态，AI智能识别异常，适用于注塑、压铸等行业',
+    specs: ['高清工业相机', '智能算法', '实时监控', '异常报警'],
+    features: [
+      '✓ 实时监控模具运行状态',
+      '✓ AI智能识别模具异常',
+      '✓ 自动报警提示',
+      '✓ 数据统计分析',
+      '✓ 远程查看功能'
+    ]
   },
   {
     id: 2,
     name: '民崛智能模具保护监视器 MJ-MP-PRO',
     nameEn: 'Minjue Mold Protection Monitor MJ-MP-PRO',
     price: 28900,
-    image: 'https://images.unsplash.com/photo-1581092918056-0c4c3acd3789?w=400',
+    image: '/MinJue/products/minjue-product-2.png',
+    parameterImage: '/MinJue/products/2-parameter.jpg',
     category: 'ai-vision',
     rating: 4.9,
     sales: 1023,
     supplier: '民崛智能科技有限公司',
     supplierEn: 'Minjue Intelligent Technology Co., Ltd',
     tags: ['模具保护', '实时监控', '高性价比'],
-    description: '实时监控模具运行状态，自动检测异常，防止模具损坏，降低生产成本'
+    description: '实时监控模具运行状态，自动检测异常，防止模具损坏，降低生产成本',
+    specs: ['模具保护', '实时检测', '自动报警', '数据记录'],
+    features: [
+      '✓ 防止模具损坏',
+      '✓ 自动检测异常情况',
+      '✓ 快速响应报警',
+      '✓ 延长模具使用寿命',
+      '✓ 降低维护成本'
+    ]
   },
   {
     id: 3,
     name: '民崛智能缺陷检测系统 MJ-QC-3000',
     nameEn: 'Minjue Defect Detection System MJ-QC-3000',
     price: 42000,
-    image: 'https://images.unsplash.com/photo-1581092160562-40aa08e78837?w=400',
+    image: '/MinJue/products/minjue-product-3.png',
+    parameterImage: '/MinJue/products/3-parameter.jpg',
     category: 'ai-vision',
     rating: 4.8,
     sales: 645,
     supplier: '民崛智能科技有限公司',
     supplierEn: 'Minjue Intelligent Technology Co., Ltd',
     tags: ['缺陷检测', 'AI算法', '高精度'],
-    description: '采用深度学习算法，精准识别产品表面缺陷，检测精度高达99.5%'
+    description: '采用深度学习算法，精准识别产品表面缺陷，检测精度高达99.5%',
+    specs: ['深度学习', '高精度检测', '多种缺陷识别', '自动分类'],
+    features: [
+      '✓ 99.5%检测精度',
+      '✓ 识别多种缺陷类型',
+      '✓ 自动分类统计',
+      '✓ 深度学习算法',
+      '✓ 可定制化训练'
+    ]
   },
   {
     id: 4,
-    name: '民崛智能注塑机监控系统 MJ-IM-500',
-    nameEn: 'Minjue Injection Machine Monitoring MJ-IM-500',
-    price: 25800,
-    image: 'https://images.unsplash.com/photo-1581093458791-9d58b3fbbd0d?w=400',
-    category: 'ai-vision',
-    rating: 4.7,
-    sales: 532,
-    supplier: '民崛智能科技有限公司',
-    supplierEn: 'Minjue Intelligent Technology Co., Ltd',
-    tags: ['注塑监控', '智能分析', '数据统计'],
-    description: '实时监控注塑机运行参数，智能分析生产数据，提升生产效率'
-  },
-  {
-    id: 5,
-    name: '民崛智能视觉定位系统 MJ-POS-200',
-    nameEn: 'Minjue Vision Positioning System MJ-POS-200',
-    price: 32600,
-    image: 'https://images.unsplash.com/photo-1516035069371-29a1b244cc32?w=400',
-    category: 'ai-vision',
-    rating: 4.8,
-    sales: 723,
-    supplier: '民崛智能科技有限公司',
-    supplierEn: 'Minjue Intelligent Technology Co., Ltd',
-    tags: ['视觉定位', '高精度', '自动化'],
-    description: '高精度视觉定位系统，定位精度±0.02mm，适用于自动化生产线'
-  },
-  {
-    id: 6,
     name: '牧河自动化上料机 MH-FL-200',
     nameEn: 'Muhe Automation Feeder MH-FL-200',
     price: 18900,
@@ -87,7 +86,7 @@ export const products = [
     description: '全自动上料系统，适用于各类生产线，提升生产效率'
   },
   {
-    id: 7,
+    id: 5,
     name: '海康威视AI视觉检测系统 VIS-2000',
     nameEn: 'Hikvision AI Vision Inspection System VIS-2000',
     price: 28900,

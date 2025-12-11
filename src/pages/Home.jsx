@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Search, ChevronRight, Play, FileText, Eye, ThumbsUp, Star, Building2, ShoppingCart, Clock, ChevronDown, Menu, X } from 'lucide-react';
-import { suppliers, procurements } from '../data/mockData';
+import { suppliers, procurements, products } from '../data/mockData';
 import AIAssistantFloat, { AIAssistantButton } from '../components/AIAssistantFloat';
 
 const Home = () => {
@@ -191,15 +191,17 @@ const Home = () => {
     ]
   ];
 
-  // 优选商品数据
-  const featuredProducts = [
-    { id: 1, name: '海康威视 MV-CA系列工业相机', price: '3,599', unit: '台', specs: '500万像素 | USB3.0接口', sales: 1250, rating: 4.8, image: 'https://images.unsplash.com/photo-1516035069371-29a1b244cc32?auto=format&fit=crop&w=300&q=80' },
-    { id: 2, name: '康耐视 In-Sight 2D视觉传感器', price: '8,999', unit: '套', specs: '高速检测 | 即插即用', sales: 890, rating: 4.9, image: 'https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?auto=format&fit=crop&w=300&q=80' },
-    { id: 3, name: '基恩士 3D激光位移传感器', price: '15,800', unit: '台', specs: '微米级精度 | 抗干扰', sales: 567, rating: 4.7, image: 'https://images.unsplash.com/photo-1581092160562-40aa08e78837?auto=format&fit=crop&w=300&q=80' },
-    { id: 4, name: 'Basler ace系列相机+镜头套装', price: '4,299', unit: '套', specs: '200万像素 | GigE接口', sales: 1023, rating: 4.6, image: 'https://images.unsplash.com/photo-1581092918056-0c4c3acd3789?auto=format&fit=crop&w=300&q=80' },
-    { id: 5, name: 'CCS LED环形光源 LDR2系列', price: '680', unit: '个', specs: '高亮度 | 可调光', sales: 2340, rating: 4.8, image: 'https://images.unsplash.com/photo-1581093458791-9d58b3fbbd0d?auto=format&fit=crop&w=300&q=80' },
-    { id: 6, name: 'Matrox Imaging 图像采集卡', price: '6,500', unit: '张', specs: '4路输入 | PCIe x4', sales: 445, rating: 4.5, image: 'https://images.unsplash.com/photo-1581094271901-8022df4466f9?auto=format&fit=crop&w=300&q=80' },
-  ];
+  // 优选商品数据 - 从mockData获取前6个产品（民崛的产品在前面）
+  const featuredProducts = products.slice(0, 6).map(product => ({
+    id: product.id,
+    name: product.name,
+    price: product.price.toLocaleString(),
+    unit: '台',
+    specs: product.tags.join(' | '),
+    sales: product.sales,
+    rating: product.rating,
+    image: product.image
+  }));
 
   const currentDiscoveryContent = allDiscoveryContent[currentPage - 1] || [];
 
