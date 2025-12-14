@@ -1,25 +1,62 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { ArrowLeft, Play, Clock, Eye, ThumbsUp, Share2, Bookmark, User } from 'lucide-react';
 
 const ContentDetail = () => {
   const { id } = useParams();
   const navigate = useNavigate();
+  const [isPlaying, setIsPlaying] = useState(false);
 
   // 所有内容数据
   const allContent = {
     1: {
       type: 'video',
-      title: 'AI视觉检测在PCB板检测中的应用案例',
-      author: '智能制造研究院',
-      authorAvatar: 'https://ui-avatars.com/api/?name=ZZZY&background=0D8ABC&color=fff',
-      publishDate: '2025-11-20',
+      title: '工业视觉检测技术应用演示',
+      author: '民崛智能',
+      authorAvatar: 'https://ui-avatars.com/api/?name=MJ&background=0D8ABC&color=fff',
+      publishDate: '2025-12-14',
       views: 15200,
       likes: 892,
       duration: '12:35',
-      thumbnail: 'https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?auto=format&fit=crop&w=800&q=80',
-      videoUrl: 'https://www.youtube.com/embed/ScMzIvxBSi4',  // Sample Tech Video
-      description: '本视频详细展示了AI视觉检测技术在PCB电路板生产线上的实际应用，包括焊点检测、元器件定位、表面缺陷识别等多个环节。',
+      thumbnail: '/MinJue/videos/video-1-cover.jpg',
+      videoUrl: '/MinJue/videos/video-1.mp4',
+      description: '本视频详细展示了工业视觉检测技术在实际生产中的应用，包括产品演示、技术特点和应用案例。',
+      content: `
+        <h2>视频简介</h2>
+        <p>本视频展示了民崛智能工业视觉检测技术的实际应用，包括AI算法、硬件设备、软件系统等核心技术模块的演示。通过实际案例，您可以了解工业视觉检测如何提升生产效率和产品质量。</p>
+        
+        <h3>主要内容</h3>
+        <ul>
+          <li><strong>产品介绍</strong>：MJ-VIS-A8等工业视觉检测设备的核心功能</li>
+          <li><strong>技术特点</strong>：高精度检测、实时处理、智能分析</li>
+          <li><strong>应用场景</strong>：电子制造、汽车零部件、精密加工等行业</li>
+          <li><strong>检测流程</strong>：图像采集、特征提取、缺陷识别、结果输出</li>
+        </ul>
+
+        <h3>技术优势</h3>
+        <p>民崛智能视觉检测系统的核心优势：</p>
+        <ul>
+          <li>检测精度高达99.9%</li>
+          <li>处理速度快，支持实时检测</li>
+          <li>易于集成到现有生产线</li>
+          <li>支持多种缺陷类型识别</li>
+          <li>提供完整的数据追溯功能</li>
+        </ul>
+
+        <h3>应用价值</h3>
+        <p>通过部署智能视觉检测系统，企业可以显著降低次品率，提高生产效率，减少人工成本。系统投资回报周期通常在6-12个月之间。</p>
+      `
+    },
+    2: {
+      type: 'article',
+      title: '如何选择合适的工业相机？5大关键参数详解',
+      author: '机器视觉专家',
+      authorAvatar: 'https://ui-avatars.com/api/?name=JQSJ&background=22C55E&color=fff',
+      publishDate: '2025-11-19',
+      views: 8500,
+      likes: 456,
+      readTime: '8分钟',
+      thumbnail: 'https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=800&q=80',
       content: `
         <h2>视频概述</h2>
         <p>PCB（印刷电路板）作为电子产品的核心部件，其质量直接影响到最终产品的可靠性。传统的人工检测方式不仅效率低下，而且容易出现漏检和误检。AI视觉检测技术的引入，彻底改变了这一现状。</p>
@@ -152,30 +189,56 @@ const ContentDetail = () => {
     },
     3: {
       type: 'video',
-      title: '3D视觉检测技术突破：亚微米级精度实现',
-      author: '精密检测技术',
-      authorAvatar: 'https://ui-avatars.com/api/?name=JMJC&background=F59E0B&color=fff',
-      publishDate: '2025-11-18',
+      title: '自动化生产线智能检测系统',
+      author: '民崛智能',
+      authorAvatar: 'https://ui-avatars.com/api/?name=MJ&background=F59E0B&color=fff',
+      publishDate: '2025-12-14',
       views: 12800,
       likes: 723,
       duration: '15:20',
-      thumbnail: 'https://images.unsplash.com/photo-1485827404703-89b55fcc595e?auto=format&fit=crop&w=800&q=80',
-      videoUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ',
-      description: '深度解析最新3D激光扫描技术如何实现亚微米级精度测量，以及在半导体、精密制造等领域的应用。',
+      thumbnail: '/MinJue/videos/video-2-cover.jpg',
+      videoUrl: '/MinJue/videos/video-2.mp4',
+      description: '深度展示自动化生产线上的智能视觉检测系统，包括系统架构、检测流程和实际应用效果。',
       content: `
-        <h2>技术背景</h2>
-        <p>随着制造业向高精度方向发展，传统的2D视觉检测已经无法满足需求。3D视觉检测技术应运而生，特别是在半导体、航空航天等对精度要求极高的领域。</p>
-
-        <h3>核心技术原理</h3>
+        <h2>视频简介</h2>
+        <p>本视频详细展示了自动化生产线中智能视觉检测系统的完整解决方案，从系统架构设计到实际应用效果，全方位呈现工业4.0时代的智能制造技术。</p>
+        
+        <h3>系统架构</h3>
         <ul>
-          <li>激光三角测量法</li>
-          <li>结构光投影技术</li>
-          <li>飞行时间（ToF）测距</li>
-          <li>光场相机技术</li>
+          <li><strong>图像采集模块</strong>：高速工业相机、专业光源系统、精密机械结构</li>
+          <li><strong>数据处理单元</strong>：边缘计算设备、AI推理引擎、实时分析系统</li>
+          <li><strong>控制系统</strong>：PLC集成、MES对接、自动化控制</li>
+          <li><strong>结果输出</strong>：缺陷标记、数据统计、质量追溯</li>
         </ul>
 
-        <h3>应用领域</h3>
-        <p>本技术已成功应用于芯片制造、精密模具检测、医疗器械质检等多个领域，检测精度达到0.1微米。</p>
+        <h3>检测流程</h3>
+        <p>完整的检测流程包括：</p>
+        <ul>
+          <li>产品进入检测区域，触发相机采集</li>
+          <li>高速相机捕获产品图像</li>
+          <li>AI算法实时分析，识别缺陷</li>
+          <li>系统自动判定合格/不合格</li>
+          <li>数据上传至MES系统，生成报告</li>
+        </ul>
+
+        <h3>应用案例</h3>
+        <p>该系统已成功应用于多个行业：</p>
+        <ul>
+          <li><strong>电子制造</strong>：PCB板、芯片、连接器质量检测</li>
+          <li><strong>汽车行业</strong>：零部件表面缺陷、装配质量检测</li>
+          <li><strong>食品包装</strong>：包装完整性、标签识别、异物检测</li>
+          <li><strong>纺织服装</strong>：面料缺陷、印花质量检测</li>
+        </ul>
+
+        <h3>实施效果</h3>
+        <p>部署智能检测系统后，企业获得显著改善：</p>
+        <ul>
+          <li>检测效率提升5-10倍</li>
+          <li>漏检率降低至0.1%以下</li>
+          <li>人工成本降低70%</li>
+          <li>产品质量稳定性提升</li>
+          <li>生产数据可视化、可追溯</li>
+        </ul>
       `
     },
     4: {
@@ -325,15 +388,18 @@ const ContentDetail = () => {
         </div>
 
         {/* 视频/图片区 */}
-        <div className="mb-8 rounded-xl overflow-hidden bg-gray-900">
+        <div className="mb-8 rounded-xl overflow-hidden bg-gray-100">
           {content.type === 'video' ? (
-            <div className="relative" style={{ paddingBottom: '56.25%' }}>
-              <iframe
-                src={content.videoUrl}
+            <div className="relative bg-black" style={{ paddingBottom: '56.25%' }}>
+              <video
                 className="absolute inset-0 w-full h-full"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                allowFullScreen
-              />
+                controls
+                poster={content.thumbnail}
+                preload="metadata"
+              >
+                <source src={content.videoUrl} type="video/mp4" />
+                您的浏览器不支持视频播放。
+              </video>
             </div>
           ) : (
             <img src={content.thumbnail} alt={content.title} className="w-full h-auto" />
