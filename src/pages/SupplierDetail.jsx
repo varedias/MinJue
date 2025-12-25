@@ -2,11 +2,13 @@ import React, { useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { MapPin, Calendar, Award, Star, Phone, Mail, MessageCircle, Building, Users, Package, TrendingUp, Shield, ChevronRight, Heart, ArrowLeft } from 'lucide-react';
 import { suppliers, products } from '../data/mockData';
+import SupplierChatDialog from '../components/SupplierChatDialog';
 
 const SupplierDetail = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState('products');
+  const [isChatOpen, setIsChatOpen] = useState(false);
 
   // 从mockData获取供应商信息
   const supplierData = suppliers.find(s => s.id === parseInt(id));
@@ -256,11 +258,14 @@ const SupplierDetail = () => {
                 </div>
               </div>
               <div className="mt-6 space-y-2">
-                <button className="w-full bg-blue-600 text-white py-3 rounded-lg hover:bg-blue-700 font-medium flex items-center justify-center gap-2">
+                <button 
+                  onClick={() => setIsChatOpen(true)}
+                  className="w-full bg-blue-600 text-white py-3 rounded-lg hover:bg-blue-700 font-medium flex items-center justify-center gap-2 transition-colors"
+                >
                   <MessageCircle size={18} />
                   在线咨询
                 </button>
-                <button className="w-full border-2 border-blue-600 text-blue-600 py-3 rounded-lg hover:bg-blue-50 font-medium flex items-center justify-center gap-2">
+                <button className="w-full border-2 border-blue-600 text-blue-600 py-3 rounded-lg hover:bg-blue-50 font-medium flex items-center justify-center gap-2 transition-colors">
                   <Heart size={18} />
                   关注店铺
                 </button>
@@ -469,6 +474,13 @@ const SupplierDetail = () => {
           </div>
         </div>
       </div>
+
+      {/* Chat Dialog */}
+      <SupplierChatDialog
+        isOpen={isChatOpen}
+        onClose={() => setIsChatOpen(false)}
+        supplier={supplier}
+      />
     </div>
   );
 };

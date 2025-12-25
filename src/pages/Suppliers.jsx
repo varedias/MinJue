@@ -3,12 +3,15 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import { suppliers } from '../data/mockData';
 import { Building2, Star, Clock, ShoppingCart, ShieldCheck, MapPin } from 'lucide-react';
 import AIAssistantFloat, { AIAssistantButton } from '../components/AIAssistantFloat';
+import SupplierChatDialog from '../components/SupplierChatDialog';
 
 const Suppliers = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const isEnglish = location.pathname.startsWith('/en');
   const [isAIAssistantOpen, setIsAIAssistantOpen] = useState(false);
+  const [isChatOpen, setIsChatOpen] = useState(false);
+  const [selectedSupplier, setSelectedSupplier] = useState(null);
 
   return (
     <div className="min-h-screen bg-gray-50 py-8">
@@ -79,10 +82,27 @@ const Suppliers = () => {
               </div>
 
               <div className="flex flex-col justify-center gap-3 min-w-[140px] border-t md:border-t-0 md:border-l border-gray-100 pt-4 md:pt-0 md:pl-6">
-                <button className="w-full bg-blue-600 text-white py-2 rounded-lg font-medium hover:bg-blue-700 transition-colors shadow-sm">
+                <button 
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setSelectedSupplier({
+                      id: supplier.id,
+                      name: isEnglish ? supplier.nameEn : supplier.name,
+                      logo: supplier.logo
+                    });
+                    setIsChatOpen(true);
+                  }}
+                  className="w-full bg-blue-600 text-white py-2 rounded-lg font-medium hover:bg-blue-700 transition-colors shadow-sm"
+                >
                   {isEnglish ? 'Contact Now' : '立即联系'}
                 </button>
-                <button className="w-full border border-gray-300 text-gray-700 py-2 rounded-lg font-medium hover:border-blue-600 hover:text-blue-600 hover:bg-blue-50 transition-colors">
+                <button 
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    navigate(isEnglish ? `/en/supplier/${supplier.id}` : `/supplier/${supplier.id}`);
+                  }}
+                  className="w-full border border-gray-300 text-gray-700 py-2 rounded-lg font-medium hover:border-blue-600 hover:text-blue-600 hover:bg-blue-50 transition-colors"
+                >
                   {isEnglish ? 'View Profile' : '查看详情'}
                 </button>
               </div>
@@ -100,6 +120,16 @@ const Suppliers = () => {
       <AIAssistantFloat 
         isOpen={isAIAssistantOpen} 
         onClose={() => setIsAIAssistantOpen(false)} 
+      />
+
+      {/* Supplier Chat Dialog */}
+      <SupplierChatDialog
+        isOpen={isChatOpen}
+        onClose={() => {
+          setIsChatOpen(false);
+          setSelectedSupplier(null);
+        }}
+        supplier={selectedSupplier}
       />
     </div>
   );

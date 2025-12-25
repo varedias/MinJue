@@ -2,6 +2,7 @@ import React, { useState, useMemo } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { Star, Phone, Heart, Share2, Shield, Truck, Clock, MessageCircle, ThumbsUp, ChevronRight, Package, Award, CheckCircle, ArrowLeft } from 'lucide-react';
 import { products, suppliers } from '../data/mockData';
+import SupplierChatDialog from '../components/SupplierChatDialog';
 
 const ProductDetail = () => {
   const { id } = useParams();
@@ -9,6 +10,7 @@ const ProductDetail = () => {
   const [selectedImage, setSelectedImage] = useState(0);
   const [quantity, setQuantity] = useState(1);
   const [activeTab, setActiveTab] = useState('detail');
+  const [isChatOpen, setIsChatOpen] = useState(false);
 
   // 从mockData获取商品详情
   const productData = useMemo(() => {
@@ -297,17 +299,17 @@ const ProductDetail = () => {
 
                 <div className="flex gap-3">
                   <button 
-                    onClick={() => navigate(`/supplier/${product.supplier.id}`)}
-                    className="flex-1 bg-blue-600 text-white py-4 rounded-lg hover:bg-blue-700 font-medium text-lg flex items-center justify-center gap-2"
+                    onClick={() => setIsChatOpen(true)}
+                    className="flex-1 bg-blue-600 text-white py-4 rounded-lg hover:bg-blue-700 font-medium text-lg flex items-center justify-center gap-2 transition-colors"
                   >
                     <MessageCircle size={20} />
                     联系供应商
                   </button>
-                  <button className="flex-1 border-2 border-blue-600 text-blue-600 py-4 rounded-lg hover:bg-blue-50 font-medium text-lg flex items-center justify-center gap-2">
+                  <button className="flex-1 border-2 border-blue-600 text-blue-600 py-4 rounded-lg hover:bg-blue-50 font-medium text-lg flex items-center justify-center gap-2 transition-colors">
                     <Phone size={20} />
                     电话咨询
                   </button>
-                  <button className="border-2 border-gray-300 text-gray-600 p-4 rounded-lg hover:bg-gray-50">
+                  <button className="border-2 border-gray-300 text-gray-600 p-4 rounded-lg hover:bg-gray-50 transition-colors">
                     <Heart size={20} />
                   </button>
                 </div>
@@ -449,6 +451,17 @@ const ProductDetail = () => {
           </div>
         </div>
       </div>
+
+      {/* Supplier Chat Dialog */}
+      <SupplierChatDialog
+        isOpen={isChatOpen}
+        onClose={() => setIsChatOpen(false)}
+        supplier={{
+          id: product.supplier.id,
+          name: product.supplier.name,
+          logo: product.supplier.logo
+        }}
+      />
     </div>
   );
 };
