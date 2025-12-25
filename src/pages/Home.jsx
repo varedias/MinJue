@@ -164,29 +164,29 @@ const Home = () => {
   const allDiscoveryContent = [
     // 第1页
     [
-      { id: 1, type: 'video', title: '工业视觉检测技术应用演示', author: '民崛智能', views: 15200, likes: 892, duration: '12:35', thumbnail: '/DongShiDi/videos/video-1-cover.jpg' },
+      { id: 1, type: 'video', title: '工业视觉检测技术应用演示', author: '民崛智能', views: 15200, likes: 892, duration: '12:35', thumbnail: '/DongShiDi/Picture/5f45ca8db560b.jpg' },
       { id: 2, type: 'article', title: '如何选择合适的工业相机？5大关键参数详解', author: '机器视觉专家', views: 8500, likes: 456, readTime: '8分钟', thumbnail: 'https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=400&q=80' },
-      { id: 3, type: 'video', title: '自动化生产线智能检测系统', author: '民崛智能', views: 12800, likes: 723, duration: '15:20', thumbnail: '/DongShiDi/videos/video-2-cover.jpg' },
+      { id: 3, type: 'video', title: '自动化生产线智能检测系统', author: '民崛智能', views: 12800, likes: 723, duration: '15:20', thumbnail: '/DongShiDi/Picture/9f1b10429b214030ab65eed8d9217246.jpeg' },
       { id: 4, type: 'article', title: '表面缺陷检测系统部署指南与最佳实践', author: '工业4.0实验室', views: 6700, likes: 334, readTime: '10分钟', thumbnail: 'https://images.unsplash.com/photo-1581092918056-0c4c3acd3789?auto=format&fit=crop&w=400&q=80' },
-      { id: 5, type: 'video', title: 'AI+机器视觉：智能工厂质检革命', author: '智造科技', views: 19500, likes: 1205, duration: '18:45', thumbnail: 'https://images.unsplash.com/photo-1581092160562-40aa08e78837?auto=format&fit=crop&w=400&q=80' },
+      { id: 5, type: 'video', title: 'AI+机器视觉：智能工厂质检革命', author: '智造科技', views: 19500, likes: 1205, duration: '18:45', thumbnail: '/DongShiDi/Picture/R-C.jpg' },
       { id: 6, type: 'article', title: '光源选型全攻略：让检测精度提升50%', author: '视觉照明专家', views: 5600, likes: 289, readTime: '6分钟', thumbnail: 'https://images.unsplash.com/photo-1581093458791-9d58b3fbbd0d?auto=format&fit=crop&w=400&q=80' },
     ],
     // 第2页
     [
       { id: 7, type: 'article', title: '工业镜头畸变校正技术深度解析', author: '光学工程师', views: 7200, likes: 412, readTime: '12分钟', thumbnail: 'https://images.unsplash.com/photo-1581092160607-ee22621dd758?auto=format&fit=crop&w=400&q=80' },
-      { id: 8, type: 'video', title: '实时缺陷检测：深度学习算法训练全流程', author: 'AI视觉算法', views: 22000, likes: 1567, duration: '25:30', thumbnail: 'https://images.unsplash.com/photo-1581092921461-eab62e97a780?auto=format&fit=crop&w=400&q=80' },
-      { id: 9, type: 'video', title: 'OCR字符识别在生产线上的应用', author: '智能识别技术', views: 9800, likes: 542, duration: '10:15', thumbnail: 'https://images.unsplash.com/photo-1581093588401-fbb62a02f120?auto=format&fit=crop&w=400&q=80' },
+      { id: 8, type: 'video', title: '实时缺陷检测：深度学习算法训练全流程', author: 'AI视觉算法', views: 22000, likes: 1567, duration: '25:30', thumbnail: '/DongShiDi/Picture/OIP-C.webp' },
+      { id: 9, type: 'video', title: 'OCR字符识别在生产线上的应用', author: '智能识别技术', views: 9800, likes: 542, duration: '10:15', thumbnail: '/DongShiDi/Picture/5f45ca8db560b.jpg' },
       { id: 10, type: 'article', title: '图像采集卡选购指南：接口类型全对比', author: '硬件工程师', views: 4500, likes: 223, readTime: '7分钟', thumbnail: 'https://images.unsplash.com/photo-1581094271901-8022df4466f9?auto=format&fit=crop&w=400&q=80' },
-      { id: 11, type: 'video', title: '汽车零部件智能检测系统完整方案', author: '汽车工业自动化', views: 16700, likes: 934, duration: '20:10', thumbnail: 'https://images.unsplash.com/photo-1581094794329-c8112a89af12?auto=format&fit=crop&w=400&q=80' },
+      { id: 11, type: 'video', title: '汽车零部件智能检测系统完整方案', author: '汽车工业自动化', views: 16700, likes: 934, duration: '20:10', thumbnail: '/DongShiDi/Picture/9f1b10429b214030ab65eed8d9217246.jpeg' },
       { id: 12, type: 'article', title: '机器视觉系统ROI计算与投资回报分析', author: '工业咨询顾问', views: 5900, likes: 301, readTime: '9分钟', thumbnail: 'https://images.unsplash.com/photo-1581094798828-37b7cf641a6e?auto=format&fit=crop&w=400&q=80' },
     ],
     // 第3页
     [
-      { id: 13, type: 'video', title: '药品包装智能检测：合规性与效率双提升', author: '医药装备技术', views: 11200, likes: 678, duration: '14:25', thumbnail: 'https://images.unsplash.com/photo-1581095949419-fccbf82e3e7d?auto=format&fit=crop&w=400&q=80' },
+      { id: 13, type: 'video', title: '药品包装智能检测：合规性与效率双提升', author: '医药装备技术', views: 11200, likes: 678, duration: '14:25', thumbnail: '/DongShiDi/Picture/R-C.jpg' },
       { id: 14, type: 'article', title: '工业4.0时代的视觉检测云平台架构', author: '云计算专家', views: 6800, likes: 367, readTime: '11分钟', thumbnail: 'https://images.unsplash.com/photo-1581096723826-c0d7b2f20e9e?auto=format&fit=crop&w=400&q=80' },
-      { id: 15, type: 'video', title: '纺织品表面瑕疵检测AI算法实战', author: '纺织智能化', views: 8900, likes: 487, duration: '16:50', thumbnail: 'https://images.unsplash.com/photo-1581097518616-a212e1db7031?auto=format&fit=crop&w=400&q=80' },
+      { id: 15, type: 'video', title: '纺织品表面瑕疵检测AI算法实战', author: '纺织智能化', views: 8900, likes: 487, duration: '16:50', thumbnail: '/DongShiDi/Picture/OIP-C.webp' },
       { id: 16, type: 'article', title: '多相机同步技术在360度检测中的应用', author: '系统集成工程师', views: 4100, likes: 198, readTime: '8分钟', thumbnail: 'https://images.unsplash.com/photo-1581098365948-6b5a5b5f9e4f?auto=format&fit=crop&w=400&q=80' },
-      { id: 17, type: 'video', title: '食品安全检测：X射线+视觉双重保障', author: '食品安全技术', views: 13500, likes: 801, duration: '13:40', thumbnail: 'https://images.unsplash.com/photo-1581099710419-e5de6c7ce08c?auto=format&fit=crop&w=400&q=80' },
+      { id: 17, type: 'video', title: '食品安全检测：X射线+视觉双重保障', author: '食品安全技术', views: 13500, likes: 801, duration: '13:40', thumbnail: '/DongShiDi/Picture/5f45ca8db560b.jpg' },
       { id: 18, type: 'article', title: '边缘计算在工业视觉中的最新进展', author: '边缘AI研究', views: 7600, likes: 423, readTime: '10分钟', thumbnail: 'https://images.unsplash.com/photo-1581101215084-0f3a4c9f32e0?auto=format&fit=crop&w=400&q=80' },
     ]
   ];

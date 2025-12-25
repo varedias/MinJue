@@ -30,7 +30,7 @@ const Discovery = () => {
     {
       id: 1,
       title: '工业视觉检测技术应用演示',
-      cover: '/DongShiDi/videos/video-1-cover.jpg',
+      cover: '/Picture/5f45ca8db560b.jpg',
       author: '民崛智能',
       avatar: 'https://ui-avatars.com/api/?name=MJ&background=0D8ABC&color=fff',
       views: 125600,
@@ -45,7 +45,7 @@ const Discovery = () => {
     {
       id: 3,
       title: '自动化生产线智能检测系统',
-      cover: '/DongShiDi/videos/video-2-cover.jpg',
+      cover: '/Picture/9f1b10429b214030ab65eed8d9217246.jpeg',
       author: '民崛智能',
       avatar: 'https://ui-avatars.com/api/?name=MJ&background=22C55E&color=fff',
       views: 89200,
@@ -60,7 +60,7 @@ const Discovery = () => {
     {
       id: 3,
       title: '千元级工业相机选购指南 | 性价比之王终极测试',
-      cover: 'https://images.unsplash.com/photo-1516035069371-29a1b244cc32?w=600',
+      cover: '/Picture/R-C.jpg',
       author: '设备评测室',
       avatar: 'https://ui-avatars.com/api/?name=SB&background=F59E0B&color=fff',
       views: 156000,
@@ -75,7 +75,7 @@ const Discovery = () => {
     {
       id: 4,
       title: 'MVTec Halcon vs OpenCV | 机器视觉软件终极对决',
-      cover: 'https://images.unsplash.com/photo-1581092918056-0c4c3acd3789?w=600',
+      cover: '/Picture/OIP-C.webp',
       author: '视觉算法工程师',
       avatar: 'https://ui-avatars.com/api/?name=SF&background=EF4444&color=fff',
       views: 67800,
@@ -94,7 +94,7 @@ const Discovery = () => {
     {
       id: 5,
       title: '探厂实拍 | 走进深圳AI视觉检测设备制造商',
-      cover: 'https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=600',
+      cover: '/videos/video-1-cover.jpg',
       author: '工业探厂Vlog',
       avatar: 'https://ui-avatars.com/api/?name=GY&background=8B5CF6&color=fff',
       views: 234000,
@@ -109,7 +109,7 @@ const Discovery = () => {
     {
       id: 6,
       title: '锂电池生产线实拍 | AOI视觉检测设备工作全流程',
-      cover: 'https://images.unsplash.com/photo-1581092160607-ee22621dd758?w=600',
+      cover: '/videos/video-2-cover.jpg',
       author: '制造业观察者',
       avatar: 'https://ui-avatars.com/api/?name=ZZ&background=06B6D4&color=fff',
       views: 178000,
@@ -124,7 +124,7 @@ const Discovery = () => {
     {
       id: 7,
       title: '老板的一天 | 视觉设备公司日常Vlog',
-      cover: 'https://images.unsplash.com/photo-1485827404703-89b55fcc595e?w=600',
+      cover: '/Picture/5f45ca8db560b.jpg',
       author: '创业者日记',
       avatar: 'https://ui-avatars.com/api/?name=CY&background=F97316&color=fff',
       views: 98500,
@@ -139,7 +139,7 @@ const Discovery = () => {
     {
       id: 8,
       title: '跟我一起参加机器视觉展会 | VISION CHINA 2024',
-      cover: 'https://images.unsplash.com/photo-1581093458791-9d58b3fbbd0d?w=600',
+      cover: '/Picture/9f1b10429b214030ab65eed8d9217246.jpeg',
       author: '行业观察',
       avatar: 'https://ui-avatars.com/api/?name=HY&background=84CC16&color=fff',
       views: 145000,
@@ -158,7 +158,7 @@ const Discovery = () => {
     {
       id: 9,
       title: 'Halcon机器视觉完整教程 | 从入门到精通(1/50)',
-      cover: 'https://images.unsplash.com/photo-1581092918056-0c4c3acd3789?w=600',
+      cover: '/Picture/OIP-C.webp',
       author: '视觉教程大师',
       avatar: 'https://ui-avatars.com/api/?name=JC&background=DC2626&color=fff',
       views: 567000,
@@ -173,7 +173,7 @@ const Discovery = () => {
     {
       id: 10,
       title: '工业相机选型与调试实战教程 | 手把手教学',
-      cover: 'https://images.unsplash.com/photo-1516035069371-29a1b244cc32?w=600',
+      cover: '/Picture/R-C.jpg',
       author: '工程师小李',
       avatar: 'https://ui-avatars.com/api/?name=XL&background=7C3AED&color=fff',
       views: 234000,
@@ -188,7 +188,7 @@ const Discovery = () => {
     {
       id: 11,
       title: 'AI缺陷检测项目实战 | 从0搭建完整系统',
-      cover: 'https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=600',
+      cover: '/videos/video-1-cover.jpg',
       author: 'AI视觉工程师',
       avatar: 'https://ui-avatars.com/api/?name=AI&background=2563EB&color=fff',
       views: 189000,
@@ -203,7 +203,7 @@ const Discovery = () => {
     {
       id: 12,
       title: 'PLC与视觉系统通讯教程 | Modbus/TCP协议详解',
-      cover: 'https://images.unsplash.com/photo-1581092160562-40aa08e78837?w=600',
+      cover: '/videos/video-2-cover.jpg',
       author: '自动化工程师',
       avatar: 'https://ui-avatars.com/api/?name=ZD&background=059669&color=fff',
       views: 123000,
@@ -222,7 +222,7 @@ const Discovery = () => {
     {
       id: 13,
       title: '二手设备淘宝记 | 5万元收购一套完整视觉检测系统',
-      cover: 'https://images.unsplash.com/photo-1485827404703-89b55fcc595e?w=600',
+      cover: '/Picture/5f45ca8db560b.jpg',
       author: '设备猎人',
       avatar: 'https://ui-avatars.com/api/?name=SB&background=DC2626&color=fff',
       views: 345000,
@@ -237,7 +237,7 @@ const Discovery = () => {
     {
       id: 14,
       title: '如何避坑 | 购买工业相机的10个注意事项',
-      cover: 'https://images.unsplash.com/photo-1516035069371-29a1b244cc32?w=600',
+      cover: '/Picture/R-C.jpg',
       author: '采购老司机',
       avatar: 'https://ui-avatars.com/api/?name=CG&background=F59E0B&color=fff',
       views: 267000,
@@ -252,7 +252,7 @@ const Discovery = () => {
     {
       id: 15,
       title: '设备置换实录 | 老设备如何卖出好价格',
-      cover: 'https://images.unsplash.com/photo-1581093458791-9d58b3fbbd0d?w=600',
+      cover: '/Picture/9f1b10429b214030ab65eed8d9217246.jpeg',
       author: '二手市场',
       avatar: 'https://ui-avatars.com/api/?name=ES&background=22C55E&color=fff',
       views: 156000,
@@ -267,7 +267,7 @@ const Discovery = () => {
     {
       id: 16,
       title: '工厂设备拍卖会直击 | 捡漏高端视觉设备',
-      cover: 'https://images.unsplash.com/photo-1581092160607-ee22621dd758?w=600',
+      cover: '/videos/video-2-cover.jpg',
       author: '拍卖观察',
       avatar: 'https://ui-avatars.com/api/?name=PM&background=8B5CF6&color=fff',
       views: 198000,
@@ -286,7 +286,7 @@ const Discovery = () => {
     {
       id: 17,
       title: '2024机器视觉行业白皮书解读 | 市场规模突破500亿',
-      cover: 'https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=600',
+      cover: '/videos/video-1-cover.jpg',
       author: '行业分析师',
       avatar: 'https://ui-avatars.com/api/?name=HY&background=0D8ABC&color=fff',
       views: 456000,
@@ -301,7 +301,7 @@ const Discovery = () => {
     {
       id: 18,
       title: 'AI视觉检测技术发展趋势 | 深度学习vs传统算法',
-      cover: 'https://images.unsplash.com/photo-1485827404703-89b55fcc595e?w=600',
+      cover: '/Picture/5f45ca8db560b.jpg',
       author: '技术前沿',
       avatar: 'https://ui-avatars.com/api/?name=JS&background=EF4444&color=fff',
       views: 289000,
@@ -316,7 +316,7 @@ const Discovery = () => {
     {
       id: 19,
       title: '国产vs进口 | 机器视觉设备竞争格局分析',
-      cover: 'https://images.unsplash.com/photo-1581092160562-40aa08e78837?w=600',
+      cover: '/videos/video-2-cover.jpg',
       author: '产业观察',
       avatar: 'https://ui-avatars.com/api/?name=CY&background=059669&color=fff',
       views: 234000,
@@ -331,7 +331,7 @@ const Discovery = () => {
     {
       id: 20,
       title: '新能源行业带来的视觉检测机遇 | 千亿市场解析',
-      cover: 'https://images.unsplash.com/photo-1581093458791-9d58b3fbbd0d?w=600',
+      cover: '/Picture/9f1b10429b214030ab65eed8d9217246.jpeg',
       author: '投资观察',
       avatar: 'https://ui-avatars.com/api/?name=TZ&background=F97316&color=fff',
       views: 345000,
