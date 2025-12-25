@@ -11,6 +11,12 @@ const Home = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isAIAssistantOpen, setIsAIAssistantOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
+  
+  // 辅助函数：处理图片路径
+  const getImagePath = (path) => {
+    if (!path || path.startsWith('http')) return path;
+    return `${import.meta.env.BASE_URL}${path.replace(/^\//, '')}`;
+  };
 
   const handleSearch = () => {
     if (searchQuery.trim()) {
@@ -409,7 +415,7 @@ const Home = () => {
               >
                 <div className="relative h-48 bg-gray-100 overflow-hidden">
                   <img 
-                    src={item.thumbnail} 
+                    src={getImagePath(item.thumbnail)} 
                     alt={item.title} 
                     className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300" 
                   />
@@ -477,7 +483,7 @@ const Home = () => {
               >
                 <div className="h-36 bg-gray-100 rounded-lg mb-3 overflow-hidden">
                   <img 
-                    src={product.image} 
+                    src={getImagePath(product.image)} 
                     alt={product.name} 
                     className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300" 
                   />

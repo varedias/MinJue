@@ -9,6 +9,12 @@ const Mall = () => {
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [sortBy, setSortBy] = useState('hot');
   const [isAIAssistantOpen, setIsAIAssistantOpen] = useState(true); // 默认显示AI对话框
+  
+  // 辅助函数：处理图片路径
+  const getImagePath = (path) => {
+    if (!path || path.startsWith('http')) return path;
+    return `${import.meta.env.BASE_URL}${path.replace(/^\//, '')}`;
+  };
 
   // 商品分类
   const categories = [
@@ -36,7 +42,7 @@ const Mall = () => {
       name: '海康威视AI视觉检测系统 VIS-2000',
       price: 28900,
       originalPrice: 35000,
-      image: 'https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=400',
+      image: '/products/minjue-product-1.png',
       category: 'ai-vision',
       rating: 4.9,
       sales: 1245,
@@ -59,7 +65,7 @@ const Mall = () => {
       name: 'Basler ace系列工业相机套装',
       price: 4299,
       originalPrice: 5200,
-      image: 'https://images.unsplash.com/photo-1516035069371-29a1b244cc32?w=400',
+      image: '/products/minjue-product-2.png',
       category: 'camera',
       rating: 4.8,
       sales: 2234,
@@ -82,7 +88,7 @@ const Mall = () => {
       name: 'CCS LED环形光源 LDR2-100',
       price: 680,
       originalPrice: 850,
-      image: 'https://images.unsplash.com/photo-1581093458791-9d58b3fbbd0d?w=400',
+      image: '/products/minjue-product-3.png',
       category: 'lens',
       rating: 4.8,
       sales: 5678,
@@ -105,7 +111,7 @@ const Mall = () => {
       name: '基恩士激光位移传感器 LK-G5000',
       price: 15800,
       originalPrice: 18500,
-      image: 'https://images.unsplash.com/photo-1581092160562-40aa08e78837?w=400',
+      image: '/products/1-parameter.jpg',
       category: 'measure',
       rating: 4.9,
       sales: 867,
@@ -128,7 +134,7 @@ const Mall = () => {
       name: '大华智能相机 DH-IPC-AI',
       price: 6800,
       originalPrice: 8200,
-      image: 'https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=400',
+      image: '/products/2-parameter.jpg',
       category: 'camera',
       rating: 4.9,
       sales: 1567,
@@ -151,7 +157,7 @@ const Mall = () => {
       name: 'ABB IRB 1200工业机器人',
       price: 85000,
       originalPrice: 95000,
-      image: 'https://images.unsplash.com/photo-1581092160562-40aa08e78837?w=400',
+      image: '/products/3-parameter.jpg',
       category: 'robot',
       rating: 5.0,
       sales: 234,
@@ -174,7 +180,7 @@ const Mall = () => {
       name: 'MVTec Halcon 机器视觉软件',
       price: 18000,
       originalPrice: 22000,
-      image: 'https://images.unsplash.com/photo-1581092918056-0c4c3acd3789?w=400',
+      image: '/products/minjue-product-1.png',
       category: 'ai-vision',
       rating: 4.9,
       sales: 2345,
@@ -197,7 +203,7 @@ const Mall = () => {
       name: '蔡司三坐标测量机 CONTURA',
       price: 350000,
       originalPrice: 420000,
-      image: 'https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=400',
+      image: '/products/minjue-product-2.png',
       category: 'measure',
       rating: 5.0,
       sales: 45,
@@ -220,7 +226,7 @@ const Mall = () => {
       name: '康耐视In-Sight 3D视觉传感器',
       price: 15800,
       originalPrice: 18900,
-      image: 'https://images.unsplash.com/photo-1581092160562-40aa08e78837?w=400',
+      image: '/products/minjue-product-3.png',
       category: 'ai-vision',
       rating: 4.8,
       sales: 867,
@@ -243,7 +249,7 @@ const Mall = () => {
       name: '富士能工业镜头 16mm定焦',
       price: 1280,
       originalPrice: 1580,
-      image: 'https://images.unsplash.com/photo-1581092160607-ee22621dd758?w=400',
+      image: '/products/1-parameter.jpg',
       category: 'lens',
       rating: 4.7,
       sales: 3456,
@@ -266,7 +272,7 @@ const Mall = () => {
       name: '爱普生SCARA机器人 T3',
       price: 38000,
       originalPrice: 45000,
-      image: 'https://images.unsplash.com/photo-1581092918056-0c4c3acd3789?w=400',
+      image: '/products/2-parameter.jpg',
       category: 'robot',
       rating: 4.8,
       sales: 456,
@@ -289,7 +295,7 @@ const Mall = () => {
       name: '二次元影像测量仪',
       price: 28000,
       originalPrice: 32000,
-      image: 'https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=400',
+      image: '/products/3-parameter.jpg',
       category: 'measure',
       rating: 4.7,
       sales: 678,
@@ -462,7 +468,7 @@ const Mall = () => {
                   >
                     <div className="relative aspect-square bg-gray-100 overflow-hidden">
                       <img
-                        src={product.image}
+                        src={getImagePath(product.image)}
                         alt={product.name}
                         className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
                       />
@@ -538,7 +544,7 @@ const Mall = () => {
                   >
                     <div className="relative w-48 h-48 bg-gray-100 rounded-lg overflow-hidden flex-shrink-0">
                       <img
-                        src={product.image}
+                        src={getImagePath(product.image)}
                         alt={product.name}
                         className="w-full h-full object-cover"
                       />

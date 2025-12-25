@@ -6,6 +6,12 @@ const Discovery = () => {
   const navigate = useNavigate();
   const [activeCategory, setActiveCategory] = useState('all');
   const [sortBy, setSortBy] = useState('hot');
+  
+  // 辅助函数：处理图片路径
+  const getImagePath = (path) => {
+    if (path.startsWith('http')) return path;
+    return `${import.meta.env.BASE_URL}${path.replace(/^\//, '')}`;
+  };
 
   // 分类标签
   const categories = [
@@ -442,7 +448,7 @@ const Discovery = () => {
               {/* 视频封面 */}
               <div className="relative aspect-video bg-gray-200 overflow-hidden">
                 <img
-                  src={video.cover}
+                  src={getImagePath(video.cover)}
                   alt={video.title}
                   className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
                   onError={(e) => {
