@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+﻿import React, { useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { ArrowLeft, Play, Clock, Eye, ThumbsUp, Share2, Bookmark, User } from 'lucide-react';
 
@@ -6,6 +6,12 @@ const ContentDetail = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const [isPlaying, setIsPlaying] = useState(false);
+  
+  // 辅助函数：处理图片和视频路径
+  const getImagePath = (path) => {
+    if (!path || path.startsWith('http')) return path;
+    return `${import.meta.env.BASE_URL}${path.replace(/^\//, '')}`;
+  };
 
   // 所有内容数据
   const allContent = {
@@ -18,8 +24,8 @@ const ContentDetail = () => {
       views: 15200,
       likes: 892,
       duration: '12:35',
-      thumbnail: '/DongShiDi/videos/video-1-cover.jpg',
-      videoUrl: '/DongShiDi/videos/video-1.mp4',
+      thumbnail: '/videos/video-1-cover.jpg',
+      videoUrl: '/videos/video-1.mp4',
       description: '本视频详细展示了工业视觉检测技术在实际生产中的应用，包括产品演示、技术特点和应用案例。',
       content: `
         <h2>视频简介</h2>
@@ -56,8 +62,8 @@ const ContentDetail = () => {
       views: 12800,
       likes: 678,
       duration: '15:20',
-      thumbnail: '/DongShiDi/videos/video-2-cover.jpg',
-      videoUrl: '/DongShiDi/videos/video-2.mp4',
+      thumbnail: '/videos/video-2-cover.jpg',
+      videoUrl: '/videos/video-2.mp4',
       description: 'PCB印刷电路板的AOI自动光学检测技术应用，展示如何通过视觉检测提升产品质量。',
       content: `
         <h2>视频概述</h2>
@@ -94,8 +100,8 @@ const ContentDetail = () => {
       views: 156000,
       likes: 4230,
       duration: '18:45',
-      thumbnail: '/DongShiDi/videos/video-1-cover.jpg',
-      videoUrl: '/DongShiDi/videos/video-1.mp4',
+      thumbnail: '/videos/video-1-cover.jpg',
+      videoUrl: '/videos/video-1.mp4',
       content: `
         <h2>引言</h2>
         <p>工业相机是机器视觉系统的"眼睛"，其性能直接决定了整个系统的检测精度和效率。面对市场上琳琅满目的产品，如何选择一款适合自己应用场景的工业相机？本文将从5个关键参数入手，为您提供专业的选型指南。</p>
@@ -199,8 +205,8 @@ const ContentDetail = () => {
       views: 12800,
       likes: 723,
       duration: '15:20',
-      thumbnail: '/DongShiDi/videos/video-2-cover.jpg',
-      videoUrl: '/DongShiDi/videos/video-2.mp4',
+      thumbnail: '/videos/video-2-cover.jpg',
+      videoUrl: '/videos/video-2.mp4',
       description: '深度展示自动化生产线上的智能视觉检测系统，包括系统架构、检测流程和实际应用效果。',
       content: `
         <h2>视频简介</h2>
@@ -349,8 +355,8 @@ const ContentDetail = () => {
       views: 67800,
       likes: 1890,
       duration: '25:12',
-      thumbnail: '/DongShiDi/videos/video-2-cover.jpg',
-      videoUrl: '/DongShiDi/videos/video-2.mp4',
+      thumbnail: '/videos/video-2-cover.jpg',
+      videoUrl: '/videos/video-2.mp4',
       description: '深度对比两大主流机器视觉软件Halcon和OpenCV的优劣势，帮助您选择最适合的开发平台。',
       content: `
         <h2>软件对比</h2>
@@ -368,8 +374,8 @@ const ContentDetail = () => {
       views: 234000,
       likes: 6780,
       duration: '28:34',
-      thumbnail: '/DongShiDi/videos/video-1-cover.jpg',
-      videoUrl: '/DongShiDi/videos/video-1.mp4',
+      thumbnail: '/videos/video-1-cover.jpg',
+      videoUrl: '/videos/video-1.mp4',
       description: '实地探访深圳一家专业的AI视觉检测设备制造商，了解从设计到生产的全流程。',
       content: `
         <h2>探厂之旅</h2>
@@ -387,8 +393,8 @@ const ContentDetail = () => {
       views: 178000,
       likes: 4560,
       duration: '16:45',
-      thumbnail: '/DongShiDi/videos/video-2-cover.jpg',
-      videoUrl: '/DongShiDi/videos/video-2.mp4',
+      thumbnail: '/videos/video-2-cover.jpg',
+      videoUrl: '/videos/video-2.mp4',
       description: '锂电池生产线上的AOI视觉检测设备实际工作场景，展示智能制造如何保障产品质量。',
       content: `
         <h2>锂电池检测</h2>
@@ -406,8 +412,8 @@ const ContentDetail = () => {
       views: 98500,
       likes: 2340,
       duration: '12:20',
-      thumbnail: '/DongShiDi/videos/video-1-cover.jpg',
-      videoUrl: '/DongShiDi/videos/video-1.mp4',
+      thumbnail: '/videos/video-1-cover.jpg',
+      videoUrl: '/videos/video-1.mp4',
       description: '跟随一位视觉设备公司老板，了解创业者的日常工作与挑战。',
       content: `
         <h2>创业日常</h2>
@@ -425,8 +431,8 @@ const ContentDetail = () => {
       views: 145000,
       likes: 3890,
       duration: '32:15',
-      thumbnail: '/DongShiDi/videos/video-2-cover.jpg',
-      videoUrl: '/DongShiDi/videos/video-2.mp4',
+      thumbnail: '/videos/video-2-cover.jpg',
+      videoUrl: '/videos/video-2.mp4',
       description: '现场直击VISION CHINA 2024机器视觉展会，了解行业最新技术和产品趋势。',
       content: `
         <h2>展会报道</h2>
@@ -444,8 +450,8 @@ const ContentDetail = () => {
       views: 567000,
       likes: 15600,
       duration: '45:30',
-      thumbnail: '/DongShiDi/videos/video-1-cover.jpg',
-      videoUrl: '/DongShiDi/videos/video-1.mp4',
+      thumbnail: '/videos/video-1-cover.jpg',
+      videoUrl: '/videos/video-1.mp4',
       description: '系统学习Halcon机器视觉软件，从基础概念到高级应用，手把手教学。',
       content: `
         <h2>课程介绍</h2>
@@ -463,8 +469,8 @@ const ContentDetail = () => {
       views: 234000,
       likes: 7890,
       duration: '38:12',
-      thumbnail: '/DongShiDi/videos/video-2-cover.jpg',
-      videoUrl: '/DongShiDi/videos/video-2.mp4',
+      thumbnail: '/videos/video-2-cover.jpg',
+      videoUrl: '/videos/video-2.mp4',
       description: '详细讲解工业相机的选型原则和调试技巧，包括参数设置、镜头匹配等实战内容。',
       content: `
         <h2>相机选型</h2>
@@ -482,8 +488,8 @@ const ContentDetail = () => {
       views: 189000,
       likes: 6780,
       duration: '52:45',
-      thumbnail: '/DongShiDi/videos/video-1-cover.jpg',
-      videoUrl: '/DongShiDi/videos/video-1.mp4',
+      thumbnail: '/videos/video-1-cover.jpg',
+      videoUrl: '/videos/video-1.mp4',
       description: '完整的AI缺陷检测项目开发教程，包括数据采集、模型训练、系统集成全流程。',
       content: `
         <h2>项目概述</h2>
@@ -501,8 +507,8 @@ const ContentDetail = () => {
       views: 123000,
       likes: 4560,
       duration: '28:30',
-      thumbnail: '/DongShiDi/videos/video-2-cover.jpg',
-      videoUrl: '/DongShiDi/videos/video-2.mp4',
+      thumbnail: '/videos/video-2-cover.jpg',
+      videoUrl: '/videos/video-2.mp4',
       description: '详解PLC与视觉系统之间的通讯协议，重点讲解Modbus/TCP的应用。',
       content: `
         <h2>通讯协议</h2>
@@ -520,8 +526,8 @@ const ContentDetail = () => {
       views: 345000,
       likes: 8900,
       duration: '22:15',
-      thumbnail: '/DongShiDi/videos/video-1-cover.jpg',
-      videoUrl: '/DongShiDi/videos/video-1.mp4',
+      thumbnail: '/videos/video-1-cover.jpg',
+      videoUrl: '/videos/video-1.mp4',
       description: '记录一次二手设备收购经历，分享如何以高性价比获得工业视觉检测系统。',
       content: `
         <h2>淘宝经验</h2>
@@ -539,8 +545,8 @@ const ContentDetail = () => {
       views: 267000,
       likes: 7650,
       duration: '18:45',
-      thumbnail: '/DongShiDi/videos/video-2-cover.jpg',
-      videoUrl: '/DongShiDi/videos/video-2.mp4',
+      thumbnail: '/videos/video-2-cover.jpg',
+      videoUrl: '/videos/video-2.mp4',
       description: '总结工业相机采购中的常见陷阱和注意事项，帮助您做出明智选择。',
       content: `
         <h2>避坑指南</h2>
@@ -558,8 +564,8 @@ const ContentDetail = () => {
       views: 156000,
       likes: 4230,
       duration: '15:30',
-      thumbnail: '/DongShiDi/videos/video-1-cover.jpg',
-      videoUrl: '/DongShiDi/videos/video-1.mp4',
+      thumbnail: '/videos/video-1-cover.jpg',
+      videoUrl: '/videos/video-1.mp4',
       description: '记录一次设备置换全过程，教您如何让旧设备卖出理想价格。',
       content: `
         <h2>置换技巧</h2>
@@ -577,8 +583,8 @@ const ContentDetail = () => {
       views: 198000,
       likes: 5670,
       duration: '25:40',
-      thumbnail: '/DongShiDi/videos/video-2-cover.jpg',
-      videoUrl: '/DongShiDi/videos/video-2.mp4',
+      thumbnail: '/videos/video-2-cover.jpg',
+      videoUrl: '/videos/video-2.mp4',
       description: '现场参加工厂设备拍卖会，见证如何以拍卖价格获得高端视觉检测设备。',
       content: `
         <h2>拍卖现场</h2>
@@ -596,8 +602,8 @@ const ContentDetail = () => {
       views: 456000,
       likes: 12300,
       duration: '35:20',
-      thumbnail: '/DongShiDi/videos/video-1-cover.jpg',
-      videoUrl: '/DongShiDi/videos/video-1.mp4',
+      thumbnail: '/videos/video-1-cover.jpg',
+      videoUrl: '/videos/video-1.mp4',
       description: '深度解读2024年机器视觉行业白皮书，分析市场趋势和投资机会。',
       content: `
         <h2>行业报告</h2>
@@ -615,8 +621,8 @@ const ContentDetail = () => {
       views: 289000,
       likes: 8900,
       duration: '28:15',
-      thumbnail: '/DongShiDi/videos/video-2-cover.jpg',
-      videoUrl: '/DongShiDi/videos/video-2.mp4',
+      thumbnail: '/videos/video-2-cover.jpg',
+      videoUrl: '/videos/video-2.mp4',
       description: '分析AI视觉检测技术的发展方向，对比深度学习与传统算法的优劣。',
       content: `
         <h2>技术演进</h2>
@@ -634,8 +640,8 @@ const ContentDetail = () => {
       views: 234000,
       likes: 6780,
       duration: '32:50',
-      thumbnail: '/DongShiDi/videos/video-1-cover.jpg',
-      videoUrl: '/DongShiDi/videos/video-1.mp4',
+      thumbnail: '/videos/video-1-cover.jpg',
+      videoUrl: '/videos/video-1.mp4',
       description: '对比国产与进口机器视觉设备的技术水平和市场占有率，探讨国产替代趋势。',
       content: `
         <h2>竞争分析</h2>
@@ -653,8 +659,8 @@ const ContentDetail = () => {
       views: 345000,
       likes: 9870,
       duration: '26:30',
-      thumbnail: '/DongShiDi/videos/video-2-cover.jpg',
-      videoUrl: '/DongShiDi/videos/video-2.mp4',
+      thumbnail: '/videos/video-2-cover.jpg',
+      videoUrl: '/videos/video-2.mp4',
       description: '分析新能源产业发展为机器视觉检测带来的巨大市场机遇。',
       content: `
         <h2>市场机遇</h2>
@@ -720,16 +726,16 @@ const ContentDetail = () => {
               <video
                 className="absolute inset-0 w-full h-full"
                 controls
-                poster={content.thumbnail}
+                poster={getImagePath(content.thumbnail)}
                 preload="metadata"
                 playsInline
               >
-                <source src={content.videoUrl} type="video/mp4" />
+                <source src={getImagePath(content.videoUrl)} type="video/mp4" />
                 您的浏览器不支持视频播放。
               </video>
             </div>
           ) : (
-            <img src={content.thumbnail} alt={content.title} className="w-full h-auto" />
+            <img src={getImagePath(content.thumbnail)} alt={content.title} className="w-full h-auto" />
           )}
         </div>
 
