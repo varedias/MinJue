@@ -43,7 +43,7 @@ const Discovery = () => {
       rating: 4.8
     },
     {
-      id: 3,
+      id: 2,
       title: '自动化生产线智能检测系统',
       cover: '/Picture/9f1b10429b214030ab65eed8d9217246.jpeg',
       author: '民崛智能',
@@ -445,6 +445,11 @@ const Discovery = () => {
                   src={video.cover}
                   alt={video.title}
                   className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
+                  onError={(e) => {
+                    console.error('图片加载失败:', video.cover);
+                    console.error('完整URL:', e.target.src);
+                  }}
+                  onLoad={() => console.log('图片加载成功:', video.cover)}
                 />
                 {/* 时长标签 */}
                 <div className="absolute bottom-2 right-2 bg-black bg-opacity-75 text-white text-xs px-2 py-1 rounded">
