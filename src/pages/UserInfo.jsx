@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
-import { User, Phone, Mail, MapPin, Camera, Edit2, Save, X } from 'lucide-react';
+import { User, Phone, Mail, MapPin, Camera, Edit2, Save, X, ShoppingCart, Video, Package, FileText, Heart, Clock, Award, Settings } from 'lucide-react';
 
 const UserInfo = () => {
   const [isEditing, setIsEditing] = useState(false);
   const [user, setUser] = useState({
     name: '张三',
     avatar: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
+    userType: 'buyer', // 'buyer' (采购商) or 'creator' (视频创作者)
     role: '普通会员',
     phone: '138****8888',
     email: 'zhangsan@example.com',
@@ -30,6 +31,123 @@ const UserInfo = () => {
     setIsEditing(false);
   };
 
+  // 采购商统计数据
+  const buyerStats = {
+    orders: 12,
+    inquiries: 8,
+    favorites: 35,
+    recentlyViewed: 24
+  };
+
+  // 视频创作者统计数据
+  const creatorStats = {
+    videos: 23,
+    views: 15600,
+    likes: 892,
+    followers: 340
+  };
+
+  // 根据用户类型渲染不同的内容
+  const renderUserTypeContent = () => {
+    if (user.userType === 'buyer') {
+      return (
+        <div className="mt-8">
+          <h2 className="text-xl font-bold text-gray-900 mb-4">采购统计</h2>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+            <div className="bg-gradient-to-br from-blue-500 to-blue-600 text-white rounded-xl p-6 text-center">
+              <ShoppingCart size={32} className="mx-auto mb-2" />
+              <p className="text-3xl font-bold">{buyerStats.orders}</p>
+              <p className="text-sm text-blue-100 mt-1">我的订单</p>
+            </div>
+            <div className="bg-gradient-to-br from-green-500 to-green-600 text-white rounded-xl p-6 text-center">
+              <FileText size={32} className="mx-auto mb-2" />
+              <p className="text-3xl font-bold">{buyerStats.inquiries}</p>
+              <p className="text-sm text-green-100 mt-1">询盘记录</p>
+            </div>
+            <div className="bg-gradient-to-br from-red-500 to-red-600 text-white rounded-xl p-6 text-center">
+              <Heart size={32} className="mx-auto mb-2" />
+              <p className="text-3xl font-bold">{buyerStats.favorites}</p>
+              <p className="text-sm text-red-100 mt-1">收藏商品</p>
+            </div>
+            <div className="bg-gradient-to-br from-purple-500 to-purple-600 text-white rounded-xl p-6 text-center">
+              <Clock size={32} className="mx-auto mb-2" />
+              <p className="text-3xl font-bold">{buyerStats.recentlyViewed}</p>
+              <p className="text-sm text-purple-100 mt-1">浏览记录</p>
+            </div>
+          </div>
+          
+          <div className="mt-6 bg-white rounded-xl p-6 border border-gray-200">
+            <h3 className="font-semibold text-gray-900 mb-4">最近订单</h3>
+            <div className="space-y-3">
+              {[1, 2, 3].map(i => (
+                <div key={i} className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
+                  <div className="flex items-center gap-3">
+                    <div className="w-12 h-12 bg-gray-200 rounded"></div>
+                    <div>
+                      <p className="font-medium text-gray-900">订单 #{2025000 + i}</p>
+                      <p className="text-sm text-gray-500">工业相机套装</p>
+                    </div>
+                  </div>
+                  <div className="text-right">
+                    <p className="font-bold text-blue-600">¥4,299</p>
+                    <p className="text-xs text-gray-500">待发货</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      );
+    } else {
+      // 视频创作者
+      return (
+        <div className="mt-8">
+          <h2 className="text-xl font-bold text-gray-900 mb-4">创作统计</h2>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+            <div className="bg-gradient-to-br from-blue-500 to-blue-600 text-white rounded-xl p-6 text-center">
+              <Video size={32} className="mx-auto mb-2" />
+              <p className="text-3xl font-bold">{creatorStats.videos}</p>
+              <p className="text-sm text-blue-100 mt-1">发布视频</p>
+            </div>
+            <div className="bg-gradient-to-br from-green-500 to-green-600 text-white rounded-xl p-6 text-center">
+              <Package size={32} className="mx-auto mb-2" />
+              <p className="text-3xl font-bold">{creatorStats.views.toLocaleString()}</p>
+              <p className="text-sm text-green-100 mt-1">总播放量</p>
+            </div>
+            <div className="bg-gradient-to-br from-red-500 to-red-600 text-white rounded-xl p-6 text-center">
+              <Heart size={32} className="mx-auto mb-2" />
+              <p className="text-3xl font-bold">{creatorStats.likes}</p>
+              <p className="text-sm text-red-100 mt-1">获赞数</p>
+            </div>
+            <div className="bg-gradient-to-br from-purple-500 to-purple-600 text-white rounded-xl p-6 text-center">
+              <Award size={32} className="mx-auto mb-2" />
+              <p className="text-3xl font-bold">{creatorStats.followers}</p>
+              <p className="text-sm text-purple-100 mt-1">粉丝数</p>
+            </div>
+          </div>
+          
+          <div className="mt-6 bg-white rounded-xl p-6 border border-gray-200">
+            <h3 className="font-semibold text-gray-900 mb-4">最新视频</h3>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              {[1, 2, 3].map(i => (
+                <div key={i} className="bg-gray-50 rounded-lg overflow-hidden">
+                  <div className="aspect-video bg-gray-300"></div>
+                  <div className="p-3">
+                    <p className="font-medium text-gray-900 text-sm line-clamp-2">工业视觉检测技术分享第{i}期</p>
+                    <div className="flex items-center justify-between mt-2 text-xs text-gray-500">
+                      <span>{(Math.random() * 5000).toFixed(0)} 播放</span>
+                      <span>2天前</span>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      );
+    }
+  };
+
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
       <div className="bg-white rounded-xl shadow-sm overflow-hidden">
@@ -52,7 +170,17 @@ const UserInfo = () => {
             <div className="ml-6 mb-2 flex-1">
               <div className="flex items-center justify-between">
                 <div>
-                  <h1 className="text-2xl font-bold text-gray-900">{user.name}</h1>
+                  <div className="flex items-center gap-3 mb-2">
+                    <h1 className="text-2xl font-bold text-gray-900">{user.name}</h1>
+                    <select 
+                      value={user.userType}
+                      onChange={(e) => setUser({...user, userType: e.target.value})}
+                      className="px-3 py-1 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    >
+                      <option value="buyer">采购商</option>
+                      <option value="creator">视频创作者</option>
+                    </select>
+                  </div>
                   <p className="text-sm text-gray-500">{user.role} | 加入时间: {user.joinDate}</p>
                 </div>
                 {!isEditing ? (
@@ -82,8 +210,10 @@ const UserInfo = () => {
             </div>
           </div>
 
+          {renderUserTypeContent()}
+
           {/* Info Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mt-8">
             {/* Basic Info */}
             <div className="bg-gray-50 rounded-xl p-6">
               <h2 className="text-lg font-semibold text-gray-900 mb-4">基本信息</h2>

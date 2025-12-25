@@ -1,14 +1,14 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Search, Filter, Star, MessageCircle, Eye, TrendingUp, Package, Grid3x3, List } from 'lucide-react';
-import AIAssistantFloat, { AIAssistantButton } from '../components/AIAssistantFloat';
+import { Search, Filter, Star, MessageCircle, Eye, TrendingUp, Package, Grid3x3, List, X } from 'lucide-react';
+import AIAssistantFloat from '../components/AIAssistantFloat';
 
 const Mall = () => {
   const navigate = useNavigate();
   const [viewMode, setViewMode] = useState('grid'); // grid or list
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [sortBy, setSortBy] = useState('hot');
-  const [isAIAssistantOpen, setIsAIAssistantOpen] = useState(false);
+  const [isAIAssistantOpen, setIsAIAssistantOpen] = useState(true); // 默认显示AI对话框
 
   // 商品分类
   const categories = [
@@ -330,6 +330,36 @@ const Mall = () => {
       </div>
 
       <div className="max-w-7xl mx-auto px-4 py-6">
+        {/* AI助手大对话框（商城专用） */}
+        {isAIAssistantOpen && (
+          <div className="bg-white rounded-xl shadow-lg mb-6 overflow-hidden border-2 border-blue-200">
+            <div className="bg-gradient-to-r from-blue-600 to-indigo-700 text-white p-4 flex items-center justify-between">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 bg-white rounded-full flex items-center justify-center">
+                  <MessageCircle size={24} className="text-blue-600" />
+                </div>
+                <div>
+                  <h3 className="font-bold text-lg">AI 设备选型助手</h3>
+                  <p className="text-xs text-blue-100">智能推荐，快速找到合适设备</p>
+                </div>
+              </div>
+              <button 
+                onClick={() => setIsAIAssistantOpen(false)}
+                className="hover:bg-white hover:bg-opacity-20 rounded-full p-2 transition-colors"
+              >
+                <X size={24} />
+              </button>
+            </div>
+            <div className="h-96">
+              <AIAssistantFloat 
+                isOpen={true} 
+                onClose={() => setIsAIAssistantOpen(false)}
+                isInline={true}
+              />
+            </div>
+          </div>
+        )}
+
         {/* Search Bar */}
         <div className="bg-white rounded-xl shadow-sm p-4 mb-6">
           <div className="flex gap-3">
@@ -603,16 +633,15 @@ const Mall = () => {
         </div>
       </div>
 
-      {/* AI助手悬浮按钮 */}
+      {/* AI助手悬浮按钮（仅在未打开时显示） */}
       {!isAIAssistantOpen && (
-        <AIAssistantButton onClick={() => setIsAIAssistantOpen(true)} />
+        <button
+          onClick={() => setIsAIAssistantOpen(true)}
+          className="fixed bottom-6 right-6 z-40 bg-gradient-to-r from-blue-600 to-indigo-700 text-white rounded-full p-4 shadow-2xl hover:shadow-3xl hover:scale-110 transition-all duration-300 group"
+        >
+          <MessageCircle size={28} />
+        </button>
       )}
-
-      {/* AI助手悬浮窗 */}
-      <AIAssistantFloat 
-        isOpen={isAIAssistantOpen} 
-        onClose={() => setIsAIAssistantOpen(false)} 
-      />
     </div>
   );
 };

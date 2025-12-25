@@ -101,15 +101,9 @@ const Layout = () => {
             <Link to="/mall" className={`${isActive('/mall') ? 'text-blue-600' : 'text-gray-500'} hover:text-blue-600 font-medium`}>商城</Link>
             <button 
               onClick={() => handleProtectedNavigation('/profile')}
-              className="text-gray-500 hover:text-blue-600 font-medium"
-            >
-              供应中心
-            </button>
-            <button 
-              onClick={() => handleProtectedNavigation('/profile')}
               className={`${isActive('/profile') ? 'text-blue-600' : 'text-gray-500'} hover:text-blue-600 font-medium`}
             >
-              会员中心
+              供应中心
             </button>
             <button 
               onClick={() => handleProtectedNavigation('/user-info')}

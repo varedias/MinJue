@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Bot, X, Send, Loader, Minimize2, Maximize2, MessageCircle } from 'lucide-react';
 
-const AIAssistantFloat = ({ isOpen, onClose }) => {
+const AIAssistantFloat = ({ isOpen, onClose, isInline = false }) => {
   const [messages, setMessages] = useState([]);
   const [inputValue, setInputValue] = useState('');
   const [isLoading, setIsLoading] = useState(false);
@@ -96,6 +96,78 @@ const AIAssistantFloat = ({ isOpen, onClose }) => {
 
   if (!isOpen) return null;
 
+  // 如果是内联模式（商城页面），返回简化的内容区域
+  if (isInline) {
+    return (
+      <div className="h-full flex flex-col bg-gray-50">
+        {/* 消息区域 */}
+        <div className="flex-1 overflow-y-auto p-6 space-y-4">
+          {messages.map((msg, index) => (
+            <div 
+              key={index} 
+              className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}
+            >
+              <div className={`max-w-[70%] ${msg.role === 'user' ? 'order-2' : 'order-1'}`}>
+                {msg.role === 'assistant' && (
+                  <div className="flex items-center gap-2 mb-1">
+                    <Bot size={14} className="text-blue-600" />
+                    <span className="text-xs text-gray-500">AI助手</span>
+                  </div>
+                )}
+                <div 
+                  className={`rounded-2xl px-6 py-4 ${
+                    msg.role === 'user' 
+                      ? 'bg-blue-600 text-white rounded-br-none' 
+                      : 'bg-white text-gray-900 rounded-bl-none shadow-sm'
+                  }`}
+                >
+                  <p className="text-sm whitespace-pre-wrap leading-relaxed">{msg.content}</p>
+                </div>
+                {msg.role === 'user' && (
+                  <div className="flex justify-end mt-1">
+                    <span className="text-xs text-gray-500">您</span>
+                  </div>
+                )}
+              </div>
+            </div>
+          ))}
+          {isLoading && (
+            <div className="flex justify-start">
+              <div className="bg-white rounded-2xl rounded-bl-none px-6 py-4 flex items-center gap-2 shadow-sm">
+                <Loader size={16} className="animate-spin text-blue-600" />
+                <span className="text-sm text-gray-600">正在思考...</span>
+              </div>
+            </div>
+          )}
+          <div ref={messagesEndRef} />
+        </div>
+
+        {/* 输入区域 */}
+        <div className="border-t border-gray-200 p-4 bg-white">
+          <div className="flex gap-3 max-w-4xl mx-auto">
+            <input
+              type="text"
+              value={inputValue}
+              onChange={(e) => setInputValue(e.target.value)}
+              onKeyPress={handleKeyPress}
+              placeholder="描述您的设备需求，例如：我需要检测PCB板缺陷的设备..."
+              className="flex-1 px-6 py-3 text-sm border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              disabled={isLoading}
+            />
+            <button 
+              onClick={handleSendMessage}
+              disabled={!inputValue.trim() || isLoading}
+              className="bg-blue-600 text-white px-8 py-3 rounded-full hover:bg-blue-700 transition-colors disabled:bg-gray-300 disabled:cursor-not-allowed font-medium"
+            >
+              <Send size={18} />
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // 默认悬浮窗模式
   return (
     <div className="fixed bottom-6 right-6 z-50">
       {/* 悬浮窗 */}

@@ -352,7 +352,7 @@ const PersonalCenter = () => {
           <div className="hidden md:block w-64 flex-shrink-0">
             <div className="bg-white rounded-lg shadow-sm overflow-hidden sticky top-20">
               <div className="p-4 bg-blue-600 text-white">
-                <h2 className="font-bold text-lg">会员中心</h2>
+                <h2 className="font-bold text-lg">供应中心</h2>
                 <p className="text-xs text-blue-100 mt-1">供应商管理平台</p>
               </div>
               <div className="divide-y divide-gray-100">
