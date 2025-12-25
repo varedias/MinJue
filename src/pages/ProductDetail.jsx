@@ -11,6 +11,12 @@ const ProductDetail = () => {
   const [quantity, setQuantity] = useState(1);
   const [activeTab, setActiveTab] = useState('detail');
   const [isChatOpen, setIsChatOpen] = useState(false);
+  
+  // 辅助函数：处理图片路径
+  const getImagePath = (path) => {
+    if (!path || path.startsWith('http')) return path;
+    return `${import.meta.env.BASE_URL}${path.replace(/^\//, '')}`;
+  };
 
   // 从mockData获取商品详情
   const productData = useMemo(() => {
@@ -199,7 +205,7 @@ const ProductDetail = () => {
             <div>
               <div className="aspect-square bg-gray-100 rounded-xl overflow-hidden mb-4">
                 <img
-                  src={product.images[selectedImage]}
+                  src={getImagePath(product.images[selectedImage])}
                   alt={product.name}
                   className="w-full h-full object-cover"
                 />
@@ -213,7 +219,7 @@ const ProductDetail = () => {
                       selectedImage === idx ? 'border-blue-600' : 'border-transparent hover:border-gray-300'
                     }`}
                   >
-                    <img src={img} alt="" className="w-full h-full object-cover" />
+                    <img src={getImagePath(img)} alt="" className="w-full h-full object-cover" />
                   </button>
                 ))}
               </div>
