@@ -48,15 +48,17 @@ const ContentDetail = () => {
       `
     },
     2: {
-      type: 'article',
-      title: '如何选择合适的工业相机？5大关键参数详解',
-      author: '机器视觉专家',
-      authorAvatar: 'https://ui-avatars.com/api/?name=JQSJ&background=22C55E&color=fff',
-      publishDate: '2025-11-19',
-      views: 8500,
-      likes: 456,
-      readTime: '8分钟',
-      thumbnail: 'https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=800&q=80',
+      type: 'video',
+      title: 'AOI光学检测在PCB行业的应用 | 精度提升50%',
+      author: '质量检测专家',
+      authorAvatar: 'https://ui-avatars.com/api/?name=ZL&background=10B981&color=fff',
+      publishDate: '2025-12-10',
+      views: 12800,
+      likes: 678,
+      duration: '15:20',
+      thumbnail: '/DongShiDi/videos/video-2-cover.jpg',
+      videoUrl: '/DongShiDi/videos/video-2.mp4',
+      description: 'PCB印刷电路板的AOI自动光学检测技术应用，展示如何通过视觉检测提升产品质量。',
       content: `
         <h2>视频概述</h2>
         <p>PCB（印刷电路板）作为电子产品的核心部件，其质量直接影响到最终产品的可靠性。传统的人工检测方式不仅效率低下，而且容易出现漏检和误检。AI视觉检测技术的引入，彻底改变了这一现状。</p>
@@ -83,16 +85,17 @@ const ContentDetail = () => {
         <p>某知名电子制造企业引入该系统后，次品率从3.5%降低到0.2%，年节约成本超过500万元。系统投资回报周期仅为8个月。</p>
       `
     },
-    2: {
-      type: 'article',
-      title: '如何选择合适的工业相机？5大关键参数详解',
-      author: '机器视觉专家',
-      authorAvatar: 'https://ui-avatars.com/api/?name=JQSJ&background=22C55E&color=fff',
-      publishDate: '2025-11-19',
-      views: 8500,
-      likes: 456,
-      readTime: '8分钟',
-      thumbnail: 'https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=800&q=80',
+    3: {
+      type: 'video',
+      title: '千元级工业相机选购指南 | 性价比之王终极测试',
+      author: '设备评测室',
+      authorAvatar: 'https://ui-avatars.com/api/?name=SB&background=F59E0B&color=fff',
+      publishDate: '2025-12-08',
+      views: 156000,
+      likes: 4230,
+      duration: '18:45',
+      thumbnail: '/DongShiDi/videos/video-1-cover.jpg',
+      videoUrl: '/DongShiDi/videos/video-1.mp4',
       content: `
         <h2>引言</h2>
         <p>工业相机是机器视觉系统的"眼睛"，其性能直接决定了整个系统的检测精度和效率。面对市场上琳琅满目的产品，如何选择一款适合自己应用场景的工业相机？本文将从5个关键参数入手，为您提供专业的选型指南。</p>
@@ -335,6 +338,329 @@ const ContentDetail = () => {
 
         <p><strong>问题3：新缺陷类型识别率低</strong></p>
         <p>解决方案：持续收集样本，定期重新训练模型</p>
+      `
+    },
+    4: {
+      type: 'video',
+      title: 'MVTec Halcon vs OpenCV | 机器视觉软件终极对决',
+      author: '视觉算法工程师',
+      authorAvatar: 'https://ui-avatars.com/api/?name=SF&background=EF4444&color=fff',
+      publishDate: '2025-12-12',
+      views: 67800,
+      likes: 1890,
+      duration: '25:12',
+      thumbnail: '/DongShiDi/videos/video-2-cover.jpg',
+      videoUrl: '/DongShiDi/videos/video-2.mp4',
+      description: '深度对比两大主流机器视觉软件Halcon和OpenCV的优劣势，帮助您选择最适合的开发平台。',
+      content: `
+        <h2>软件对比</h2>
+        <p>Halcon和OpenCV是机器视觉领域最流行的两个软件平台，各有优势。本视频从性能、易用性、成本等多个角度进行全面对比。</p>
+        <h3>性能对比</h3>
+        <p>Halcon在商业应用中表现优异，而OpenCV开源免费更适合研发学习。</p>
+      `
+    },
+    5: {
+      type: 'video',
+      title: '探厂实拍 | 走进深圳AI视觉检测设备制造商',
+      author: '工业探厂Vlog',
+      authorAvatar: 'https://ui-avatars.com/api/?name=GY&background=8B5CF6&color=fff',
+      publishDate: '2025-12-13',
+      views: 234000,
+      likes: 6780,
+      duration: '28:34',
+      thumbnail: '/DongShiDi/videos/video-1-cover.jpg',
+      videoUrl: '/DongShiDi/videos/video-1.mp4',
+      description: '实地探访深圳一家专业的AI视觉检测设备制造商，了解从设计到生产的全流程。',
+      content: `
+        <h2>探厂之旅</h2>
+        <p>深入深圳工业区，带您参观现代化的视觉检测设备生产线，感受中国智造的魅力。</p>
+        <h3>生产工艺</h3>
+        <p>从研发设计、零部件加工、组装调试到质量检验，每个环节都体现了精益制造的理念。</p>
+      `
+    },
+    6: {
+      type: 'video',
+      title: '锂电池生产线实拍 | AOI视觉检测设备工作全流程',
+      author: '制造业观察者',
+      authorAvatar: 'https://ui-avatars.com/api/?name=ZZ&background=06B6D4&color=fff',
+      publishDate: '2025-12-11',
+      views: 178000,
+      likes: 4560,
+      duration: '16:45',
+      thumbnail: '/DongShiDi/videos/video-2-cover.jpg',
+      videoUrl: '/DongShiDi/videos/video-2.mp4',
+      description: '锂电池生产线上的AOI视觉检测设备实际工作场景，展示智能制造如何保障产品质量。',
+      content: `
+        <h2>锂电池检测</h2>
+        <p>新能源行业快速发展带动了锂电池生产需求，AOI视觉检测在其中发挥关键作用。</p>
+        <h3>检测项目</h3>
+        <p>极耳焊接、涂层均匀度、尺寸精度、表面缺陷等全方位检测。</p>
+      `
+    },
+    7: {
+      type: 'video',
+      title: '老板的一天 | 视觉设备公司日常Vlog',
+      author: '创业者日记',
+      authorAvatar: 'https://ui-avatars.com/api/?name=CY&background=F97316&color=fff',
+      publishDate: '2025-12-08',
+      views: 98500,
+      likes: 2340,
+      duration: '12:20',
+      thumbnail: '/DongShiDi/videos/video-1-cover.jpg',
+      videoUrl: '/DongShiDi/videos/video-1.mp4',
+      description: '跟随一位视觉设备公司老板，了解创业者的日常工作与挑战。',
+      content: `
+        <h2>创业日常</h2>
+        <p>从早会到客户拜访，从技术讨论到商务谈判，记录视觉设备公司老板真实的一天。</p>
+        <h3>经营感悟</h3>
+        <p>分享创业经验、管理心得和行业见解。</p>
+      `
+    },
+    8: {
+      type: 'video',
+      title: '跟我一起参加机器视觉展会 | VISION CHINA 2024',
+      author: '行业观察',
+      authorAvatar: 'https://ui-avatars.com/api/?name=HY&background=84CC16&color=fff',
+      publishDate: '2025-12-12',
+      views: 145000,
+      likes: 3890,
+      duration: '32:15',
+      thumbnail: '/DongShiDi/videos/video-2-cover.jpg',
+      videoUrl: '/DongShiDi/videos/video-2.mp4',
+      description: '现场直击VISION CHINA 2024机器视觉展会，了解行业最新技术和产品趋势。',
+      content: `
+        <h2>展会报道</h2>
+        <p>VISION CHINA是亚洲最大的机器视觉展会，汇聚了全球顶尖品牌和最新技术。</p>
+        <h3>精彩内容</h3>
+        <p>新品发布、技术论坛、现场演示，全方位展示机器视觉行业风貌。</p>
+      `
+    },
+    9: {
+      type: 'video',
+      title: 'Halcon机器视觉完整教程 | 从入门到精通(1/50)',
+      author: '视觉教程大师',
+      authorAvatar: 'https://ui-avatars.com/api/?name=JC&background=DC2626&color=fff',
+      publishDate: '2025-11-15',
+      views: 567000,
+      likes: 15600,
+      duration: '45:30',
+      thumbnail: '/DongShiDi/videos/video-1-cover.jpg',
+      videoUrl: '/DongShiDi/videos/video-1.mp4',
+      description: '系统学习Halcon机器视觉软件，从基础概念到高级应用，手把手教学。',
+      content: `
+        <h2>课程介绍</h2>
+        <p>这是一套完整的Halcon视觉软件教程，涵盖图像处理、特征提取、模式匹配等核心技术。</p>
+        <h3>学习路径</h3>
+        <p>从环境搭建开始，逐步深入到实际项目开发，适合零基础学员。</p>
+      `
+    },
+    10: {
+      type: 'video',
+      title: '工业相机选型与调试实战教程 | 手把手教学',
+      author: '工程师小李',
+      authorAvatar: 'https://ui-avatars.com/api/?name=XL&background=7C3AED&color=fff',
+      publishDate: '2025-12-01',
+      views: 234000,
+      likes: 7890,
+      duration: '38:12',
+      thumbnail: '/DongShiDi/videos/video-2-cover.jpg',
+      videoUrl: '/DongShiDi/videos/video-2.mp4',
+      description: '详细讲解工业相机的选型原则和调试技巧，包括参数设置、镜头匹配等实战内容。',
+      content: `
+        <h2>相机选型</h2>
+        <p>如何根据应用场景选择合适的工业相机？本教程提供系统性的选型方法论。</p>
+        <h3>调试技巧</h3>
+        <p>曝光时间、增益、白平衡等参数的优化调整方法。</p>
+      `
+    },
+    11: {
+      type: 'video',
+      title: 'AI缺陷检测项目实战 | 从0搭建完整系统',
+      author: 'AI视觉工程师',
+      authorAvatar: 'https://ui-avatars.com/api/?name=AI&background=2563EB&color=fff',
+      publishDate: '2025-12-08',
+      views: 189000,
+      likes: 6780,
+      duration: '52:45',
+      thumbnail: '/DongShiDi/videos/video-1-cover.jpg',
+      videoUrl: '/DongShiDi/videos/video-1.mp4',
+      description: '完整的AI缺陷检测项目开发教程，包括数据采集、模型训练、系统集成全流程。',
+      content: `
+        <h2>项目概述</h2>
+        <p>本教程以实际工业项目为例，展示如何从零开始搭建AI缺陷检测系统。</p>
+        <h3>技术栈</h3>
+        <p>Python、TensorFlow、OpenCV、Flask等主流技术的综合应用。</p>
+      `
+    },
+    12: {
+      type: 'video',
+      title: 'PLC与视觉系统通讯教程 | Modbus/TCP协议详解',
+      author: '自动化工程师',
+      authorAvatar: 'https://ui-avatars.com/api/?name=ZD&background=059669&color=fff',
+      publishDate: '2025-12-10',
+      views: 123000,
+      likes: 4560,
+      duration: '28:30',
+      thumbnail: '/DongShiDi/videos/video-2-cover.jpg',
+      videoUrl: '/DongShiDi/videos/video-2.mp4',
+      description: '详解PLC与视觉系统之间的通讯协议，重点讲解Modbus/TCP的应用。',
+      content: `
+        <h2>通讯协议</h2>
+        <p>工业自动化中，PLC与视觉系统的数据交互至关重要，Modbus/TCP是最常用的协议之一。</p>
+        <h3>实战案例</h3>
+        <p>演示如何实现PLC控制相机拍照、接收检测结果等功能。</p>
+      `
+    },
+    13: {
+      type: 'video',
+      title: '二手设备淘宝记 | 5万元收购一套完整视觉检测系统',
+      author: '设备猎人',
+      authorAvatar: 'https://ui-avatars.com/api/?name=SB&background=DC2626&color=fff',
+      publishDate: '2025-12-12',
+      views: 345000,
+      likes: 8900,
+      duration: '22:15',
+      thumbnail: '/DongShiDi/videos/video-1-cover.jpg',
+      videoUrl: '/DongShiDi/videos/video-1.mp4',
+      description: '记录一次二手设备收购经历，分享如何以高性价比获得工业视觉检测系统。',
+      content: `
+        <h2>淘宝经验</h2>
+        <p>二手设备市场隐藏着不少宝藏，关键是懂行情、会鉴别。本视频分享实战经验。</p>
+        <h3>注意事项</h3>
+        <p>设备状态检查、价格评估、售后保障等购买要点。</p>
+      `
+    },
+    14: {
+      type: 'video',
+      title: '如何避坑 | 购买工业相机的10个注意事项',
+      author: '采购老司机',
+      authorAvatar: 'https://ui-avatars.com/api/?name=CG&background=F59E0B&color=fff',
+      publishDate: '2025-12-08',
+      views: 267000,
+      likes: 7650,
+      duration: '18:45',
+      thumbnail: '/DongShiDi/videos/video-2-cover.jpg',
+      videoUrl: '/DongShiDi/videos/video-2.mp4',
+      description: '总结工业相机采购中的常见陷阱和注意事项，帮助您做出明智选择。',
+      content: `
+        <h2>避坑指南</h2>
+        <p>采购工业相机时，新手常犯哪些错误？资深采购经理倾囊相授。</p>
+        <h3>十大要点</h3>
+        <p>从参数理解、品牌选择、价格谈判到售后服务，全方位避坑。</p>
+      `
+    },
+    15: {
+      type: 'video',
+      title: '设备置换实录 | 老设备如何卖出好价格',
+      author: '二手市场',
+      authorAvatar: 'https://ui-avatars.com/api/?name=ES&background=22C55E&color=fff',
+      publishDate: '2025-12-11',
+      views: 156000,
+      likes: 4230,
+      duration: '15:30',
+      thumbnail: '/DongShiDi/videos/video-1-cover.jpg',
+      videoUrl: '/DongShiDi/videos/video-1.mp4',
+      description: '记录一次设备置换全过程，教您如何让旧设备卖出理想价格。',
+      content: `
+        <h2>置换技巧</h2>
+        <p>企业升级设备时，如何处理旧设备？置换是一个不错的选择。</p>
+        <h3>增值方法</h3>
+        <p>设备保养、资料整理、市场定价等技巧分享。</p>
+      `
+    },
+    16: {
+      type: 'video',
+      title: '工厂设备拍卖会直击 | 捡漏高端视觉设备',
+      author: '拍卖观察',
+      authorAvatar: 'https://ui-avatars.com/api/?name=PM&background=8B5CF6&color=fff',
+      publishDate: '2025-12-13',
+      views: 198000,
+      likes: 5670,
+      duration: '25:40',
+      thumbnail: '/DongShiDi/videos/video-2-cover.jpg',
+      videoUrl: '/DongShiDi/videos/video-2.mp4',
+      description: '现场参加工厂设备拍卖会，见证如何以拍卖价格获得高端视觉检测设备。',
+      content: `
+        <h2>拍卖现场</h2>
+        <p>工厂倒闭或升级时，设备拍卖是捡漏的好机会。本视频记录真实拍卖过程。</p>
+        <h3>拍卖策略</h3>
+        <p>如何评估设备价值、制定竞拍策略、避免冲动竞价。</p>
+      `
+    },
+    17: {
+      type: 'video',
+      title: '2024机器视觉行业白皮书解读 | 市场规模突破500亿',
+      author: '行业分析师',
+      authorAvatar: 'https://ui-avatars.com/api/?name=HY&background=0D8ABC&color=fff',
+      publishDate: '2025-12-08',
+      views: 456000,
+      likes: 12300,
+      duration: '35:20',
+      thumbnail: '/DongShiDi/videos/video-1-cover.jpg',
+      videoUrl: '/DongShiDi/videos/video-1.mp4',
+      description: '深度解读2024年机器视觉行业白皮书，分析市场趋势和投资机会。',
+      content: `
+        <h2>行业报告</h2>
+        <p>2024年中国机器视觉市场规模突破500亿元，年增长率超过20%。</p>
+        <h3>关键数据</h3>
+        <p>市场规模、应用领域、技术趋势、竞争格局等核心内容解读。</p>
+      `
+    },
+    18: {
+      type: 'video',
+      title: 'AI视觉检测技术发展趋势 | 深度学习vs传统算法',
+      author: '技术前沿',
+      authorAvatar: 'https://ui-avatars.com/api/?name=JS&background=EF4444&color=fff',
+      publishDate: '2025-12-12',
+      views: 289000,
+      likes: 8900,
+      duration: '28:15',
+      thumbnail: '/DongShiDi/videos/video-2-cover.jpg',
+      videoUrl: '/DongShiDi/videos/video-2.mp4',
+      description: '分析AI视觉检测技术的发展方向，对比深度学习与传统算法的优劣。',
+      content: `
+        <h2>技术演进</h2>
+        <p>从传统图像处理到深度学习，视觉检测技术经历了怎样的变革？</p>
+        <h3>未来趋势</h3>
+        <p>边缘计算、3D视觉、多模态融合等前沿技术展望。</p>
+      `
+    },
+    19: {
+      type: 'video',
+      title: '国产vs进口 | 机器视觉设备竞争格局分析',
+      author: '产业观察',
+      authorAvatar: 'https://ui-avatars.com/api/?name=CY&background=059669&color=fff',
+      publishDate: '2025-12-10',
+      views: 234000,
+      likes: 6780,
+      duration: '32:50',
+      thumbnail: '/DongShiDi/videos/video-1-cover.jpg',
+      videoUrl: '/DongShiDi/videos/video-1.mp4',
+      description: '对比国产与进口机器视觉设备的技术水平和市场占有率，探讨国产替代趋势。',
+      content: `
+        <h2>竞争分析</h2>
+        <p>国产机器视觉设备近年来快速崛起，在某些领域已接近甚至超越进口产品。</p>
+        <h3>市场格局</h3>
+        <p>分析各细分市场的竞争态势、国产化率、技术差距等。</p>
+      `
+    },
+    20: {
+      type: 'video',
+      title: '新能源行业带来的视觉检测机遇 | 千亿市场解析',
+      author: '投资观察',
+      authorAvatar: 'https://ui-avatars.com/api/?name=TZ&background=F97316&color=fff',
+      publishDate: '2025-12-13',
+      views: 345000,
+      likes: 9870,
+      duration: '26:30',
+      thumbnail: '/DongShiDi/videos/video-2-cover.jpg',
+      videoUrl: '/DongShiDi/videos/video-2.mp4',
+      description: '分析新能源产业发展为机器视觉检测带来的巨大市场机遇。',
+      content: `
+        <h2>市场机遇</h2>
+        <p>新能源汽车、光伏、储能等行业的快速发展，催生了巨大的视觉检测需求。</p>
+        <h3>投资价值</h3>
+        <p>市场规模预测、细分领域机会、投资建议等内容分析。</p>
       `
     }
   };
