@@ -450,7 +450,7 @@ const Discovery = () => {
                 <img
                   src={getImagePath(video.cover)}
                   alt={video.title}
-                  className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
+                  className="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
                   onError={(e) => {
                     console.error('图片加载失败:', video.cover);
                     console.error('完整URL:', e.target.src);
@@ -458,17 +458,17 @@ const Discovery = () => {
                   onLoad={() => console.log('图片加载成功:', video.cover)}
                 />
                 {/* 时长标签 */}
-                <div className="absolute bottom-2 right-2 bg-black bg-opacity-75 text-white text-xs px-2 py-1 rounded">
+                <div className="absolute bottom-2 right-2 bg-black bg-opacity-75 text-white text-xs px-2 py-1 rounded z-10">
                   {video.duration}
                 </div>
-                {/* 播放按钮 */}
-                <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-30 transition-all duration-300 flex items-center justify-center">
-                  <div className="bg-white bg-opacity-0 group-hover:bg-opacity-90 rounded-full p-3 transform scale-0 group-hover:scale-100 transition-all duration-300">
+                {/* 播放按钮 - 透明覆盖层，hover时显示 */}
+                <div className="absolute inset-0 bg-transparent group-hover:bg-black/30 transition-all duration-300 flex items-center justify-center z-10 pointer-events-none">
+                  <div className="bg-white/0 group-hover:bg-white/90 rounded-full p-3 transform scale-0 group-hover:scale-100 transition-all duration-300">
                     <Play size={28} className="text-blue-600" />
                   </div>
                 </div>
                 {/* 评分标签 */}
-                <div className="absolute top-2 left-2 bg-orange-500 text-white text-xs px-2 py-1 rounded-full flex items-center gap-1">
+                <div className="absolute top-2 left-2 bg-orange-500 text-white text-xs px-2 py-1 rounded-full flex items-center gap-1 z-10">
                   <Star size={12} className="fill-white" />
                   {video.rating}
                 </div>

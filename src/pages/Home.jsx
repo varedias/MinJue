@@ -417,22 +417,22 @@ const Home = () => {
                   <img 
                     src={getImagePath(item.thumbnail)} 
                     alt={item.title} 
-                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300" 
+                    className="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-300" 
                   />
                   {item.type === 'video' && (
                     <>
-                      <div className="absolute inset-0 bg-black bg-opacity-30 flex items-center justify-center">
-                        <div className="bg-white bg-opacity-90 rounded-full p-4 group-hover:bg-blue-600 group-hover:text-white transition-colors">
+                      <div className="absolute inset-0 bg-transparent group-hover:bg-black/20 flex items-center justify-center transition-all z-10 pointer-events-none">
+                        <div className="bg-white/90 rounded-full p-4 group-hover:bg-blue-600 transition-colors">
                           <Play size={28} className="text-blue-600 group-hover:text-white" />
                         </div>
                       </div>
-                      <div className="absolute bottom-3 right-3 bg-black bg-opacity-70 text-white text-xs px-3 py-1 rounded-full">
+                      <div className="absolute bottom-3 right-3 bg-black/70 text-white text-xs px-3 py-1 rounded-full z-10">
                         {item.duration}
                       </div>
                     </>
                   )}
                   {item.type === 'article' && (
-                    <div className="absolute top-3 left-3 bg-green-500 text-white text-xs px-3 py-1 rounded-full flex items-center gap-1">
+                    <div className="absolute top-3 left-3 bg-green-500 text-white text-xs px-3 py-1 rounded-full flex items-center gap-1 z-10">
                       <FileText size={14} />
                       文章
                     </div>
