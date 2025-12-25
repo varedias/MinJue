@@ -164,9 +164,9 @@ const Home = () => {
   const allDiscoveryContent = [
     // 第1页
     [
-      { id: 1, type: 'video', title: '工业视觉检测技术应用演示', author: '民崛智能', views: 15200, likes: 892, duration: '12:35', thumbnail: '/MinJue/videos/video-1-cover.jpg' },
+      { id: 1, type: 'video', title: '工业视觉检测技术应用演示', author: '民崛智能', views: 15200, likes: 892, duration: '12:35', thumbnail: '/DongShiDi/videos/video-1-cover.jpg' },
       { id: 2, type: 'article', title: '如何选择合适的工业相机？5大关键参数详解', author: '机器视觉专家', views: 8500, likes: 456, readTime: '8分钟', thumbnail: 'https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=400&q=80' },
-      { id: 3, type: 'video', title: '自动化生产线智能检测系统', author: '民崛智能', views: 12800, likes: 723, duration: '15:20', thumbnail: '/MinJue/videos/video-2-cover.jpg' },
+      { id: 3, type: 'video', title: '自动化生产线智能检测系统', author: '民崛智能', views: 12800, likes: 723, duration: '15:20', thumbnail: '/DongShiDi/videos/video-2-cover.jpg' },
       { id: 4, type: 'article', title: '表面缺陷检测系统部署指南与最佳实践', author: '工业4.0实验室', views: 6700, likes: 334, readTime: '10分钟', thumbnail: 'https://images.unsplash.com/photo-1581092918056-0c4c3acd3789?auto=format&fit=crop&w=400&q=80' },
       { id: 5, type: 'video', title: 'AI+机器视觉：智能工厂质检革命', author: '智造科技', views: 19500, likes: 1205, duration: '18:45', thumbnail: 'https://images.unsplash.com/photo-1581092160562-40aa08e78837?auto=format&fit=crop&w=400&q=80' },
       { id: 6, type: 'article', title: '光源选型全攻略：让检测精度提升50%', author: '视觉照明专家', views: 5600, likes: 289, readTime: '6分钟', thumbnail: 'https://images.unsplash.com/photo-1581093458791-9d58b3fbbd0d?auto=format&fit=crop&w=400&q=80' },

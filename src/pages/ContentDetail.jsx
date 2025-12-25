@@ -18,8 +18,8 @@ const ContentDetail = () => {
       views: 15200,
       likes: 892,
       duration: '12:35',
-      thumbnail: '/MinJue/videos/video-1-cover.jpg',
-      videoUrl: '/MinJue/videos/video-1.mp4',
+      thumbnail: '/DongShiDi/videos/video-1-cover.jpg',
+      videoUrl: '/DongShiDi/videos/video-1.mp4',
       description: '本视频详细展示了工业视觉检测技术在实际生产中的应用，包括产品演示、技术特点和应用案例。',
       content: `
         <h2>视频简介</h2>
@@ -196,8 +196,8 @@ const ContentDetail = () => {
       views: 12800,
       likes: 723,
       duration: '15:20',
-      thumbnail: '/MinJue/videos/video-2-cover.jpg',
-      videoUrl: '/MinJue/videos/video-2.mp4',
+      thumbnail: '/DongShiDi/videos/video-2-cover.jpg',
+      videoUrl: '/DongShiDi/videos/video-2.mp4',
       description: '深度展示自动化生产线上的智能视觉检测系统，包括系统架构、检测流程和实际应用效果。',
       content: `
         <h2>视频简介</h2>

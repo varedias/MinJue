@@ -30,7 +30,7 @@ const Discovery = () => {
     {
       id: 1,
       title: '工业视觉检测技术应用演示',
-      cover: '/MinJue/videos/video-1-cover.jpg',
+      cover: '/DongShiDi/videos/video-1-cover.jpg',
       author: '民崛智能',
       avatar: 'https://ui-avatars.com/api/?name=MJ&background=0D8ABC&color=fff',
       views: 125600,
@@ -45,7 +45,7 @@ const Discovery = () => {
     {
       id: 3,
       title: '自动化生产线智能检测系统',
-      cover: '/MinJue/videos/video-2-cover.jpg',
+      cover: '/DongShiDi/videos/video-2-cover.jpg',
       author: '民崛智能',
       avatar: 'https://ui-avatars.com/api/?name=MJ&background=22C55E&color=fff',
       views: 89200,
