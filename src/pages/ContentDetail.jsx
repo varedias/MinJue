@@ -396,6 +396,7 @@ const ContentDetail = () => {
                 controls
                 poster={content.thumbnail}
                 preload="metadata"
+                playsInline
               >
                 <source src={content.videoUrl} type="video/mp4" />
                 您的浏览器不支持视频播放。
