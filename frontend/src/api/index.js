@@ -1,7 +1,54 @@
+import axios from 'axios';
+
 // API 配置 (使用 Vite 代理，无需指定完整 URL)
 const API_BASE_URL = '';
 
-// 通用请求方法
+// 创建 axios 实例
+export const api = axios.create({
+    baseURL: API_BASE_URL,
+    timeout: 10000,
+    headers: {
+        'Content-Type': 'application/json',
+    },
+});
+
+// 请求拦截器 - 添加 token
+api.interceptors.request.use(
+    (config) => {
+        const token = localStorage.getItem('token');
+        if (token) {
+            config.headers.Authorization = `Bearer ${token}`;
+        }
+        return config;
+    },
+    (error) => {
+        return Promise.reject(error);
+    }
+);
+
+// 响应拦截器 - 统一处理响应
+api.interceptors.response.use(
+    (response) => {
+        const { data } = response;
+        // 如果后端返回的是标准格式 { code, data, message }
+        if (data.code === 200) {
+            return data; // 返回整个 data 对象，包含 data.data
+        } else {
+            throw new Error(data.message || '请求失败');
+        }
+    },
+    (error) => {
+        console.error('API Error:', error);
+        if (error.response?.status === 401) {
+            // Token 过期或未授权
+            localStorage.removeItem('token');
+            window.location.href = '/login';
+        }
+        throw error;
+    }
+);
+
+// 通用请求方法（保留兼容性）
 async function request(url, options = {}) {
     const token = localStorage.getItem('token');
 
