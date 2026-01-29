@@ -342,8 +342,8 @@ const Register = () => {
           <span>English</span>
         </Link>
         <div className="register-header">
-          <h1>🏭 注册账号</h1>
-          <p>加入民崛智能平台</p>
+          <h1>👁️ 注册账号</h1>
+          <p>加入懂视帝平台</p>
         </div>
 
         {/* Role Selection */}

@@ -303,8 +303,8 @@ const Login = () => {
 
       {/* Left Side - Branding */}
       <div className="login-left">
-        <h1>🏭 民崛智能</h1>
-        <p>工业智能视觉检测专家</p>
+        <h1>👁️ 懂视帝</h1>
+        <p>AI视觉检测领导者</p>
       </div>
 
       {/* Right Side - Login Form */}

@@ -297,8 +297,8 @@ const LoginEn = () => {
 
       {/* Left Side - Branding */}
       <div className="login-left">
-        <h1>🏭 DongShiDi</h1>
-        <p>Industrial Vision Expert</p>
+        <h1>👁️ DongShiDi</h1>
+        <p>AI Vision Detection Leader</p>
       </div>
 
       {/* Right Side - Login Form */}

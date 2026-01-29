@@ -344,8 +344,8 @@ const RegisterEn = () => {
         </Link>
 
         <div className="register-header">
-          <h1>🏭 Create Account</h1>
-          <p>Join MinJue Intelligence Platform</p>
+          <h1>👁️ Create Account</h1>
+          <p>Join DongShiDi Platform</p>
         </div>
 
         {/* Role Selection */}
