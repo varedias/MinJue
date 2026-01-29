@@ -1,319 +1,215 @@
-# 民崛智能 (MinJue) - 工业智能视觉检测平台
+# Refactored README.md
 
-一个专业的工业智能视觉检测设备交易与租赁平台，集商品展示、订单管理、设备租赁、内容发现等功能于一体。
+<div align="center">
 
-## 🎯 项目概述
+# MinJue (懂视帝)
 
-民崛智能是一个B2B工业设备交易平台，专注于：
-- **AI视觉检测设备** - 懂视帝、康耐视等品牌设备
-- **工业相机与光源** - 专业工业视觉系统
-- **设备租赁服务** - 融资租赁和经营租赁
-- **内容发现** - 行业资讯、产品测评、技术教程
+### B2B工业设备宣传与电商平台
+**[ B2B电商 | 视频内容 | 设备租赁 | 企业服务 ]**
 
-## 🏗️ 技术栈
+<p>
+  <img src="https://img.shields.io/badge/Java-17-orange?style=for-the-badge&logo=openjdk&logoColor=white" />
+  <img src="https://img.shields.io/badge/Spring%20Boot-3.2.2-green?style=for-the-badge&logo=springboot&logoColor=white" />
+  <img src="https://img.shields.io/badge/React-19-blue?style=for-the-badge&logo=react&logoColor=white" />
+  <img src="https://img.shields.io/badge/Vite-7-purple?style=for-the-badge&logo=vite&logoColor=white" />
+  <img src="https://img.shields.io/badge/License-MIT-blue?style=for-the-badge" />
+</p>
 
-### 前端 (React 19)
-- **框架**: React 19 + React Router v7
-- **样式**: Tailwind CSS + Lucide React 图标
-- **HTTP**: Axios
-- **图表**: ECharts
-- **状态管理**: React Context API
-- **国际化**: 中英文支持
+**"[ v1.0 基础服务 ] - [ v2.0 电商交易 ] - [ v3.0 智能服务 ]" 全周期闭环**
 
-### 后端 (Spring Boot 3)
-- **框架**: Spring Boot 3.1.3
-- **ORM**: MyBatis Plus
-- **数据库**: MySQL 8.0
-- **缓存**: Redis
-- **认证**: JWT + Spring Security
-- **API文档**: Swagger 3.0
+[ 商城 ] · [ 发现 ] · [ 租赁 ] · [ 供应商 ]
 
-## 📁 项目结构
+---
+</div>
 
-```
-MinJue/
-├── backend/                          # Java 后端项目
-│   ├── src/main/java/com/minjue/
-│   │   ├── config/                  # 配置类 (JWT, Security, CORS等)
-│   │   ├── common/                  # 通用工具 (异常处理, 结果包装等)
-│   │   └── modules/                 # 业务模块
-│   │       ├── system/              # 系统用户管理
-│   │       ├── product/             # 商品管理
-│   │       ├── order/               # 订单管理
-│   │       ├── leasing/             # 租赁设备管理
-│   │       ├── supplier/            # 供应商管理
-│   │       ├── content/             # 内容管理
-│   │       ├── interaction/         # 互动管理 (评论、点赞、收藏、分享)
-│   │       └── admin/               # 管理后台接口
-│   └── src/main/resources/
-│       ├── application.yml          # 应用配置
-│       ├── init.sql                 # 数据库初始化脚本
-│       └── add_update_time.sql      # 数据库迁移脚本
-│
-├── frontend/                         # React 前端项目
-│   ├── src/
-│   │   ├── admin/                   # 管理后台
-│   │   │   ├── api/                 # 管理后台 API 调用
-│   │   │   ├── components/          # 通用组件 (Table, Pagination等)
-│   │   │   ├── context/             # 管理后台上下文
-│   │   │   ├── layouts/             # 布局组件
-│   │   │   ├── locales/             # 国际化文件
-│   │   │   └── pages/               # 管理页面
-│   │   ├── api/                     # 用户端 API 调用
-│   │   ├── components/              # 通用组件
-│   │   ├── context/                 # 全局上下文
-│   │   ├── pages/                   # 用户端页面
-│   │   ├── App.jsx                  # 主应用
-│   │   └── main.jsx                 # 入口文件
-│   ├── public/                      # 静态资源
-│   ├── package.json
-│   ├── vite.config.js
-│   └── tailwind.config.js
-│
-└── documents/                        # 项目文档
-```
+## 📖 项目介绍 (Project Overview)
 
-## 🚀 快速开始
+**MinJue (懂视帝)** 致力于打造工业设备领域的综合性B2B平台。通过融合电商交易与视频内容发现（类Bilibili模式），解决工业采购中的信息透明度问题。平台支持多种租赁模式（融资租赁/经营租赁），并提供详尽的供应商资质展示，建立商业互信。
 
-### 前置要求
-- Node.js 18+
-- Java 17+
-- MySQL 8.0+
-- Redis 6.0+
+## ✨ 核心功能 (Core Features)
 
-### 后端启动
-
-1. **配置数据库**
-```bash
-# 创建数据库并导入初始化脚本
-mysql -u root -p < backend/src/main/resources/init.sql
-```
-
-2. **配置 application.yml**
-```yaml
-spring:
-  datasource:
-    url: jdbc:mysql://localhost:3306/minjue_db
-    username: root
-    password: your_password
-  redis:
-    host: localhost
-    port: 6379
-```
-
-3. **启动后端**
-```bash
-cd backend
-mvn spring-boot:run
-# 或使用 IDE 直接运行 MinJueApplication.java
-```
-
-后端运行在 `http://localhost:8080`
-
-### 前端启动
-
-1. **安装依赖**
-```bash
-cd frontend
-npm install
-```
-
-2. **启动开发服务器**
-```bash
-npm run dev
-```
-
-前端运行在 `http://localhost:3002`
-
-## 📚 主要功能
-
-### 用户端功能
-- ✅ 用户注册/登录 (支持邮箱验证码)
-- ✅ 商品浏览与搜索 (分类、排序、分页)
-- ✅ 商品详情查看
-- ✅ 设备租赁 (融资租赁/经营租赁)
-- ✅ 购物车管理
-- ✅ 订单管理 (直接下单、订单查询)
-- ✅ 内容发现 (视频、文章、Vlog)
-- ✅ 供应商查看
-- ✅ 个人中心 (用户信息、订单历史)
-- ✅ 互动功能 (评论、点赞、收藏、分享)
-
-### 管理后台功能
-- ✅ 用户管理 (查询、编辑、禁用、批量操作)
-- ✅ 商品管理 (CRUD、上下架、批量操作)
-- ✅ 订单管理 (查询、状态更新、统计)
-- ✅ 供应商管理 (审核、编辑)
-- ✅ 租赁设备管理 (CRUD、状态管理)
-- ✅ 评论管理 (审核、删除)
-- ✅ 互动数据管理 (点赞、收藏、分享统计)
-- ✅ 仪表盘 (统计数据、图表展示)
-- ✅ 国际化支持 (中英文切换)
-- ✅ 分页管理 (完整的分页功能)
-
-## 🔐 认证与授权
-
-### 用户角色
-- **USER** - 普通用户/采购方
-- **SUPPLIER** - 供应商
-- **ADMIN** - 管理员 (自动识别，无需单独登录)
-
-### 认证流程
-1. 用户登录时需要输入验证码
-2. 后端验证成功后返回 JWT Token
-3. 前端存储 Token 到 localStorage
-4. 后续请求自动在 Authorization header 中携带 Token
-5. 刷新页面时自动从 localStorage 恢复用户信息
-
-## 📊 数据库表结构
-
-### 核心表
-- `sys_user` - 系统用户表
-- `pms_product` - 商品表
-- `pms_category` - 商品分类表
-- `oms_order` - 订单表
-- `oms_order_item` - 订单明细表
-- `oms_supplier` - 供应商表
-- `oms_leasing` - 租赁设备表
-- `cms_content` - 内容表
-- `pms_comment` - 商品评论表
-- `ums_like` - 用户点赞表
-- `ums_favorite` - 用户收藏表
-- `ums_share` - 分享记录表
-
-## 🔧 API 文档
-
-### 用户认证
-```
-POST /api/v1/user/login          - 用户登录
-POST /api/v1/user/register       - 用户注册
-GET  /api/v1/user/info           - 获取用户信息
-POST /api/v1/user/reset-password - 重置密码
-```
-
-### 商品相关
-```
-GET  /api/product/list           - 获取商品列表
-GET  /api/product/{id}           - 获取商品详情
-GET  /api/category/list          - 获取分类列表
-```
-
-### 订单相关
-```
-POST /api/order/direct           - 直接下单
-GET  /api/order/list             - 获取订单列表
-GET  /api/order/{id}             - 获取订单详情
-POST /api/order/pay/{id}         - 支付订单
-```
-
-### 管理后台
-```
-GET  /api/admin/dashboard/stats           - 获取统计数据
-GET  /api/admin/dashboard/recent-users    - 获取最新用户
-GET  /api/admin/dashboard/recent-products - 获取最新商品
-GET  /api/admin/user/list                 - 用户列表
-GET  /api/admin/product/list              - 商品列表
-GET  /api/admin/order/list                - 订单列表
-GET  /api/admin/interaction/stats         - 互动统计
-```
-
-## 🧪 测试账号
-
-### 管理员
-- 用户名: `admin`
-- 密码: `123456`
-- 角色: 自动识别为管理员
-
-### 供应商
-- 用户名: `supplier1`
-- 密码: `123456`
-
-### 普通用户
-- 用户名: `user1`
-- 密码: `123456`
-
-## 📝 开发指南
-
-### 添加新的管理页面
-
-1. 创建 API 文件 `frontend/src/admin/api/xxx.js`
-2. 创建页面组件 `frontend/src/admin/pages/XxxList.jsx`
-3. 在 `frontend/src/admin/layouts/Sidebar.jsx` 中添加菜单项
-4. 在 `App.jsx` 中添加路由
-
-### 添加新的后端接口
-
-1. 创建 Entity 类
-2. 创建 Mapper 接口
-3. 创建 Service 类
-4. 创建 Controller 类
-5. 在 `init.sql` 中添加表结构
-
-### 国际化支持
-
-- 中文: `frontend/src/admin/locales/zh.js`
-- 英文: `frontend/src/admin/locales/en.js`
-
-使用 `AdminI18nContext` 进行国际化切换
-
-## 🐛 常见问题
-
-### 1. 后端启动报错 "Unknown column 'update_time'"
-执行迁移脚本:
-```bash
-mysql -u root -p minjue_db < backend/src/main/resources/add_update_time.sql
-```
-
-### 2. 前端 403 错误
-确保:
-- 后端已重启
-- Token 有效且正确传递
-- 用户角色为 ADMIN (管理后台)
-
-### 3. 刷新页面自动退出登录
-已修复，现在支持:
-- 自动从 localStorage 恢复用户信息
-- 加载状态等待完成后再检查权限
-
-## 📦 部署
-
-### Docker 部署 (可选)
-
-```bash
-# 构建前端
-cd frontend
-npm run build
-
-# 构建后端
-cd ../backend
-mvn clean package
-
-# 使用 Docker Compose 部署
-docker-compose up -d
-```
-
-## 🤝 贡献指南
-
-1. Fork 本仓库
-2. 创建特性分支 (`git checkout -b feature/AmazingFeature`)
-3. 提交更改 (`git commit -m 'Add some AmazingFeature'`)
-4. 推送到分支 (`git push origin feature/AmazingFeature`)
-5. 开启 Pull Request
-
-## 📄 许可证
-
-本项目采用 MIT 许可证。详见 [LICENSE](LICENSE) 文件。
-
-## 📞 联系方式
-
-- 项目主页: https://github.com/varedias/MinJue
-- 问题反馈: https://github.com/varedias/MinJue/issues
-
-## 🎉 致谢
-
-感谢所有贡献者和使用者的支持！
+| 模块 | 功能 | 说明 |
+|------|------|------|
+| **商城** | **产品矩阵** | 覆盖12大类工业设备，包括AI视觉检测、工业相机、镜头光源、机器人等。 |
+| **商城** | **智能筛选** | 支持多维度筛选、排序及网格/列表视图切换，提升设备查找效率。 |
+| **发现** | **视频内容** | 类Bilibili的视频社区，包含设备测评、操作教程和行业洞察。 |
+| **租赁** | **双模租赁** | 灵活支持融资租赁（Financial Leasing）和经营租赁（Operating Leasing）。 |
+| **供应商** | **企业档案** | 全方位展示企业资质（ISO认证等）、经营数据及完整产品线。 |
+| **交互** | **在线咨询** | 支持与供应商进行实时在线沟通。 |
+| **后台** | **供应商审核** | 管理员审核供应商资质（管理后台）。 |
+| **后台** | **用户管理** | 用户列表、封禁/解封、角色管理（管理后台）。 |
+| **后台** | **数据统计** | 完整的仪表盘数据统计（管理后台）。 |
 
 ---
 
-**最后更新**: 2026-01-29
-**版本**: 1.0.0
+## 🏗️ 技术栈 (Tech Stack)
+
+### 🌐 前端 (Frontend)
+- **核心框架**: React 19.2.0
+- **构建工具**: Vite 7.2.4
+- **样式方案**: Tailwind CSS 4.1.17
+- **路由管理**: React Router DOM 7.9.6
+- **UI组件库**: Lucide React (图标)
+- **状态管理**: Context API / Zustand
+
+### 🔧 后端 (Backend)
+- **核心框架**: Spring Boot 3.2.2
+- **数据库**: MySQL 8.0+
+- **ORM框架**: MyBatis Plus 3.5.5
+- **缓存中间件**: Redis
+- **安全认证**: Spring Security + JWT 0.11.5
+- **工具库**: Hutool 5.8.25, Knife4j 4.5.0
+
+---
+
+## 🧭 系统架构 (Architecture)
+
+```mermaid
+graph TD
+    User[用户 / 企业] -->|HTTPS| Frontend[React 单页应用]
+    
+    subgraph 客户端层
+        Frontend -->|Router| Pages[商城 / 发现 / 租赁 / 供应商]
+        Frontend -->|Axios| API_Client
+    end
+    
+    API_Client -->|REST API| Backend[Spring Boot 后端]
+    
+    subgraph 服务端层
+        Backend -->|Authentication| Security[Spring Security + JWT]
+        Backend -->|Business Logic| Services[商品 / 订单 / 内容服务]
+        Services -->|ORM| DB[(MySQL 数据库)]
+        Services -->|Cache| Cache[(Redis 缓存)]
+    end
+```
+
+---
+
+## 📁 目录结构 (Directory Structure)
+
+```
+MinJue/
+├── backend/                        # Spring Boot 后端工程
+│   ├── src/main/java/com/minjue/
+│   │   ├── config/                 # 全局配置 (Security, Redis, WebMvc等)
+│   │   ├── modules/
+│   │   │   ├── admin/              # 管理后台接口模块
+│   │   │   ├── content/            # 内容社区模块 (Discovery)
+│   │   │   ├── interaction/        # 互动模块 (点赞/收藏/评论)
+│   │   │   ├── leasing/            # 租赁业务模块
+│   │   │   ├── order/              # 订单交易模块
+│   │   │   ├── product/            # 商品管理模块
+│   │   │   ├── supplier/           # 供应商黄页模块
+│   │   │   └── system/             # 系统基础模块 (User, Auth)
+│   │   └── MinJueApplication.java  # 启动类
+│   ├── src/main/resources/
+│   │   ├── mapper/                 # MyBatis XML Mapper 文件
+│   │   ├── application.yml         # 项目主配置文件
+│   │   └── init.sql                # 数据库初始化脚本
+│   └── pom.xml                     # Maven 依赖配置
+│
+├── frontend/                       # React 前端工程
+│   ├── public/                     # 静态资源 (Logo, Icons)
+│   ├── src/
+│   │   ├── admin/                  # [v2.1] 管理后台子系统
+│   │   │   ├── components/         # 后台专用组件
+│   │   │   ├── pages/              # 后台页面 (Dashboard, UserList...)
+│   │   │   └── layouts/            # 后台布局
+│   │   ├── api/                    # API 接口封装
+│   │   ├── assets/                 # 静态图片/样式
+│   │   ├── components/             # 公共组件 (Navbar, Footer, Layout...)
+│   │   ├── context/                # AuthContext, AdminContext
+│   │   ├── pages/                  # 前台页面
+│   │   │   ├── auth/               # 登录/注册
+│   │   │   ├── home/               # 首页
+│   │   │   ├── mall/               # 商城首页
+│   │   │   ├── product/            # 商品详情/租赁详情
+│   │   │   ├── supplier/           # 供应商主页
+│   │   │   ├── user/               # 个人中心/供应中心
+│   │   │   ├── content/            # 内容发现页
+│   │   │   └── support/            # 帮助中心
+│   │   ├── routes/                 # 路由定义
+│   │   ├── App.jsx                 # 根组件
+│   │   └── main.jsx                # 入口文件
+│   ├── package.json                # NPM 依赖
+│   ├── tailwind.config.js          # Tailwind 配置
+│   └── vite.config.js              # Vite 配置
+│
+├── documents/                      # 项目文档归档
+│   └── resources/                  # 宣传册与演示资源
+└── README.md                       # 项目说明文档
+```
+
+---
+
+## 🚀 快速开始 (Quick Start)
+
+### 1️⃣ 环境准备 (Prerequisites)
+- **JDK**: 17 或更高版本
+- **Node.js**: 18.0 或更高版本
+- **MySQL**: 8.0+ (需创建数据库 `minjue_db`)
+- **Redis**: 6.0+
+- **各IDE插件**: 推荐安装 Lombok, Tailwind CSS Intellisense
+
+### 2️⃣ 数据库初始化 (Database Init)
+1. 连接 MySQL 数据库，创建 schema：
+   ```sql
+   CREATE DATABASE minjue_db CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+   ```
+2. 运行后端脚本 `backend/src/main/resources/init.sql` 初始化表结构和测试数据。
+
+### 3️⃣ 后端启动 (Backend Startup)
+使用 IntelliJ IDEA 或命令行启动：
+```bash
+cd backend
+# 1. 编译打包 (可选)
+mvn clean install
+
+# 2. 运行
+# 注意：请确保 application.yml 中的数据库账号密码配置正确
+java -jar target/minjue-backend-0.0.1-SNAPSHOT.jar
+
+# OR 直接通过 Maven 运行
+mvn spring-boot:run
+```
+> 后端服务默认端口: **8080**
+
+### 4️⃣ 前端启动 (Frontend Startup)
+```bash
+cd frontend
+# 1. 安装依赖
+npm install
+
+# 2. 启动开发服务器
+npm run dev
+```
+> 前端访问地址: **http://localhost:5173**
+
+---
+
+## 📅 开发路线 (Roadmap)
+
+- [x] **v1.0 基础服务 (2024-01-15)**: 完成产品分类、视频发现、租赁模式及响应式布局。
+- [x] **v2.0 电商交易 (2024-01-20)**: 上线完整商城功能、商品详情、供应商主页、购物车及筛选功能。
+- [x] **v2.1 管理后台 (2025-01-29)**: 完成管理员认证、供应商审核、用户管理、商品监管等功能。
+- [x] **v2.2 分权工作台 (2025-01-29)**: 实现供应商（供应中心）与采购方（个人中心）的差异化工作台与权限隔离。
+- [ ] **v3.0 智能服务**: 规划AI智能推荐、智能客服及移动端App适配。
+
+---
+
+## � 许可证 (License)
+MIT License
+
+<div align="center">
+<p style="margin: 30px 0 10px;">
+    <strong>Development Team</strong>
+</p>
+<p>
+    主开发: <a href="https://github.com/IceYuanyyy" target="_blank" style="font-weight:bold; color: #0969da; text-decoration: none;">IceYuanyyy</a>
+    &nbsp;&nbsp;|&nbsp;&nbsp;
+    副开发: <a href="https://github.com/varedias" target="_blank" style="font-weight:bold; color: #0969da; text-decoration: none;">varedias</a>
+</p>
+<p style="color: #666; font-size: 12px;">
+    Made with ❤️ by MinJue Team
+</p>
+</div>
