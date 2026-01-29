@@ -339,7 +339,7 @@ const Mall = () => {
         {/* AI助手大对话框（商城专用） */}
         {isAIAssistantOpen && (
           <div className="bg-white rounded-xl shadow-lg mb-6 overflow-hidden border-2 border-blue-200">
-            <div className="bg-gradient-to-r from-blue-600 to-indigo-700 text-white p-4 flex items-center justify-between">
+            <div className="bg-gradient-to-r from-blue-500 to-blue-700 text-white p-4 flex items-center justify-between">
               <div className="flex items-center gap-3">
                 <div className="w-10 h-10 bg-white rounded-full flex items-center justify-center">
                   <MessageCircle size={24} className="text-blue-600" />
@@ -643,7 +643,7 @@ const Mall = () => {
       {!isAIAssistantOpen && (
         <button
           onClick={() => setIsAIAssistantOpen(true)}
-          className="fixed bottom-6 right-6 z-40 bg-gradient-to-r from-blue-600 to-indigo-700 text-white rounded-full p-4 shadow-2xl hover:shadow-3xl hover:scale-110 transition-all duration-300 group"
+          className="fixed bottom-6 right-6 z-40 bg-gradient-to-r from-blue-500 to-blue-700 text-white rounded-full p-4 shadow-2xl hover:shadow-3xl hover:scale-110 transition-all duration-300 group"
         >
           <MessageCircle size={28} />
         </button>

@@ -260,9 +260,9 @@ const Leasing = () => {
                 </div>
                 <p className="text-sm text-gray-600">租期结束后,设备所有权归您</p>
               </div>
-              <div className="bg-gradient-to-br from-purple-50 to-purple-100 rounded-xl p-5 border border-purple-200">
+              <div className="bg-gradient-to-br from-blue-50 to-blue-100 rounded-xl p-5 border border-blue-200">
                 <div className="flex items-center gap-3 mb-2">
-                  <div className="w-10 h-10 bg-purple-600 rounded-lg flex items-center justify-center">
+                  <div className="w-10 h-10 bg-blue-600 rounded-lg flex items-center justify-center">
                     <FileText className="text-white" size={20} />
                   </div>
                   <h3 className="font-bold text-gray-900">税收优惠</h3>
@@ -299,9 +299,9 @@ const Leasing = () => {
                 </div>
                 <p className="text-sm text-gray-600">24小时内快速发货配送</p>
               </div>
-              <div className="bg-gradient-to-br from-indigo-50 to-indigo-100 rounded-xl p-5 border border-indigo-200">
+              <div className="bg-gradient-to-br from-slate-50 to-slate-100 rounded-xl p-5 border border-slate-200">
                 <div className="flex items-center gap-3 mb-2">
-                  <div className="w-10 h-10 bg-indigo-600 rounded-lg flex items-center justify-center">
+                  <div className="w-10 h-10 bg-slate-600 rounded-lg flex items-center justify-center">
                     <Building2 className="text-white" size={20} />
                   </div>
                   <h3 className="font-bold text-gray-900">免维护</h3>

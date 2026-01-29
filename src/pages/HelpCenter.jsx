@@ -32,7 +32,7 @@ const HelpCenter = () => {
           <p className="text-gray-500 text-sm">解决使用过程中遇到的问题</p>
         </div>
         <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100 text-center hover:shadow-md transition-shadow">
-          <div className="w-12 h-12 bg-purple-50 rounded-full flex items-center justify-center text-purple-600 mx-auto mb-4">
+          <div className="w-12 h-12 bg-blue-50 rounded-full flex items-center justify-center text-blue-600 mx-auto mb-4">
             <FileText size={24} />
           </div>
           <h3 className="font-semibold text-lg mb-2">规则中心</h3>

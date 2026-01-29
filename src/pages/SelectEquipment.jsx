@@ -108,7 +108,7 @@ const SelectEquipment = () => {
   return (
     <div className="pb-20 md:pb-0 bg-gray-50 min-h-screen">
       {/* AI Assistant Banner */}
-      <div className="bg-gradient-to-r from-blue-600 to-indigo-700 p-6 text-white">
+      <div className="bg-gradient-to-r from-blue-500 to-blue-700 p-6 text-white">
         <div className="flex items-start justify-between">
           <div>
             <h1 className="text-2xl font-bold mb-2 flex items-center gap-2">
@@ -137,7 +137,7 @@ const SelectEquipment = () => {
         <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
           <div className="bg-white rounded-2xl shadow-2xl w-full max-w-3xl h-[80vh] flex flex-col">
             {/* Chat Header */}
-            <div className="bg-gradient-to-r from-blue-600 to-indigo-700 text-white p-4 rounded-t-2xl flex items-center justify-between">
+            <div className="bg-gradient-to-r from-blue-500 to-blue-700 text-white p-4 rounded-t-2xl flex items-center justify-between">
               <div className="flex items-center gap-3">
                 <div className="w-10 h-10 bg-white rounded-full flex items-center justify-center">
                   <Bot size={24} className="text-blue-600" />

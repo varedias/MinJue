@@ -63,7 +63,7 @@ const Layout = () => {
               <Store size={12} /> 免费开店
             </button>
             <span className="text-gray-300">|</span>
-            <Link to="/en" className="hover:text-blue-600 flex items-center gap-1 text-indigo-600 font-medium">
+            <Link to="/en" className="hover:text-blue-600 flex items-center gap-1 text-blue-600 font-medium">
               <Globe size={12} /> 跨境服务
             </Link>
           </div>

@@ -69,12 +69,12 @@ const PersonalCenter = () => {
                 </div>
                 <p className="text-orange-100">待处理询盘</p>
               </div>
-              <div className="bg-gradient-to-br from-purple-500 to-purple-600 text-white p-6 rounded-xl">
+              <div className="bg-gradient-to-br from-blue-500 to-blue-600 text-white p-6 rounded-xl">
                 <div className="flex items-center justify-between mb-2">
                   <FileText size={24} />
                   <span className="text-3xl font-bold">{stats.quotes}</span>
                 </div>
-                <p className="text-purple-100">待处理报价</p>
+                <p className="text-blue-100">待处理报价</p>
               </div>
             </div>
 

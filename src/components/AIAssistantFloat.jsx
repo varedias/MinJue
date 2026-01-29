@@ -180,7 +180,7 @@ const AIAssistantFloat = ({ isOpen, onClose, isInline = false }) => {
         style={{ maxHeight: 'calc(100vh - 100px)' }}
       >
         {/* 标题栏 */}
-        <div className="bg-gradient-to-r from-blue-600 to-indigo-700 text-white p-4 rounded-t-2xl flex items-center justify-between cursor-move">
+        <div className="bg-gradient-to-r from-blue-500 to-blue-700 text-white p-4 rounded-t-2xl flex items-center justify-between cursor-move">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 bg-white rounded-full flex items-center justify-center">
               <Bot size={24} className="text-blue-600" />
@@ -287,7 +287,7 @@ export const AIAssistantButton = ({ onClick }) => {
   return (
     <button
       onClick={onClick}
-      className="fixed bottom-6 right-6 z-40 bg-gradient-to-r from-blue-600 to-indigo-700 text-white rounded-full p-4 shadow-2xl hover:shadow-3xl hover:scale-110 transition-all duration-300 group"
+      className="fixed bottom-6 right-6 z-40 bg-gradient-to-r from-blue-500 to-blue-700 text-white rounded-full p-4 shadow-2xl hover:shadow-3xl hover:scale-110 transition-all duration-300 group"
       title="打开AI助手"
     >
       <div className="relative">

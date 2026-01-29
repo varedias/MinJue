@@ -384,7 +384,7 @@ const Discovery = () => {
   return (
     <div className="min-h-screen bg-gray-50 pb-20 md:pb-0">
       {/* 顶部Banner */}
-      <div className="bg-gradient-to-r from-blue-600 via-blue-700 to-purple-600 text-white">
+      <div className="bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 text-white">
         <div className="max-w-7xl mx-auto px-4 py-12">
           <h1 className="text-4xl font-bold mb-3">发现推荐</h1>
           <p className="text-blue-100 text-lg">探索工业视觉领域的精彩内容 · 学习 · 交流 · 成长</p>

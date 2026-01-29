@@ -69,10 +69,10 @@ const UserInfo = () => {
               <p className="text-3xl font-bold">{buyerStats.favorites}</p>
               <p className="text-sm text-red-100 mt-1">收藏商品</p>
             </div>
-            <div className="bg-gradient-to-br from-purple-500 to-purple-600 text-white rounded-xl p-6 text-center">
+            <div className="bg-gradient-to-br from-gray-500 to-gray-600 text-white rounded-xl p-6 text-center">
               <Clock size={32} className="mx-auto mb-2" />
               <p className="text-3xl font-bold">{buyerStats.recentlyViewed}</p>
-              <p className="text-sm text-purple-100 mt-1">浏览记录</p>
+              <p className="text-sm text-gray-100 mt-1">浏览记录</p>
             </div>
           </div>
           
@@ -119,10 +119,10 @@ const UserInfo = () => {
               <p className="text-3xl font-bold">{creatorStats.likes}</p>
               <p className="text-sm text-red-100 mt-1">获赞数</p>
             </div>
-            <div className="bg-gradient-to-br from-purple-500 to-purple-600 text-white rounded-xl p-6 text-center">
+            <div className="bg-gradient-to-br from-teal-500 to-teal-600 text-white rounded-xl p-6 text-center">
               <Award size={32} className="mx-auto mb-2" />
               <p className="text-3xl font-bold">{creatorStats.followers}</p>
-              <p className="text-sm text-purple-100 mt-1">粉丝数</p>
+              <p className="text-sm text-teal-100 mt-1">粉丝数</p>
             </div>
           </div>
           
@@ -257,7 +257,7 @@ const UserInfo = () => {
                 </div>
 
                 <div className="flex items-center p-3 bg-white rounded-lg border border-gray-100">
-                  <div className="w-10 h-10 rounded-full bg-purple-50 flex items-center justify-center text-purple-600 mr-4">
+                  <div className="w-10 h-10 rounded-full bg-blue-50 flex items-center justify-center text-blue-600 mr-4">
                     <Mail size={20} />
                   </div>
                   <div className="flex-grow">

@@ -5,22 +5,22 @@ const CrossBorder = () => {
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Hero Section */}
-      <div className="bg-indigo-900 text-white relative overflow-hidden">
+      <div className="bg-blue-800 text-white relative overflow-hidden">
         <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1578575437130-527eed3abbec?ixlib=rb-1.2.1&auto=format&fit=crop&w=1920&q=80')] bg-cover bg-center opacity-20"></div>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24 relative z-10">
           <div className="max-w-3xl">
             <h1 className="text-5xl font-bold mb-6 leading-tight">
               懂视帝跨境服务<br />
-              <span className="text-indigo-400">连接全球工业制造</span>
+              <span className="text-blue-300">连接全球工业制造</span>
             </h1>
             <p className="text-xl text-gray-300 mb-8">
               一站式跨境工业设备交易解决方案，为您打通全球供应链，提供清关、物流、支付全流程服务。
             </p>
             <div className="flex gap-4">
-              <button className="px-8 py-3 bg-indigo-500 hover:bg-indigo-600 text-white rounded-lg font-semibold transition-colors flex items-center gap-2">
+              <button className="px-8 py-3 bg-blue-500 hover:bg-blue-600 text-white rounded-lg font-semibold transition-colors flex items-center gap-2">
                 立即入驻 <ArrowRight size={20} />
               </button>
-              <button className="px-8 py-3 bg-white text-indigo-900 rounded-lg font-semibold hover:bg-gray-100 transition-colors">
+              <button className="px-8 py-3 bg-white text-blue-800 rounded-lg font-semibold hover:bg-gray-100 transition-colors">
                 了解更多
               </button>
             </div>
@@ -57,7 +57,7 @@ const CrossBorder = () => {
           </div>
 
           <div className="bg-white p-8 rounded-xl shadow-sm hover:shadow-md transition-shadow border border-gray-100">
-            <div className="w-14 h-14 bg-purple-50 rounded-xl flex items-center justify-center text-purple-600 mb-6">
+            <div className="w-14 h-14 bg-blue-50 rounded-xl flex items-center justify-center text-blue-600 mb-6">
               <ShieldCheck size={32} />
             </div>
             <h3 className="text-xl font-bold text-gray-900 mb-3">合规保障</h3>
@@ -69,23 +69,23 @@ const CrossBorder = () => {
       </div>
 
       {/* Stats Section */}
-      <div className="bg-indigo-900 text-white py-16">
+      <div className="bg-blue-800 text-white py-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
             <div>
-              <div className="text-4xl font-bold text-indigo-400 mb-2">20+</div>
+              <div className="text-4xl font-bold text-blue-300 mb-2">20+</div>
               <div className="text-gray-300">覆盖国家</div>
             </div>
             <div>
-              <div className="text-4xl font-bold text-indigo-400 mb-2">5000+</div>
+              <div className="text-4xl font-bold text-blue-300 mb-2">5000+</div>
               <div className="text-gray-300">海外供应商</div>
             </div>
             <div>
-              <div className="text-4xl font-bold text-indigo-400 mb-2">10亿+</div>
+              <div className="text-4xl font-bold text-blue-300 mb-2">10亿+</div>
               <div className="text-gray-300">年交易额</div>
             </div>
             <div>
-              <div className="text-4xl font-bold text-indigo-400 mb-2">100%</div>
+              <div className="text-4xl font-bold text-blue-300 mb-2">100%</div>
               <div className="text-gray-300">合规保障</div>
             </div>
           </div>
@@ -96,7 +96,7 @@ const CrossBorder = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
         <div className="flex items-center justify-between mb-8">
           <h2 className="text-2xl font-bold text-gray-900">海外热销设备</h2>
-          <button className="text-indigo-600 font-medium hover:text-indigo-700 flex items-center gap-1">
+          <button className="text-blue-600 font-medium hover:text-blue-700 flex items-center gap-1">
             查看全部 <ArrowRight size={18} />
           </button>
         </div>
@@ -105,18 +105,18 @@ const CrossBorder = () => {
           {[1, 2, 3, 4].map((item) => (
             <div key={item} className="bg-white border border-gray-200 rounded-lg overflow-hidden hover:shadow-lg transition-shadow group">
               <div className="h-48 bg-gray-100 relative">
-                <div className="absolute top-3 left-3 bg-indigo-600 text-white text-xs px-2 py-1 rounded">
+                <div className="absolute top-3 left-3 bg-blue-600 text-white text-xs px-2 py-1 rounded">
                   德国进口
                 </div>
               </div>
               <div className="p-4">
-                <h3 className="font-medium text-gray-900 mb-2 group-hover:text-indigo-600">
+                <h3 className="font-medium text-gray-900 mb-2 group-hover:text-blue-600">
                   高精度五轴加工中心
                 </h3>
                 <p className="text-sm text-gray-500 mb-3">Siemens 840D系统 | 20000rpm</p>
                 <div className="flex items-center justify-between">
                   <span className="text-red-600 font-bold">询价</span>
-                  <button className="p-2 bg-gray-50 rounded-full hover:bg-indigo-50 text-gray-600 hover:text-indigo-600">
+                  <button className="p-2 bg-gray-50 rounded-full hover:bg-blue-50 text-gray-600 hover:text-blue-600">
                     <ArrowRight size={16} />
                   </button>
                 </div>
