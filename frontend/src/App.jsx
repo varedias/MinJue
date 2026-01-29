@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { lazy, Suspense } from 'react';
 import { HashRouter as Router, Routes, Route } from 'react-router-dom';
 import { AuthProvider } from './context/AuthContext';
 import Layout from './components/Layout';
@@ -40,13 +40,17 @@ import HelpCenter from './pages/support/HelpCenter';
 import ContactService from './pages/support/ContactService';
 import InquiryChat from './pages/support/InquiryChat';
 
-// Admin
+// Admin - 使用懒加载优化性能
 import AdminLayout from './admin/layouts/AdminLayout';
 import RequireAdmin from './admin/components/RequireAdmin';
-import AdminDashboard from './admin/pages/Dashboard';
-import AdminUserList from './admin/pages/UserList';
-import AdminSupplierList from './admin/pages/SupplierList';
-import AdminProductList from './admin/pages/ProductList';
+const AdminDashboard = lazy(() => import('./admin/pages/Dashboard'));
+const AdminUserList = lazy(() => import('./admin/pages/UserList'));
+const AdminSupplierList = lazy(() => import('./admin/pages/SupplierList'));
+const AdminProductList = lazy(() => import('./admin/pages/ProductList'));
+const AdminLeasingList = lazy(() => import('./admin/pages/LeasingList'));
+const AdminCommentList = lazy(() => import('./admin/pages/CommentList'));
+const AdminInteractionList = lazy(() => import('./admin/pages/InteractionList'));
+const AdminOrderList = lazy(() => import('./admin/pages/OrderList'));
 
 import LayoutEn from './components/LayoutEn';
 
@@ -115,6 +119,10 @@ function App() {
             <Route path="users" element={<AdminUserList />} />
             <Route path="suppliers" element={<AdminSupplierList />} />
             <Route path="products" element={<AdminProductList />} />
+            <Route path="leasing" element={<AdminLeasingList />} />
+            <Route path="orders" element={<AdminOrderList />} />
+            <Route path="comments" element={<AdminCommentList />} />
+            <Route path="interactions" element={<AdminInteractionList />} />
           </Route>
 
         </Routes>

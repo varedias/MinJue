@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import { User, Lock, ArrowRight, Building2, ShoppingBag, UserCircle, RefreshCw, Globe } from 'lucide-react';
+import { User, Lock, Building2, ShoppingBag, UserCircle, RefreshCw, Globe } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import { captchaApi, userApi } from '../../api';
 
@@ -35,6 +35,7 @@ const Login = () => {
     e.preventDefault();
     setError('');
 
+    // 游客直接进入首页
     if (role === 'guest') {
       navigate('/');
       return;
@@ -60,8 +61,14 @@ const Login = () => {
       // 获取用户信息
       const userInfo = await userApi.getInfo();
       setUser(userInfo);
+      localStorage.setItem('user', JSON.stringify(userInfo));
 
-      navigate('/');
+      // 如果是管理员，跳转到管理后台（自动识别，不需要选择管理员角色）
+      if (userInfo.role === 'ADMIN') {
+        navigate('/admin/dashboard');
+      } else {
+        navigate('/');
+      }
     } catch (err) {
       setError(err.message || '登录失败');
       fetchCaptcha(); // 刷新验证码

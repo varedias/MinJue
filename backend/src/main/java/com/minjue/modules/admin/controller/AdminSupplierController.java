@@ -13,9 +13,12 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
-@Tag(name = "Admin Supplier Audit")
+import java.time.LocalDateTime;
+
+@Tag(name = "Admin Supplier Management")
 @RestController
 @RequestMapping("/api/admin/supplier")
 @RequiredArgsConstructor
@@ -30,7 +33,6 @@ public class AdminSupplierController {
             @RequestParam(defaultValue = "1") Integer page,
             @RequestParam(defaultValue = "10") Integer size) {
 
-        // is_verified = 0 (待审核)
         Page<OmsSupplier> pageParam = new Page<>(page, size);
         IPage<OmsSupplier> result = supplierService.page(pageParam,
                 new LambdaQueryWrapper<OmsSupplier>().eq(OmsSupplier::getIsVerified, 0));
@@ -43,16 +45,21 @@ public class AdminSupplierController {
     public Result<IPage<OmsSupplier>> getAllList(
             @RequestParam(defaultValue = "1") Integer page,
             @RequestParam(defaultValue = "10") Integer size,
-            @RequestParam(required = false) Integer status) {
+            @RequestParam(required = false) Integer status,
+            @RequestParam(required = false) String name) {
 
         Page<OmsSupplier> pageParam = new Page<>(page, size);
         LambdaQueryWrapper<OmsSupplier> wrapper = new LambdaQueryWrapper<>();
+        
         if (status != null) {
             wrapper.eq(OmsSupplier::getIsVerified, status);
         }
+        if (StringUtils.hasText(name)) {
+            wrapper.like(OmsSupplier::getName, name);
+        }
         wrapper.orderByDesc(OmsSupplier::getCreateTime);
+        
         IPage<OmsSupplier> result = supplierService.page(pageParam, wrapper);
-
         return Result.success(result);
     }
 
@@ -64,6 +71,40 @@ public class AdminSupplierController {
             return Result.error(404, "供应商不存在");
         }
         return Result.success(supplier);
+    }
+
+    @Operation(summary = "创建供应商")
+    @PostMapping("/create")
+    public Result<String> create(@RequestBody OmsSupplier supplier) {
+        supplier.setCreateTime(LocalDateTime.now());
+        if (supplier.getIsVerified() == null) {
+            supplier.setIsVerified(1); // 管理员创建默认已认证
+        }
+        supplierService.save(supplier);
+        return Result.success("供应商创建成功");
+    }
+
+    @Operation(summary = "更新供应商")
+    @PutMapping("/{id}")
+    public Result<String> update(@PathVariable Long id, @RequestBody OmsSupplier supplier) {
+        OmsSupplier existing = supplierService.getById(id);
+        if (existing == null) {
+            return Result.error(404, "供应商不存在");
+        }
+        supplier.setId(id);
+        supplierService.updateById(supplier);
+        return Result.success("供应商更新成功");
+    }
+
+    @Operation(summary = "删除供应商")
+    @DeleteMapping("/{id}")
+    public Result<String> delete(@PathVariable Long id) {
+        OmsSupplier supplier = supplierService.getById(id);
+        if (supplier == null) {
+            return Result.error(404, "供应商不存在");
+        }
+        supplierService.removeById(id);
+        return Result.success("供应商删除成功");
     }
 
     @Operation(summary = "审核供应商")
@@ -93,5 +134,23 @@ public class AdminSupplierController {
             supplierService.updateById(supplier);
             return Result.success("已拒绝");
         }
+    }
+
+    @Operation(summary = "更新供应商认证状态")
+    @PostMapping("/status")
+    public Result<String> updateStatus(@RequestBody java.util.Map<String, Object> params) {
+        Long id = Long.valueOf(params.get("id").toString());
+        Integer status = Integer.valueOf(params.get("status").toString());
+
+        OmsSupplier supplier = supplierService.getById(id);
+        if (supplier == null) {
+            return Result.error(404, "供应商不存在");
+        }
+
+        supplier.setIsVerified(status);
+        supplierService.updateById(supplier);
+
+        String[] statusText = {"待审核", "已认证", "已拒绝"};
+        return Result.success("状态已更新为: " + statusText[status]);
     }
 }

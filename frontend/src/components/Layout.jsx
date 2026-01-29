@@ -58,9 +58,9 @@ const Layout = () => {
                   <LogIn size={12} /> 登录
                 </Link>
                 <span className="text-gray-300">|</span>
-                <button className="hover:text-blue-600 flex items-center gap-1">
+                <Link to="/register" className="hover:text-blue-600 flex items-center gap-1">
                   <UserPlus size={12} /> 免费注册
-                </button>
+                </Link>
               </>
             )}
             <span className="text-gray-300">|</span>
@@ -111,13 +111,13 @@ const Layout = () => {
               onClick={() => handleProtectedNavigation('/profile')}
               className={`${isActive('/profile') ? 'text-blue-600' : 'text-gray-500'} hover:text-blue-600 font-medium`}
             >
-              供应中心
+              {(user?.role === 'SUPPLIER' || user?.role === 'ADMIN') ? '供应中心' : '个人中心'}
             </button>
             <button
               onClick={() => handleProtectedNavigation('/user-info')}
               className={`${isActive('/user-info') ? 'text-blue-600' : 'text-gray-500'} hover:text-blue-600 font-medium`}
             >
-              个人中心
+              账号设置
             </button>
           </nav>
           <div className="md:hidden">

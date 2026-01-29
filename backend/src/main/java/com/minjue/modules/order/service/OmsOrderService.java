@@ -7,6 +7,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.minjue.common.exception.CustomException;
 import com.minjue.modules.order.dto.CartItemDTO;
 import com.minjue.modules.order.dto.CreateOrderDTO;
+import com.minjue.modules.order.dto.DirectOrderDTO;
 import com.minjue.modules.order.entity.OmsOrder;
 import com.minjue.modules.order.entity.OmsOrderItem;
 import com.minjue.modules.order.mapper.OmsOrderItemMapper;
@@ -78,6 +79,47 @@ public class OmsOrderService extends ServiceImpl<OmsOrderMapper, OmsOrder> {
 
         // 清除购物车中已下单的商品
         cartService.removeItems(userId, dto.getProductIds());
+
+        return orderNo;
+    }
+
+    /**
+     * 直接下单（不需要购物车）
+     */
+    @Transactional(rollbackFor = Exception.class)
+    public String createDirectOrder(Long userId, DirectOrderDTO dto) {
+        if (dto.getProductId() == null) {
+            throw new CustomException("请选择要购买的商品");
+        }
+        if (dto.getQuantity() == null || dto.getQuantity() <= 0) {
+            dto.setQuantity(1);
+        }
+
+        // 计算总金额
+        BigDecimal totalAmount = dto.getProductPrice().multiply(BigDecimal.valueOf(dto.getQuantity()));
+
+        // 生成订单号
+        String orderNo = IdUtil.getSnowflakeNextIdStr();
+
+        // 创建订单
+        OmsOrder order = new OmsOrder();
+        order.setOrderNo(orderNo);
+        order.setUserId(userId);
+        order.setTotalAmount(totalAmount);
+        order.setStatus(0); // 待付款
+        order.setCreateTime(LocalDateTime.now());
+        save(order);
+
+        // 创建订单项
+        OmsOrderItem orderItem = new OmsOrderItem();
+        orderItem.setOrderId(order.getId());
+        orderItem.setProductId(dto.getProductId());
+        orderItem.setProductName(dto.getProductName());
+        orderItem.setProductImage(dto.getProductImage());
+        orderItem.setProductPrice(dto.getProductPrice());
+        orderItem.setQuantity(dto.getQuantity());
+        orderItem.setSubtotal(totalAmount);
+        orderItemMapper.insert(orderItem);
 
         return orderNo;
     }

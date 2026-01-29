@@ -1,89 +1,62 @@
-import React from 'react';
-import { Outlet, Link, useNavigate, useLocation } from 'react-router-dom';
-import { LayoutDashboard, Users, Building2, Package, LogOut } from 'lucide-react';
-import { useAuth } from '../../context/AuthContext';
+import { Suspense } from 'react';
+import { Outlet } from 'react-router-dom';
+import Sidebar from './Sidebar';
+import Header from './Header';
+import { ToastContainer } from '../components/common/Toast';
+import { AdminI18nProvider } from '../context/AdminI18nContext';
 
+/**
+ * 管理后台主布局
+ */
 const AdminLayout = () => {
-    const { user, logout } = useAuth();
-    const navigate = useNavigate();
-    const location = useLocation();
+  return (
+    <AdminI18nProvider>
+      <div className="min-h-screen bg-gray-100" style={{ minWidth: '1280px' }}>
+        {/* Toast 通知容器 */}
+        <ToastContainer />
 
-    const handleLogout = () => {
-        logout();
-        navigate('/login');
-    };
+        {/* 侧边栏 */}
+        <Sidebar />
 
-    const menuItems = [
-        { path: '/admin/dashboard', icon: LayoutDashboard, label: '仪表盘' },
-        { path: '/admin/users', icon: Users, label: '用户管理' },
-        { path: '/admin/suppliers', icon: Building2, label: '供应商审核' },
-        { path: '/admin/products', icon: Package, label: '商品监管' },
-    ];
+        {/* 主内容区域 */}
+        <div className="ml-60">
+          {/* 顶部导航栏 */}
+          <Header />
 
-    return (
-        <div className="flex h-screen bg-gray-100">
-            {/* Sidebar */}
-            <aside className="w-64 bg-slate-900 text-white flex flex-col">
-                <div className="p-6 border-b border-slate-800">
-                    <h1 className="text-xl font-bold flex items-center gap-2">
-                        <span className="text-blue-500">MinJue</span> Admin
-                    </h1>
+          {/* 页面内容 */}
+          <main className="p-6">
+            <Suspense
+              fallback={
+                <div className="flex items-center justify-center h-64">
+                  <div className="flex items-center gap-2 text-gray-500">
+                    <svg className="animate-spin h-5 w-5" viewBox="0 0 24 24">
+                      <circle
+                        className="opacity-25"
+                        cx="12"
+                        cy="12"
+                        r="10"
+                        stroke="currentColor"
+                        strokeWidth="4"
+                        fill="none"
+                      />
+                      <path
+                        className="opacity-75"
+                        fill="currentColor"
+                        d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                      />
+                    </svg>
+                    <span>Loading...</span>
+                  </div>
                 </div>
-
-                <nav className="flex-1 p-4 space-y-1">
-                    {menuItems.map((item) => {
-                        const Icon = item.icon;
-                        const isActive = location.pathname === item.path;
-
-                        return (
-                            <Link
-                                key={item.path}
-                                to={item.path}
-                                className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-colors ${isActive
-                                        ? 'bg-blue-600 text-white'
-                                        : 'text-slate-400 hover:bg-slate-800 hover:text-white'
-                                    }`}
-                            >
-                                <Icon size={20} />
-                                <span className="font-medium">{item.label}</span>
-                            </Link>
-                        );
-                    })}
-                </nav>
-
-                <div className="p-4 border-t border-slate-800">
-                    <div className="flex items-center gap-3 px-4 py-3 mb-2">
-                        <div className="w-8 h-8 rounded-full bg-blue-500 flex items-center justify-center font-bold">
-                            {user?.username?.charAt(0).toUpperCase()}
-                        </div>
-                        <div className="flex-1 overflow-hidden">
-                            <p className="text-sm font-medium truncate">{user?.nickname || user?.username}</p>
-                            <p className="text-xs text-slate-500">Administrator</p>
-                        </div>
-                    </div>
-                    <button
-                        onClick={handleLogout}
-                        className="w-full flex items-center gap-2 px-4 py-2 text-sm text-red-400 hover:bg-slate-800 rounded-lg transition-colors"
-                    >
-                        <LogOut size={16} />
-                        退出登录
-                    </button>
-                </div>
-            </aside>
-
-            {/* Main Content */}
-            <main className="flex-1 overflow-auto">
-                <header className="bg-white shadow-sm h-16 flex items-center px-8 justify-between sticky top-0 z-10">
-                    <h2 className="text-lg font-semibold text-gray-800">
-                        {menuItems.find(i => i.path === location.pathname)?.label || '管理后台'}
-                    </h2>
-                </header>
-                <div className="p-8">
-                    <Outlet />
-                </div>
-            </main>
+              }
+            >
+              <Outlet />
+            </Suspense>
+          </main>
         </div>
-    );
+      </div>
+    </AdminI18nProvider>
+  );
 };
 
 export default AdminLayout;

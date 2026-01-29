@@ -4,13 +4,20 @@ const AuthContext = createContext(null);
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(true); // 添加加载状态
 
   useEffect(() => {
     // Check localStorage on load
     const storedUser = localStorage.getItem('user');
     if (storedUser) {
-      setUser(JSON.parse(storedUser));
+      try {
+        setUser(JSON.parse(storedUser));
+      } catch (e) {
+        localStorage.removeItem('user');
+        localStorage.removeItem('token');
+      }
     }
+    setLoading(false); // 加载完成
   }, []);
 
   const logout = () => {
@@ -22,7 +29,7 @@ export const AuthProvider = ({ children }) => {
   const isAdmin = user?.role === 'ADMIN';
 
   return (
-    <AuthContext.Provider value={{ user, setUser, logout, isAdmin }}>
+    <AuthContext.Provider value={{ user, setUser, logout, isAdmin, loading }}>
       {children}
     </AuthContext.Provider>
   );

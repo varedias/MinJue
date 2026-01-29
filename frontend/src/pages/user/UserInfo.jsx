@@ -1,18 +1,46 @@
-import React, { useState } from 'react';
-import { User, Phone, Mail, MapPin, Camera, Edit2, Save, X, ShoppingCart, Video, Package, FileText, Heart, Clock, Award, Settings } from 'lucide-react';
+import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../../context/AuthContext';
+import { User, Phone, Mail, MapPin, Camera, Edit2, Save, X, ShoppingCart, FileText, Heart, Clock, Video, Package, Award } from 'lucide-react';
 
 const UserInfo = () => {
+  const { user: authUser } = useAuth();
+  const navigate = useNavigate();
   const [isEditing, setIsEditing] = useState(false);
+
+  // 如果未登录，重定向到登录页
+  useEffect(() => {
+    if (!authUser) {
+      navigate('/login');
+    }
+  }, [authUser, navigate]);
+
+  // 使用 authUser 初始化本地状态，如果 authUser 为空（未登录或加载中），提供默认空值防止报错
   const [user, setUser] = useState({
-    name: '张三',
-    avatar: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
-    userType: 'buyer', // 'buyer' (采购商) or 'creator' (视频创作者)
-    role: '普通会员',
-    phone: '138****8888',
-    email: 'zhangsan@example.com',
-    location: '上海市浦东新区',
-    joinDate: '2024-01-01'
+    name: authUser?.nickname || authUser?.username || '用户',
+    avatar: authUser?.avatar || 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
+    userType: 'buyer', // 默认身份，后续可根据 role 扩展
+    role: authUser?.role === 'ADMIN' ? '管理员' : (authUser?.role === 'SUPPLIER' ? '供应商' : '普通会员'),
+    phone: authUser?.phone || '未绑定',
+    email: authUser?.email || '未绑定',
+    location: '未知', // 数据库暂无此字段
+    joinDate: authUser?.createTime ? new Date(authUser.createTime).toLocaleDateString() : '刚刚'
   });
+
+  // 当 authUser 变化时更新 user (处理刷新后的加载)
+  useEffect(() => {
+    if (authUser) {
+      setUser(prev => ({
+        ...prev,
+        name: authUser.nickname || authUser.username,
+        avatar: authUser.avatar || prev.avatar,
+        role: authUser.role === 'ADMIN' ? '管理员' : (authUser.role === 'SUPPLIER' ? '供应商' : '普通会员'),
+        phone: authUser.phone || prev.phone,
+        email: authUser.email || prev.email,
+        joinDate: authUser.createTime ? new Date(authUser.createTime).toLocaleDateString() : prev.joinDate
+      }));
+    }
+  }, [authUser]);
 
   const [editForm, setEditForm] = useState(user);
 
@@ -75,7 +103,7 @@ const UserInfo = () => {
               <p className="text-sm text-purple-100 mt-1">浏览记录</p>
             </div>
           </div>
-          
+
           <div className="mt-6 bg-white rounded-xl p-6 border border-gray-200">
             <h3 className="font-semibold text-gray-900 mb-4">最近订单</h3>
             <div className="space-y-3">
@@ -125,7 +153,7 @@ const UserInfo = () => {
               <p className="text-sm text-purple-100 mt-1">粉丝数</p>
             </div>
           </div>
-          
+
           <div className="mt-6 bg-white rounded-xl p-6 border border-gray-200">
             <h3 className="font-semibold text-gray-900 mb-4">最新视频</h3>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -153,14 +181,14 @@ const UserInfo = () => {
       <div className="bg-white rounded-xl shadow-sm overflow-hidden">
         {/* Header Background */}
         <div className="h-32 bg-gradient-to-r from-blue-500 to-blue-600"></div>
-        
+
         <div className="px-8 pb-8">
           {/* Profile Header */}
           <div className="relative flex items-end -mt-12 mb-8">
             <div className="relative">
-              <img 
-                src={user.avatar} 
-                alt={user.name} 
+              <img
+                src={user.avatar}
+                alt={user.name}
                 className="w-24 h-24 rounded-full border-4 border-white shadow-md object-cover"
               />
               <button className="absolute bottom-0 right-0 p-1.5 bg-white rounded-full shadow-sm border border-gray-200 text-gray-600 hover:text-blue-600">
@@ -172,9 +200,9 @@ const UserInfo = () => {
                 <div>
                   <div className="flex items-center gap-3 mb-2">
                     <h1 className="text-2xl font-bold text-gray-900">{user.name}</h1>
-                    <select 
+                    <select
                       value={user.userType}
-                      onChange={(e) => setUser({...user, userType: e.target.value})}
+                      onChange={(e) => setUser({ ...user, userType: e.target.value })}
                       className="px-3 py-1 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                     >
                       <option value="buyer">采购商</option>
@@ -184,7 +212,7 @@ const UserInfo = () => {
                   <p className="text-sm text-gray-500">{user.role} | 加入时间: {user.joinDate}</p>
                 </div>
                 {!isEditing ? (
-                  <button 
+                  <button
                     onClick={handleEdit}
                     className="px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded-lg hover:bg-blue-700 flex items-center gap-2"
                   >
@@ -192,13 +220,13 @@ const UserInfo = () => {
                   </button>
                 ) : (
                   <div className="flex gap-2">
-                    <button 
+                    <button
                       onClick={handleCancel}
                       className="px-4 py-2 bg-gray-100 text-gray-700 text-sm font-medium rounded-lg hover:bg-gray-200 flex items-center gap-2"
                     >
                       <X size={16} /> 取消
                     </button>
-                    <button 
+                    <button
                       onClick={handleSave}
                       className="px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded-lg hover:bg-blue-700 flex items-center gap-2"
                     >
@@ -225,10 +253,10 @@ const UserInfo = () => {
                   <div className="flex-grow">
                     <p className="text-xs text-gray-500">昵称</p>
                     {isEditing ? (
-                      <input 
-                        type="text" 
+                      <input
+                        type="text"
                         value={editForm.name}
-                        onChange={(e) => setEditForm({...editForm, name: e.target.value})}
+                        onChange={(e) => setEditForm({ ...editForm, name: e.target.value })}
                         className="w-full mt-1 px-2 py-1 border border-gray-300 rounded text-sm focus:outline-none focus:border-blue-500"
                       />
                     ) : (
@@ -236,7 +264,7 @@ const UserInfo = () => {
                     )}
                   </div>
                 </div>
-                
+
                 <div className="flex items-center p-3 bg-white rounded-lg border border-gray-100">
                   <div className="w-10 h-10 rounded-full bg-green-50 flex items-center justify-center text-green-600 mr-4">
                     <Phone size={20} />
@@ -244,10 +272,10 @@ const UserInfo = () => {
                   <div className="flex-grow">
                     <p className="text-xs text-gray-500">手机号码</p>
                     {isEditing ? (
-                      <input 
-                        type="text" 
+                      <input
+                        type="text"
                         value={editForm.phone}
-                        onChange={(e) => setEditForm({...editForm, phone: e.target.value})}
+                        onChange={(e) => setEditForm({ ...editForm, phone: e.target.value })}
                         className="w-full mt-1 px-2 py-1 border border-gray-300 rounded text-sm focus:outline-none focus:border-blue-500"
                       />
                     ) : (
@@ -263,10 +291,10 @@ const UserInfo = () => {
                   <div className="flex-grow">
                     <p className="text-xs text-gray-500">电子邮箱</p>
                     {isEditing ? (
-                      <input 
-                        type="text" 
+                      <input
+                        type="text"
                         value={editForm.email}
-                        onChange={(e) => setEditForm({...editForm, email: e.target.value})}
+                        onChange={(e) => setEditForm({ ...editForm, email: e.target.value })}
                         className="w-full mt-1 px-2 py-1 border border-gray-300 rounded text-sm focus:outline-none focus:border-blue-500"
                       />
                     ) : (
@@ -282,10 +310,10 @@ const UserInfo = () => {
                   <div className="flex-grow">
                     <p className="text-xs text-gray-500">所在地区</p>
                     {isEditing ? (
-                      <input 
-                        type="text" 
+                      <input
+                        type="text"
                         value={editForm.location}
-                        onChange={(e) => setEditForm({...editForm, location: e.target.value})}
+                        onChange={(e) => setEditForm({ ...editForm, location: e.target.value })}
                         className="w-full mt-1 px-2 py-1 border border-gray-300 rounded text-sm focus:outline-none focus:border-blue-500"
                       />
                     ) : (
@@ -307,7 +335,7 @@ const UserInfo = () => {
                   </div>
                   <button className="text-blue-600 text-sm hover:underline">修改</button>
                 </div>
-                
+
                 <div className="flex items-center justify-between p-4 bg-white rounded-lg border border-gray-100">
                   <div>
                     <p className="font-medium text-gray-900">手机绑定</p>

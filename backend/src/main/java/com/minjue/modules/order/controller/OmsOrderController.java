@@ -3,6 +3,7 @@ package com.minjue.modules.order.controller;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.minjue.common.result.Result;
 import com.minjue.modules.order.dto.CreateOrderDTO;
+import com.minjue.modules.order.dto.DirectOrderDTO;
 import com.minjue.modules.order.entity.OmsOrder;
 import com.minjue.modules.order.entity.OmsOrderItem;
 import com.minjue.modules.order.service.OmsOrderService;
@@ -30,10 +31,17 @@ public class OmsOrderController {
         return 1L;
     }
 
-    @Operation(summary = "Create Order")
+    @Operation(summary = "Create Order from Cart")
     @PostMapping("/create")
     public Result<String> createOrder(Principal principal, @RequestBody CreateOrderDTO dto) {
         String orderNo = orderService.createOrder(getUserId(principal), dto);
+        return Result.success(orderNo);
+    }
+
+    @Operation(summary = "Direct Order (without cart)")
+    @PostMapping("/direct")
+    public Result<String> directOrder(Principal principal, @RequestBody DirectOrderDTO dto) {
+        String orderNo = orderService.createDirectOrder(getUserId(principal), dto);
         return Result.success(orderNo);
     }
 

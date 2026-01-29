@@ -32,9 +32,9 @@ public class SysUserService extends ServiceImpl<SysUserMapper, SysUser> {
         }
 
         // 角色校验逻辑
-        // 如果数据库角色是 ADMIN，允许以任何身份登录
+        // 如果数据库角色是 ADMIN，允许以任何身份登录（自动识别为管理员）
         if ("ADMIN".equals(user.getRole())) {
-            // pass
+            // 管理员可以用任何角色登录，登录后自动识别为管理员
         } else {
             // 非管理员，严格校验身份
             if ("supplier".equals(role)) {
@@ -42,7 +42,7 @@ public class SysUserService extends ServiceImpl<SysUserMapper, SysUser> {
                     throw new CustomException("该账号不是供应商账号，请切换身份登录");
                 }
             } else if ("buyer".equals(role)) {
-                // 假设 buyer 对应数据库的 USER 角色 (或者 BUYER，看具体定义，根据上下文暂定USER为普通/采购用户)
+                // buyer 对应数据库的 USER 角色
                 if (!"USER".equals(user.getRole())) {
                     throw new CustomException("该账号不是采购方账号，请切换身份登录");
                 }

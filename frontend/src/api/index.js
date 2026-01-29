@@ -39,11 +39,8 @@ api.interceptors.response.use(
     },
     (error) => {
         console.error('API Error:', error);
-        if (error.response?.status === 401) {
-            // Token 过期或未授权
-            localStorage.removeItem('token');
-            window.location.href = '/login';
-        }
+        // 不自动跳转登录页，允许游客模式访问
+        // 具体页面可以根据需要自行处理 401 错误
         throw error;
     }
 );
@@ -185,6 +182,13 @@ export const cartApi = {
 export const orderApi = {
     create: (orderData) =>
         request('/api/v1/order/create', {
+            method: 'POST',
+            body: JSON.stringify(orderData),
+        }),
+
+    // 直接下单（不需要购物车）
+    directOrder: (orderData) =>
+        request('/api/v1/order/direct', {
             method: 'POST',
             body: JSON.stringify(orderData),
         }),
