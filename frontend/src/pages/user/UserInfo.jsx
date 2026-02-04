@@ -8,10 +8,12 @@ const UserInfo = () => {
   const navigate = useNavigate();
   const [isEditing, setIsEditing] = useState(false);
 
-  // 如果未登录，重定向到登录页
+  // 如果未登录，重定向到登录页；如果是管理员，跳转到管理后台
   useEffect(() => {
     if (!authUser) {
       navigate('/login');
+    } else if (authUser.role === 'ADMIN') {
+      navigate('/admin/dashboard');
     }
   }, [authUser, navigate]);
 

@@ -525,3 +525,25 @@ INSERT INTO ums_share (user_id, target_type, target_id, target_name, share_url, 
 (NULL, 'product', 1, '懂视帝AI视觉检测系统 DSD-2000', '/product/1', 'copy'),
 (NULL, 'product', 3, '懂视帝3D视觉传感器 DSD-3D100', '/product/3', 'weibo'),
 (4, 'content', 1, '懂视帝AI视觉检测系统深度测评', '/content/1', 'wechat');
+
+-- ===========================================
+-- 补丁：确保 oms_order.update_time 字段存在
+-- ===========================================
+-- 兼容低版本 MySQL：动态判断是否已存在 update_time 列
+SET @col_exists := (
+   SELECT COUNT(*) FROM information_schema.COLUMNS
+   WHERE TABLE_SCHEMA = DATABASE()
+     AND TABLE_NAME = 'oms_order'
+     AND COLUMN_NAME = 'update_time'
+);
+
+SET @add_col_sql := IF(@col_exists = 0,
+   'ALTER TABLE oms_order ADD COLUMN update_time DATETIME NULL COMMENT ''更新时间'';',
+   'SELECT 1;'
+);
+
+PREPARE stmt FROM @add_col_sql;
+EXECUTE stmt;
+DEALLOCATE PREPARE stmt;
+
+UPDATE oms_order SET update_time = create_time WHERE update_time IS NULL;

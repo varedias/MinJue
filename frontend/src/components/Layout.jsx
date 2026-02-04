@@ -24,7 +24,12 @@ const Layout = () => {
     if (!user) {
       navigate('/login');
     } else {
-      navigate(path);
+      // 如果是管理员访问个人中心或用户信息，跳转到管理后台
+      if (user.role === 'ADMIN' && (path === '/profile' || path === '/user-info')) {
+        navigate('/admin/dashboard');
+      } else {
+        navigate(path);
+      }
     }
   };
 
@@ -111,7 +116,7 @@ const Layout = () => {
               onClick={() => handleProtectedNavigation('/profile')}
               className={`${isActive('/profile') ? 'text-blue-600' : 'text-gray-500'} hover:text-blue-600 font-medium`}
             >
-              {(user?.role === 'SUPPLIER' || user?.role === 'ADMIN') ? '供应中心' : '个人中心'}
+              {user?.role === 'ADMIN' ? '管理中心' : (user?.role === 'SUPPLIER' ? '供应中心' : '个人中心')}
             </button>
             <button
               onClick={() => handleProtectedNavigation('/user-info')}

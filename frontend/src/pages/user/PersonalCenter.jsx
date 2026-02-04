@@ -12,11 +12,14 @@ const PersonalCenter = () => {
   useEffect(() => {
     if (!user) {
       navigate('/login');
+    } else if (user.role === 'ADMIN') {
+      // 管理员直接跳转到管理后台
+      navigate('/admin/dashboard');
     }
   }, [user, navigate]);
 
   // 判断是否为供应商
-  const isSupplier = user?.role === 'SUPPLIER' || user?.role === 'ADMIN';
+  const isSupplier = user?.role === 'SUPPLIER';
 
   // ---------------- 供应商模拟数据 ----------------
   const supplierStats = {
