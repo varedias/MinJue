@@ -1,146 +1,139 @@
-import React, { useState } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import { MapPin, Calendar, Award, Star, Phone, Mail, MessageCircle, Building, Users, Package, TrendingUp, Shield, ChevronRight, Heart, ArrowLeft } from 'lucide-react';
-import { suppliers, products } from '../../data/mockData';
+import { supplierApi, contentApi } from '../../api/index';
+import { productApi } from '../../api/product';
 import SupplierChatDialog from '../../components/SupplierChatDialog';
 
 const SupplierDetail = () => {
   const { id } = useParams();
   const navigate = useNavigate();
+  const location = useLocation();
+  const isEnglish = location.pathname.startsWith('/en');
   const [activeTab, setActiveTab] = useState('products');
   const [isChatOpen, setIsChatOpen] = useState(false);
+  const [supplierData, setSupplierData] = useState(null);
+  const [supplierProducts, setSupplierProducts] = useState([]);
+  const [loading, setLoading] = useState(true);
 
-  // 从mockData获取供应商信息
-  const supplierData = suppliers.find(s => s.id === parseInt(id));
+  // 辅助函数
+  const getImagePath = (path) => {
+    if (!path || path.startsWith('http')) return path;
+    return `${import.meta.env.BASE_URL}${path.replace(/^\//, '')}`;
+  };
+
+  const safeJsonParse = (str, fallback = null) => {
+    if (!str) return fallback;
+    try { return JSON.parse(str); } catch { return fallback; }
+  };
+
+  // 加载数据
+  useEffect(() => {
+    const loadData = async () => {
+      setLoading(true);
+      try {
+        const data = await supplierApi.getDetail(id);
+        const sData = data?.data || data;
+        if (!sData || !sData.id) {
+          setSupplierData(null);
+          setLoading(false);
+          return;
+        }
+        setSupplierData(sData);
+
+        // 加载该供应商的商品
+        try {
+          const pRes = await productApi.getList({ page: 1, size: 20, supplierId: sData.id });
+          setSupplierProducts(pRes?.records || []);
+        } catch (e) {
+          console.error('加载供应商商品失败:', e);
+        }
+      } catch (e) {
+        console.error('加载供应商详情失败:', e);
+        setSupplierData(null);
+      } finally {
+        setLoading(false);
+      }
+    };
+    loadData();
+  }, [id]);
+
+  // 加载中
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+      </div>
+    );
+  }
 
   // 如果找不到供应商，显示错误
   if (!supplierData) {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
-          <h2 className="text-2xl font-bold text-gray-900 mb-4">供应商不存在</h2>
+          <h2 className="text-2xl font-bold text-gray-900 mb-4">{isEnglish ? 'Supplier Not Found' : '供应商不存在'}</h2>
           <button onClick={() => navigate('/suppliers')} className="text-blue-600 hover:text-blue-700">
-            返回供应商列表
+            {isEnglish ? 'Back to Suppliers' : '返回供应商列表'}
           </button>
         </div>
       </div>
     );
   }
 
-  // 获取该供应商的产品
-  const supplierProducts = products.filter(p => p.supplier === supplierData.name);
+  // 解析联系方式
+  const contact = safeJsonParse(supplierData.contactInfo, {});
+  const yearsInBusiness = supplierData.createTime
+    ? Math.max(1, new Date().getFullYear() - new Date(supplierData.createTime).getFullYear())
+    : 1;
 
-  // 供应商详细信息（使用mockData的数据）
+  // 构建供应商详情对象
   const supplier = {
     id: supplierData.id,
     name: supplierData.name,
     logo: supplierData.logo,
     banner: 'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=1200&h=300&fit=crop',
-    rating: supplierData.rating,
-    reviewCount: supplierData.orders,
-    years: supplierData.years,
-    location: supplierData.location || '中国',
-    founded: supplierData.founded || `${new Date().getFullYear() - supplierData.years}年`,
-    employees: supplierData.employees || '50-100人',
-    type: supplierData.type || '有限责任公司',
-    registered: supplierData.registered || '1000万元',
-    responseRate: supplierData.responseRate || 95,
-    responseTime: supplierData.responseTime || '3小时内',
-    description: supplierData.detailDescription || supplierData.description,
-    certifications: supplierData.certifications.map((cert, index) => ({
-      name: cert,
-      image: `https://via.placeholder.com/150x200?text=${cert}`
-    })),
+    rating: 4.8,
+    reviewCount: 0,
+    years: yearsInBusiness,
+    location: contact.address || contact.city || '中国',
+    founded: supplierData.createTime ? supplierData.createTime.substring(0, 4) + '年' : '未知',
+    employees: contact.employees || '未公开',
+    type: contact.companyType || '有限责任公司',
+    registered: contact.registeredCapital || '未公开',
+    responseRate: 95,
+    responseTime: '3小时内',
+    description: supplierData.description || '暂无介绍',
+    isVerified: supplierData.isVerified === 1,
     stats: {
       products: supplierProducts.length,
-      followers: Math.floor(supplierData.orders * 5.2),
-      sales: supplierData.orders * 12,
-      satisfaction: (supplierData.rating / 5 * 100).toFixed(1)
+      followers: 0,
+      sales: supplierProducts.reduce((sum, p) => sum + (p.sales || 0), 0),
+      satisfaction: '96.0'
     },
-    contact: supplierData.contact || {
-      phone: '400-xxx-xxxx',
-      mobile: '138****8888',
-      email: 'contact@company.com',
-      wechat: 'company_official',
-      address: supplierData.location || '中国'
+    contact: {
+      phone: contact.phone || '未公开',
+      mobile: contact.mobile || '未公开',
+      email: contact.email || '未公开',
+      wechat: contact.wechat || '未公开',
+      address: contact.address || '中国'
     },
     advantages: [
-      {
-        icon: Award,
-        title: '品质保证',
-        desc: '所有产品均通过质量认证'
-      },
-      {
-        icon: Shield,
-        title: '售后无忧',
-        desc: '提供专业售后服务'
-      },
-      {
-        icon: TrendingUp,
-        title: '技术领先',
-        desc: '持续技术创新'
-      },
-      {
-        icon: Users,
-        title: '专业团队',
-        desc: '经验丰富的技术团队'
-      }
+      { icon: Award, title: '品质保证', desc: '所有产品均通过质量认证' },
+      { icon: Shield, title: '售后无忧', desc: '提供专业售后服务' },
+      { icon: TrendingUp, title: '技术领先', desc: '持续技术创新' },
+      { icon: Users, title: '专业团队', desc: '经验丰富的技术团队' },
     ],
     products: supplierProducts.map(p => ({
       id: p.id,
       name: p.name,
-      price: p.price,
-      originalPrice: Math.floor(p.price * 1.2),
+      price: Number(p.price || 0),
+      originalPrice: p.originalPrice ? Number(p.originalPrice) : null,
       image: p.image,
-      rating: p.rating,
-      sales: p.sales,
-      tags: p.tags
+      sales: p.sales || 0,
     })),
-    reviews: [
-      {
-        id: 1,
-        user: '张先生',
-        avatar: 'https://ui-avatars.com/api/?name=ZS&background=random',
-        rating: 5,
-        date: '2024-01-15',
-        content: '合作了2年多,产品质量稳定,售后服务响应快,是值得信赖的供应商!',
-        product: '海康威视AI视觉检测系统'
-      },
-      {
-        id: 2,
-        user: '李工',
-        avatar: 'https://ui-avatars.com/api/?name=LG&background=random',
-        rating: 5,
-        date: '2024-01-10',
-        content: '技术团队非常专业,能够根据我们的需求定制解决方案。产品性能稳定,价格合理。',
-        product: '智能视觉分拣系统'
-      },
-      {
-        id: 3,
-        user: '王经理',
-        avatar: 'https://ui-avatars.com/api/?name=WJL&background=random',
-        rating: 5,
-        date: '2024-01-05',
-        content: '公司实力强,产品线丰富,从采购到售后都很专业。已经推荐给同行了。',
-        product: '大华智能相机'
-      }
-    ],
-    news: [
-      {
-        id: 1,
-        title: '智视科技发布新一代AI视觉检测系统',
-        date: '2024-01-20',
-        image: 'https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=400',
-        summary: '采用最新深度学习算法,检测精度提升30%...'
-      },
-      {
-        id: 2,
-        title: '公司荣获"深圳市专精特新企业"称号',
-        date: '2024-01-10',
-        image: 'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=400',
-        summary: '凭借在工业视觉领域的技术创新和市场表现...'
-      }
-    ]
+    reviews: [],
+    news: []
   };
 
   return (
@@ -167,12 +160,12 @@ const SupplierDetail = () => {
                   <div className="flex items-center gap-1">
                     <Star className="text-yellow-400 fill-yellow-400" size={18} />
                     <span className="font-medium">{supplier.rating}</span>
-                    <span className="text-blue-200">({supplier.reviewCount}评价)</span>
+                    <span className="text-blue-200">({supplier.reviewCount}{isEnglish ? ' reviews' : '评价'})</span>
                   </div>
                   <span className="text-blue-200">|</span>
                   <div className="flex items-center gap-1">
                     <Calendar size={16} />
-                    <span>经营{supplier.years}年</span>
+                    <span>{isEnglish ? `${supplier.years} years` : `经营${supplier.years}年`}</span>
                   </div>
                   <span className="text-blue-200">|</span>
                   <div className="flex items-center gap-1">
@@ -203,56 +196,56 @@ const SupplierDetail = () => {
           <div className="lg:col-span-1 space-y-6">
             {/* Stats Card */}
             <div className="bg-white rounded-xl shadow-sm p-6">
-              <h3 className="font-bold text-gray-900 mb-4">企业数据</h3>
+              <h3 className="font-bold text-gray-900 mb-4">{isEnglish ? 'Company Stats' : '企业数据'}</h3>
               <div className="grid grid-cols-2 gap-4">
                 <div className="text-center">
                   <div className="text-2xl font-bold text-blue-600">{supplier.stats.products}</div>
-                  <div className="text-sm text-gray-600">在售商品</div>
+                  <div className="text-sm text-gray-600">{isEnglish ? 'Products' : '在售商品'}</div>
                 </div>
                 <div className="text-center">
                   <div className="text-2xl font-bold text-blue-600">{supplier.stats.followers.toLocaleString()}</div>
-                  <div className="text-sm text-gray-600">关注人数</div>
+                  <div className="text-sm text-gray-600">{isEnglish ? 'Followers' : '关注人数'}</div>
                 </div>
                 <div className="text-center">
                   <div className="text-2xl font-bold text-blue-600">{supplier.stats.sales.toLocaleString()}</div>
-                  <div className="text-sm text-gray-600">累计销量</div>
+                  <div className="text-sm text-gray-600">{isEnglish ? 'Total Sales' : '累计销量'}</div>
                 </div>
                 <div className="text-center">
                   <div className="text-2xl font-bold text-blue-600">{supplier.stats.satisfaction}%</div>
-                  <div className="text-sm text-gray-600">好评率</div>
+                  <div className="text-sm text-gray-600">{isEnglish ? 'Satisfaction' : '好评率'}</div>
                 </div>
               </div>
             </div>
 
             {/* Contact Card */}
             <div className="bg-white rounded-xl shadow-sm p-6">
-              <h3 className="font-bold text-gray-900 mb-4">联系方式</h3>
+              <h3 className="font-bold text-gray-900 mb-4">{isEnglish ? 'Contact' : '联系方式'}</h3>
               <div className="space-y-3">
                 <div className="flex items-center gap-3 text-gray-700">
                   <Phone size={18} className="text-blue-600" />
                   <div>
-                    <div className="text-sm text-gray-500">联系电话</div>
+                    <div className="text-sm text-gray-500">{isEnglish ? 'Phone' : '联系电话'}</div>
                     <div className="font-medium">{supplier.contact.phone}</div>
                   </div>
                 </div>
                 <div className="flex items-center gap-3 text-gray-700">
                   <Mail size={18} className="text-blue-600" />
                   <div>
-                    <div className="text-sm text-gray-500">电子邮箱</div>
+                    <div className="text-sm text-gray-500">{isEnglish ? 'Email' : '电子邮箱'}</div>
                     <div className="font-medium">{supplier.contact.email}</div>
                   </div>
                 </div>
                 <div className="flex items-center gap-3 text-gray-700">
                   <MessageCircle size={18} className="text-blue-600" />
                   <div>
-                    <div className="text-sm text-gray-500">微信号</div>
+                    <div className="text-sm text-gray-500">{isEnglish ? 'WeChat' : '微信号'}</div>
                     <div className="font-medium">{supplier.contact.wechat}</div>
                   </div>
                 </div>
                 <div className="flex items-center gap-3 text-gray-700">
                   <MapPin size={18} className="text-blue-600" />
                   <div>
-                    <div className="text-sm text-gray-500">公司地址</div>
+                    <div className="text-sm text-gray-500">{isEnglish ? 'Address' : '公司地址'}</div>
                     <div className="font-medium">{supplier.contact.address}</div>
                   </div>
                 </div>
@@ -263,41 +256,41 @@ const SupplierDetail = () => {
                   className="w-full bg-blue-600 text-white py-3 rounded-lg hover:bg-blue-700 font-medium flex items-center justify-center gap-2 transition-colors"
                 >
                   <MessageCircle size={18} />
-                  在线咨询
+                  {isEnglish ? 'Chat Now' : '在线咨询'}
                 </button>
                 <button className="w-full border-2 border-blue-600 text-blue-600 py-3 rounded-lg hover:bg-blue-50 font-medium flex items-center justify-center gap-2 transition-colors">
                   <Heart size={18} />
-                  关注店铺
+                  {isEnglish ? 'Follow' : '关注店铺'}
                 </button>
               </div>
             </div>
 
             {/* Company Info Card */}
             <div className="bg-white rounded-xl shadow-sm p-6">
-              <h3 className="font-bold text-gray-900 mb-4">企业信息</h3>
+              <h3 className="font-bold text-gray-900 mb-4">{isEnglish ? 'Company Info' : '企业信息'}</h3>
               <div className="space-y-3 text-sm">
                 <div className="flex justify-between">
-                  <span className="text-gray-600">企业类型</span>
+                  <span className="text-gray-600">{isEnglish ? 'Type' : '企业类型'}</span>
                   <span className="text-gray-900 font-medium">{supplier.type}</span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-gray-600">成立时间</span>
+                  <span className="text-gray-600">{isEnglish ? 'Founded' : '成立时间'}</span>
                   <span className="text-gray-900 font-medium">{supplier.founded}</span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-gray-600">注册资本</span>
+                  <span className="text-gray-600">{isEnglish ? 'Capital' : '注册资本'}</span>
                   <span className="text-gray-900 font-medium">{supplier.registered}</span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-gray-600">员工人数</span>
+                  <span className="text-gray-600">{isEnglish ? 'Employees' : '员工人数'}</span>
                   <span className="text-gray-900 font-medium">{supplier.employees}</span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-gray-600">响应率</span>
+                  <span className="text-gray-600">{isEnglish ? 'Response Rate' : '响应率'}</span>
                   <span className="text-green-600 font-medium">{supplier.responseRate}%</span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-gray-600">响应时间</span>
+                  <span className="text-gray-600">{isEnglish ? 'Response Time' : '响应时间'}</span>
                   <span className="text-green-600 font-medium">{supplier.responseTime}</span>
                 </div>
               </div>
@@ -305,7 +298,7 @@ const SupplierDetail = () => {
 
             {/* Advantages */}
             <div className="bg-white rounded-xl shadow-sm p-6">
-              <h3 className="font-bold text-gray-900 mb-4">企业优势</h3>
+              <h3 className="font-bold text-gray-900 mb-4">{isEnglish ? 'Advantages' : '企业优势'}</h3>
               <div className="space-y-4">
                 {supplier.advantages.map((adv, idx) => (
                   <div key={idx} className="flex items-start gap-3">
@@ -329,10 +322,10 @@ const SupplierDetail = () => {
               <div className="border-b">
                 <div className="flex">
                   {[
-                    { id: 'products', label: '全部商品', count: supplier.products.length },
-                    { id: 'reviews', label: '店铺评价', count: supplier.reviewCount },
-                    { id: 'certifications', label: '资质证书', count: supplier.certifications.length },
-                    { id: 'news', label: '企业动态', count: supplier.news.length }
+                    { id: 'products', label: isEnglish ? 'Products' : '全部商品', count: supplier.products.length },
+                    { id: 'reviews', label: isEnglish ? 'Reviews' : '店铺评价', count: supplier.reviews.length },
+                    { id: 'about', label: isEnglish ? 'About' : '企业介绍', count: null },
+                    { id: 'news', label: isEnglish ? 'News' : '企业动态', count: supplier.news.length }
                   ].map((tab) => (
                     <button
                       key={tab.id}
@@ -342,7 +335,7 @@ const SupplierDetail = () => {
                           : 'text-gray-600 hover:text-gray-900'
                         }`}
                     >
-                      {tab.label} ({tab.count})
+                      {tab.label}{tab.count !== null ? ` (${tab.count})` : ''}
                     </button>
                   ))}
                 </div>
@@ -360,29 +353,17 @@ const SupplierDetail = () => {
                       >
                         <div className="relative aspect-square bg-gray-100 overflow-hidden">
                           <img
-                            src={product.image}
+                            src={getImagePath(product.image)}
                             alt={product.name}
                             className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
                           />
-                          <div className="absolute top-3 left-3 flex gap-2">
-                            {product.tags.map((tag, idx) => (
-                              <span key={idx} className="bg-red-500 text-white text-xs px-2 py-1 rounded">
-                                {tag}
-                              </span>
-                            ))}
-                          </div>
                         </div>
                         <div className="p-4">
                           <h3 className="text-sm font-medium text-gray-900 line-clamp-2 mb-2 group-hover:text-blue-600">
                             {product.name}
                           </h3>
                           <div className="flex items-center gap-2 mb-3 text-xs text-gray-500">
-                            <div className="flex items-center gap-1">
-                              <Star size={14} className="text-yellow-400 fill-yellow-400" />
-                              <span>{product.rating}</span>
-                            </div>
-                            <span>|</span>
-                            <span>已售{product.sales}</span>
+                            <span>{isEnglish ? `${product.sales} sold` : `已售${product.sales}`}</span>
                           </div>
                           <div className="flex items-end justify-between">
                             <div>
@@ -406,66 +387,99 @@ const SupplierDetail = () => {
                 {/* Reviews Tab */}
                 {activeTab === 'reviews' && (
                   <div className="space-y-6">
-                    {supplier.reviews.map((review) => (
-                      <div key={review.id} className="border-b pb-6 last:border-b-0">
-                        <div className="flex items-start gap-4">
-                          <img src={review.avatar} alt={review.user} className="w-12 h-12 rounded-full" />
-                          <div className="flex-grow">
-                            <div className="flex items-center justify-between mb-2">
-                              <div>
-                                <div className="font-medium text-gray-900">{review.user}</div>
-                                <div className="text-sm text-gray-500">{review.date}</div>
+                    {supplier.reviews.length === 0 ? (
+                      <div className="text-center py-16 text-gray-400">
+                        <Star size={48} className="mx-auto mb-4 text-gray-300" />
+                        <p className="text-lg">{isEnglish ? 'No Reviews' : '暂无评价'}</p>
+                        <p className="text-sm mt-2">{isEnglish ? 'This supplier has no reviews yet' : '该供应商暂时还没有用户评价'}</p>
+                      </div>
+                    ) : (
+                      supplier.reviews.map((review) => (
+                        <div key={review.id} className="border-b pb-6 last:border-b-0">
+                          <div className="flex items-start gap-4">
+                            <img src={review.avatar} alt={review.user} className="w-12 h-12 rounded-full" />
+                            <div className="flex-grow">
+                              <div className="flex items-center justify-between mb-2">
+                                <div>
+                                  <div className="font-medium text-gray-900">{review.user}</div>
+                                  <div className="text-sm text-gray-500">{review.date}</div>
+                                </div>
+                                <div className="flex items-center gap-1">
+                                  {[...Array(5)].map((_, i) => (
+                                    <Star key={i} size={16} className={i < review.rating ? 'text-yellow-400 fill-yellow-400' : 'text-gray-300'} />
+                                  ))}
+                                </div>
                               </div>
-                              <div className="flex items-center gap-1">
-                                {[...Array(5)].map((_, i) => (
-                                  <Star key={i} size={16} className={i < review.rating ? 'text-yellow-400 fill-yellow-400' : 'text-gray-300'} />
-                                ))}
-                              </div>
+                              <p className="text-gray-700">{review.content}</p>
                             </div>
-                            <div className="text-sm text-blue-600 mb-2">购买商品: {review.product}</div>
-                            <p className="text-gray-700">{review.content}</p>
                           </div>
                         </div>
-                      </div>
-                    ))}
+                      ))
+                    )}
                   </div>
                 )}
 
-                {/* Certifications Tab */}
-                {activeTab === 'certifications' && (
-                  <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
-                    {supplier.certifications.map((cert, idx) => (
-                      <div key={idx} className="text-center">
-                        <div className="aspect-[3/4] bg-gray-100 rounded-lg mb-3 overflow-hidden">
-                          <img src={cert.image} alt={cert.name} className="w-full h-full object-cover" />
-                        </div>
-                        <div className="text-sm text-gray-900 font-medium">{cert.name}</div>
+                {/* About Tab */}
+                {activeTab === 'about' && (
+                  <div className="space-y-6">
+                    <div>
+                      <h3 className="text-lg font-bold text-gray-900 mb-3">{isEnglish ? 'Company Introduction' : '企业简介'}</h3>
+                      <p className="text-gray-700 leading-relaxed">{supplier.description}</p>
+                    </div>
+                    {supplier.isVerified && (
+                      <div className="flex items-center gap-2 bg-green-50 text-green-700 px-4 py-3 rounded-lg">
+                        <Shield size={20} />
+                        <span className="font-medium">{isEnglish ? 'This supplier is verified' : '该供应商已通过平台认证'}</span>
                       </div>
-                    ))}
+                    )}
+                    <div>
+                      <h3 className="text-lg font-bold text-gray-900 mb-3">{isEnglish ? 'Key Advantages' : '核心优势'}</h3>
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        {supplier.advantages.map((adv, idx) => (
+                          <div key={idx} className="flex items-start gap-3 p-4 bg-gray-50 rounded-lg">
+                            <div className="p-2 bg-blue-50 rounded-lg">
+                              <adv.icon className="text-blue-600" size={20} />
+                            </div>
+                            <div>
+                              <div className="font-medium text-gray-900">{adv.title}</div>
+                              <div className="text-sm text-gray-600">{adv.desc}</div>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
                   </div>
                 )}
 
                 {/* News Tab */}
                 {activeTab === 'news' && (
                   <div className="space-y-6">
-                    {supplier.news.map((news) => (
-                      <div key={news.id} className="flex gap-4 border-b pb-6 last:border-b-0">
-                        <img src={news.image} alt={news.title} className="w-48 h-32 rounded-lg object-cover" />
-                        <div className="flex-grow">
-                          <h3 className="text-lg font-bold text-gray-900 mb-2 hover:text-blue-600 cursor-pointer">
-                            {news.title}
-                          </h3>
-                          <p className="text-gray-600 mb-3">{news.summary}</p>
-                          <div className="flex items-center justify-between">
-                            <span className="text-sm text-gray-500">{news.date}</span>
-                            <button className="text-blue-600 text-sm hover:underline flex items-center gap-1">
-                              查看详情
-                              <ChevronRight size={16} />
-                            </button>
+                    {supplier.news.length === 0 ? (
+                      <div className="text-center py-16 text-gray-400">
+                        <Building size={48} className="mx-auto mb-4 text-gray-300" />
+                        <p className="text-lg">{isEnglish ? 'No News' : '暂无动态'}</p>
+                        <p className="text-sm mt-2">{isEnglish ? 'This supplier has no news yet' : '该供应商暂未发布企业动态'}</p>
+                      </div>
+                    ) : (
+                      supplier.news.map((news) => (
+                        <div key={news.id} className="flex gap-4 border-b pb-6 last:border-b-0">
+                          <img src={news.image} alt={news.title} className="w-48 h-32 rounded-lg object-cover" />
+                          <div className="flex-grow">
+                            <h3 className="text-lg font-bold text-gray-900 mb-2 hover:text-blue-600 cursor-pointer">
+                              {news.title}
+                            </h3>
+                            <p className="text-gray-600 mb-3">{news.summary}</p>
+                            <div className="flex items-center justify-between">
+                              <span className="text-sm text-gray-500">{news.date}</span>
+                              <button className="text-blue-600 text-sm hover:underline flex items-center gap-1">
+                                {isEnglish ? 'Read More' : '查看详情'}
+                                <ChevronRight size={16} />
+                              </button>
+                            </div>
                           </div>
                         </div>
-                      </div>
-                    ))}
+                      ))
+                    )}
                   </div>
                 )}
               </div>

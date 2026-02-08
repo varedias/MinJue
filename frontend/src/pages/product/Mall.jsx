@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { Search, Filter, Star, MessageCircle, Grid3x3, List, X, AlertCircle } from 'lucide-react';
 import AIAssistantFloat from '../../components/AIAssistantFloat';
 import { productApi } from '../../api/product';
+import { LoadingSpinner, EmptyState } from '../../components/common/UIComponents';
 
 const Mall = () => {
   const navigate = useNavigate();
@@ -40,9 +41,17 @@ const Mall = () => {
   };
 
   // 辅助函数：处理图片路径
+  // 辅助函数：处理图片路径（Unsplash 在国内无法访问，替换为本地占位图）
   const getImagePath = (path) => {
-    if (!path || path.startsWith('http')) return path;
+    if (!path) return '/products/placeholder-product.svg';
+    if (path.includes('unsplash.com')) return '/products/placeholder-product.svg';
+    if (path.startsWith('http')) return path;
     return `${import.meta.env.BASE_URL}${path.replace(/^\//, '')}`;
+  };
+
+  // 图片加载失败时的占位图
+  const handleImageError = (e) => {
+    e.target.src = '/products/placeholder-product.svg';
   };
 
   // 获取分类
@@ -93,7 +102,7 @@ const Mall = () => {
     return (
       <div onClick={() => !isOffShelf && navigate(`/product/${product.id}`)} className={`bg-white rounded-xl shadow-sm hover:shadow-xl transition-all overflow-hidden group ${isOffShelf ? 'opacity-60 cursor-not-allowed' : 'cursor-pointer'}`}>
         <div className="relative aspect-square bg-gray-100 overflow-hidden">
-          <img src={getImagePath(product.image)} alt={product.name} className={`w-full h-full object-cover ${!isOffShelf && 'group-hover:scale-110'} transition-transform duration-300`} />
+          <img src={getImagePath(product.image)} alt={product.name} className={`w-full h-full object-cover ${!isOffShelf && 'group-hover:scale-110'} transition-transform duration-300`} onError={handleImageError} />
           {isOffShelf && (
             <div className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center">
               <div className="bg-gray-800 text-white px-4 py-2 rounded-lg flex items-center gap-2">
@@ -185,9 +194,9 @@ const Mall = () => {
             </div>
 
             {loading ? (
-              <div className="text-center py-20"><div className="inline-block w-8 h-8 border-4 border-blue-600 border-t-transparent rounded-full animate-spin"></div><p className="mt-4 text-gray-500">加载中...</p></div>
+              <LoadingSpinner text="正在加载商品..." />
             ) : products.length === 0 ? (
-              <div className="text-center py-20 bg-white rounded-xl"><p className="text-gray-500">暂无商品</p></div>
+              <EmptyState title="暂无商品" description="试试其他分类或搜索关键词" />
             ) : (
               <div className={viewMode === 'grid' ? 'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6' : 'space-y-4'}>
                 {products.map((product) => <ProductCard key={product.id} product={product} />)}

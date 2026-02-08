@@ -1,13 +1,25 @@
 import { useState, useEffect, useCallback } from 'react';
-import { Search, Filter, Calendar, TrendingUp, Building2, Award, Clock, Star, FileText, AlertCircle } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
+import { Search, Filter, Calendar, TrendingUp, Building2, Award, Clock, Star, FileText, AlertCircle, X } from 'lucide-react';
 import { leasingApi } from '../../api/product';
+import { leasingApplicationApi } from '../../api/index';
+import { useAuth } from '../../context/AuthContext';
 
 const Leasing = () => {
+  const navigate = useNavigate();
+  const { user } = useAuth();
   const [activeTab, setActiveTab] = useState('financing');
   const [searchTerm, setSearchTerm] = useState('');
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [pagination, setPagination] = useState({ current: 1, pageSize: 12, total: 0 });
+
+  // 租赁申请弹窗状态
+  const [applyModal, setApplyModal] = useState({ visible: false, product: null });
+  const [applyForm, setApplyForm] = useState({
+    leasePeriod: 'MONTH', leaseDuration: 1, companyName: '', contactName: '', contactPhone: '', remark: ''
+  });
+  const [submitting, setSubmitting] = useState(false);
 
   // 获取租赁设备列表
   const fetchProducts = useCallback(async () => {
@@ -35,6 +47,46 @@ const Leasing = () => {
   const handleTabChange = (tab) => {
     setActiveTab(tab);
     setPagination(prev => ({ ...prev, current: 1 }));
+  };
+
+  // 打开租赁申请弹窗
+  const openApplyModal = (product) => {
+    if (!user) { navigate('/login'); return; }
+    setApplyForm({ leasePeriod: 'MONTH', leaseDuration: 1, companyName: '', contactName: '', contactPhone: '', remark: '' });
+    setApplyModal({ visible: true, product });
+  };
+
+  // 提交租赁申请
+  const handleApplySubmit = async () => {
+    if (!applyForm.companyName.trim()) { alert('请输入企业名称'); return; }
+    if (!applyForm.contactName.trim()) { alert('请输入联系人'); return; }
+    if (!applyForm.contactPhone.trim()) { alert('请输入联系电话'); return; }
+    setSubmitting(true);
+    try {
+      const p = applyModal.product;
+      let estimatedCost = 0;
+      if (applyForm.leasePeriod === 'DAY') estimatedCost = (p.dailyPrice || 0) * applyForm.leaseDuration;
+      else if (applyForm.leasePeriod === 'WEEK') estimatedCost = (p.weeklyPrice || 0) * applyForm.leaseDuration;
+      else estimatedCost = (p.monthlyPrice || 0) * applyForm.leaseDuration;
+
+      await leasingApplicationApi.apply({
+        leasingId: p.id,
+        leaseType: p.type === 'financing' ? 'FINANCIAL' : 'OPERATING',
+        leasePeriod: applyForm.leasePeriod,
+        leaseDuration: applyForm.leaseDuration,
+        estimatedCost,
+        companyName: applyForm.companyName,
+        contactName: applyForm.contactName,
+        contactPhone: applyForm.contactPhone,
+        remark: applyForm.remark,
+      });
+      alert('租赁申请已提交，请等待审核！');
+      setApplyModal({ visible: false, product: null });
+    } catch (e) {
+      alert('提交失败: ' + (e.message || '网络错误'));
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   // 计算总页数
@@ -122,7 +174,7 @@ const Leasing = () => {
                 </div>
               </div>
               {product.totalPrice && <div className="text-xs text-gray-500 mb-3">设备总价: ¥{Number(product.totalPrice).toLocaleString()}</div>}
-              <button disabled={isOffShelf} className={`w-full py-2.5 rounded-lg font-medium transition-all ${isOffShelf ? 'bg-gray-300 text-gray-500 cursor-not-allowed' : 'bg-gradient-to-r from-blue-600 to-blue-700 text-white hover:from-blue-700 hover:to-blue-800'}`}>
+              <button disabled={isOffShelf} onClick={() => !isOffShelf && openApplyModal(product)} className={`w-full py-2.5 rounded-lg font-medium transition-all ${isOffShelf ? 'bg-gray-300 text-gray-500 cursor-not-allowed' : 'bg-gradient-to-r from-blue-600 to-blue-700 text-white hover:from-blue-700 hover:to-blue-800'}`}>
                 {isOffShelf ? '暂不可租' : '立即租赁'}
               </button>
             </div>
@@ -133,7 +185,7 @@ const Leasing = () => {
                 <div><p className="text-xs text-gray-500 mb-1">周租</p><p className={`text-sm font-bold ${isOffShelf ? 'text-gray-400' : 'text-orange-600'}`}>¥{product.weeklyPrice}</p></div>
                 <div><p className="text-xs text-gray-500 mb-1">月租</p><p className={`text-sm font-bold ${isOffShelf ? 'text-gray-400' : 'text-orange-600'}`}>¥{product.monthlyPrice}</p></div>
               </div>
-              <button disabled={isOffShelf} className={`w-full py-2.5 rounded-lg font-medium transition-all ${isOffShelf ? 'bg-gray-300 text-gray-500 cursor-not-allowed' : 'bg-gradient-to-r from-green-600 to-green-700 text-white hover:from-green-700 hover:to-green-800'}`}>
+              <button disabled={isOffShelf} onClick={() => !isOffShelf && openApplyModal(product)} className={`w-full py-2.5 rounded-lg font-medium transition-all ${isOffShelf ? 'bg-gray-300 text-gray-500 cursor-not-allowed' : 'bg-gradient-to-r from-green-600 to-green-700 text-white hover:from-green-700 hover:to-green-800'}`}>
                 {isOffShelf ? '暂不可租' : '立即租赁'}
               </button>
             </div>
@@ -270,6 +322,131 @@ const Leasing = () => {
           </div>
         )}
       </div>
+
+      {/* 租赁申请弹窗 */}
+      {applyModal.visible && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
+          <div className="bg-white rounded-xl w-full max-w-lg max-h-[90vh] overflow-y-auto">
+            <div className="flex items-center justify-between p-6 border-b">
+              <h3 className="text-lg font-bold text-gray-900">申请租赁</h3>
+              <button onClick={() => setApplyModal({ visible: false, product: null })} className="text-gray-400 hover:text-gray-600">
+                <X size={20} />
+              </button>
+            </div>
+            <div className="p-6 space-y-4">
+              {/* 设备信息 */}
+              <div className="bg-gray-50 rounded-lg p-4">
+                <p className="font-medium text-gray-900">{applyModal.product?.name}</p>
+                <p className="text-sm text-gray-500 mt-1">
+                  {applyModal.product?.type === 'financing' ? '融资租赁' : '经营租赁'} · {applyModal.product?.supplier}
+                </p>
+              </div>
+
+              {/* 租赁周期 */}
+              {applyModal.product?.type !== 'financing' && (
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">租赁周期 *</label>
+                  <select
+                    className="w-full px-3 py-2 border rounded-lg text-sm"
+                    value={applyForm.leasePeriod}
+                    onChange={e => setApplyForm(f => ({ ...f, leasePeriod: e.target.value }))}
+                  >
+                    <option value="DAY">按天</option>
+                    <option value="WEEK">按周</option>
+                    <option value="MONTH">按月</option>
+                  </select>
+                </div>
+              )}
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  租赁时长 * ({applyForm.leasePeriod === 'DAY' ? '天' : applyForm.leasePeriod === 'WEEK' ? '周' : '月'})
+                </label>
+                <input
+                  type="number" min="1"
+                  className="w-full px-3 py-2 border rounded-lg text-sm"
+                  value={applyForm.leaseDuration}
+                  onChange={e => setApplyForm(f => ({ ...f, leaseDuration: Math.max(1, parseInt(e.target.value) || 1) }))}
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">企业名称 *</label>
+                <input
+                  type="text"
+                  className="w-full px-3 py-2 border rounded-lg text-sm"
+                  placeholder="请输入企业名称"
+                  value={applyForm.companyName}
+                  onChange={e => setApplyForm(f => ({ ...f, companyName: e.target.value }))}
+                />
+              </div>
+
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">联系人 *</label>
+                  <input
+                    type="text"
+                    className="w-full px-3 py-2 border rounded-lg text-sm"
+                    placeholder="联系人姓名"
+                    value={applyForm.contactName}
+                    onChange={e => setApplyForm(f => ({ ...f, contactName: e.target.value }))}
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">联系电话 *</label>
+                  <input
+                    type="tel"
+                    className="w-full px-3 py-2 border rounded-lg text-sm"
+                    placeholder="手机号码"
+                    value={applyForm.contactPhone}
+                    onChange={e => setApplyForm(f => ({ ...f, contactPhone: e.target.value }))}
+                  />
+                </div>
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">备注</label>
+                <textarea
+                  className="w-full px-3 py-2 border rounded-lg text-sm"
+                  rows={3}
+                  placeholder="其他需求说明（可选）"
+                  value={applyForm.remark}
+                  onChange={e => setApplyForm(f => ({ ...f, remark: e.target.value }))}
+                />
+              </div>
+
+              {/* 预估费用 */}
+              <div className="bg-blue-50 rounded-lg p-4">
+                <p className="text-sm text-gray-600">预估费用</p>
+                <p className="text-2xl font-bold text-blue-600 mt-1">
+                  ¥{(() => {
+                    const p = applyModal.product;
+                    let unit = p?.monthlyPrice || 0;
+                    if (applyForm.leasePeriod === 'DAY') unit = p?.dailyPrice || 0;
+                    else if (applyForm.leasePeriod === 'WEEK') unit = p?.weeklyPrice || 0;
+                    return (Number(unit) * applyForm.leaseDuration).toLocaleString();
+                  })()}
+                </p>
+              </div>
+            </div>
+            <div className="p-6 border-t flex gap-3">
+              <button
+                onClick={() => setApplyModal({ visible: false, product: null })}
+                className="flex-1 py-2.5 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50"
+              >
+                取消
+              </button>
+              <button
+                onClick={handleApplySubmit}
+                disabled={submitting}
+                className="flex-1 py-2.5 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50"
+              >
+                {submitting ? '提交中...' : '提交申请'}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

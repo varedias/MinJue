@@ -31,6 +31,7 @@ export default {
     suppliers: '供应商审核',
     products: '商品管理',
     leasing: '租赁管理',
+    orders: '订单管理',
     comments: '评论管理',
     interactions: '互动数据',
   },

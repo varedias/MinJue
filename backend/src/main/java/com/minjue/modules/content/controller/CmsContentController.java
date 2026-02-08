@@ -23,8 +23,9 @@ public class CmsContentController {
             @RequestParam(defaultValue = "1") Integer page,
             @RequestParam(defaultValue = "10") Integer size,
             @RequestParam(required = false) String type,
-            @RequestParam(required = false) String category) {
-        return Result.success(contentService.listContents(page, size, type, category));
+            @RequestParam(required = false) String category,
+            @RequestParam(required = false) String keyword) {
+        return Result.success(contentService.listContents(page, size, type, category, keyword));
     }
 
     @Operation(summary = "Get Content Detail")

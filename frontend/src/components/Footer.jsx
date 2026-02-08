@@ -1,5 +1,5 @@
 import React from 'react';
-import { Phone, Mail, MapPin, Facebook, Twitter, Linkedin } from 'lucide-react';
+import { Mail, Facebook, Twitter, Linkedin } from 'lucide-react';
 
 const Footer = () => {
   return (
@@ -27,16 +27,12 @@ const Footer = () => {
             <h4 className="text-lg font-semibold mb-4">联系我们</h4>
             <ul className="space-y-3 text-gray-400 text-sm">
               <li className="flex items-center gap-2">
-                <Phone size={16} />
-                <span>400-123-4567</span>
+                <Mail size={16} />
+                <span>2478686497@qq.com</span>
               </li>
               <li className="flex items-center gap-2">
                 <Mail size={16} />
-                <span>support@techequip.com</span>
-              </li>
-              <li className="flex items-center gap-2">
-                <MapPin size={16} />
-                <span>上海市浦东新区科技园区88号</span>
+                <span>2696432359@qq.com</span>
               </li>
             </ul>
           </div>
@@ -64,7 +60,7 @@ const Footer = () => {
         </div>
         
         <div className="border-t border-gray-800 pt-8 text-center text-gray-500 text-sm">
-          <p>&copy; 2025 懂视帝. All rights reserved. 沪ICP备12345678号</p>
+          <p>&copy; 2025 懂视帝. All rights reserved.</p>
         </div>
       </div>
     </footer>

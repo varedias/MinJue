@@ -1,5 +1,5 @@
 import React from 'react';
-import { Phone, Mail, MapPin, Clock, MessageSquare } from 'lucide-react';
+import { Mail, Clock, MessageSquare } from 'lucide-react';
 
 const ContactService = () => {
   return (
@@ -17,11 +17,11 @@ const ContactService = () => {
             <div className="space-y-6">
               <div className="flex items-start gap-4">
                 <div className="w-10 h-10 bg-blue-50 rounded-lg flex items-center justify-center text-blue-600 flex-shrink-0">
-                  <Phone size={20} />
+                  <Mail size={20} />
                 </div>
                 <div>
-                  <h3 className="font-medium text-gray-900">客服热线</h3>
-                  <p className="text-blue-600 font-bold text-lg mt-1">400-123-4567</p>
+                  <h3 className="font-medium text-gray-900">客服邮箱</h3>
+                  <p className="text-blue-600 font-bold text-lg mt-1">2478686497@qq.com</p>
                   <p className="text-gray-500 text-sm mt-1">周一至周日 9:00-18:00</p>
                 </div>
               </div>
@@ -31,19 +31,9 @@ const ContactService = () => {
                   <Mail size={20} />
                 </div>
                 <div>
-                  <h3 className="font-medium text-gray-900">电子邮箱</h3>
-                  <p className="text-gray-600 mt-1">support@techequip.com</p>
+                  <h3 className="font-medium text-gray-900">商务邮箱</h3>
+                  <p className="text-gray-600 mt-1">2696432359@qq.com</p>
                   <p className="text-gray-500 text-sm mt-1">通常在24小时内回复</p>
-                </div>
-              </div>
-
-              <div className="flex items-start gap-4">
-                <div className="w-10 h-10 bg-orange-50 rounded-lg flex items-center justify-center text-orange-600 flex-shrink-0">
-                  <MapPin size={20} />
-                </div>
-                <div>
-                  <h3 className="font-medium text-gray-900">公司地址</h3>
-                  <p className="text-gray-600 mt-1">上海市浦东新区张江高科技园区</p>
                 </div>
               </div>
             </div>

@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { suppliers } from '../../data/mockData';
-import { Building2, Star, Clock, ShoppingCart, ShieldCheck, MapPin } from 'lucide-react';
+import { supplierApi } from '../../api/index';
+import { Building2, Star, Clock, ShoppingCart, ShieldCheck, MapPin, Search } from 'lucide-react';
 import AIAssistantFloat, { AIAssistantButton } from '../../components/AIAssistantFloat';
+import { EmptyState, Pagination } from '../../components/common/UIComponents';
 import SupplierChatDialog from '../../components/SupplierChatDialog';
 
 const Suppliers = () => {
@@ -12,6 +13,46 @@ const Suppliers = () => {
   const [isAIAssistantOpen, setIsAIAssistantOpen] = useState(false);
   const [isChatOpen, setIsChatOpen] = useState(false);
   const [selectedSupplier, setSelectedSupplier] = useState(null);
+  const [supplierList, setSupplierList] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [searchKeyword, setSearchKeyword] = useState('');
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+
+  // 辅助函数：处理图片路径（Unsplash 在国内无法访问）
+  const getImagePath = (path) => {
+    if (!path) return '/products/placeholder-supplier.svg';
+    if (path.includes('unsplash.com')) return '/products/placeholder-supplier.svg';
+    if (path.startsWith('http')) return path;
+    return `${import.meta.env.BASE_URL}${path.replace(/^\//, '')}`;
+  };
+
+  const handleImageError = (e) => {
+    e.target.src = '/products/placeholder-supplier.svg';
+  };
+
+  const loadSuppliers = async (page = 1) => {
+    setLoading(true);
+    try {
+      const data = await supplierApi.getList({ page, size: 10, keyword: searchKeyword || undefined });
+      const records = data?.records || [];
+      setSupplierList(records);
+      setTotalPages(data?.pages || 1);
+      setCurrentPage(page);
+    } catch (e) {
+      console.error('加载供应商失败:', e);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    loadSuppliers(1);
+  }, []);
+
+  const handleSearch = () => {
+    loadSuppliers(1);
+  };
 
   return (
     <div className="min-h-screen bg-gray-50 py-8">
@@ -25,59 +66,89 @@ const Suppliers = () => {
           </p>
         </div>
 
+        {/* 搜索栏 */}
+        <div className="mb-6 flex gap-3">
+          <div className="relative flex-grow">
+            <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" size={18} />
+            <input
+              type="text"
+              value={searchKeyword}
+              onChange={(e) => setSearchKeyword(e.target.value)}
+              onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
+              placeholder={isEnglish ? 'Search suppliers...' : '搜索供应商名称...'}
+              className="w-full bg-white rounded-lg py-3 pl-11 pr-4 border border-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            />
+          </div>
+          <button onClick={handleSearch} className="bg-blue-600 text-white px-6 rounded-lg hover:bg-blue-700">
+            {isEnglish ? 'Search' : '搜索'}
+          </button>
+        </div>
+
+        {loading ? (
+          <div className="space-y-6">
+            {[1,2,3].map(i => (
+              <div key={i} className="bg-white border rounded-xl p-6 animate-pulse flex gap-6">
+                <div className="w-48 h-48 bg-gray-200 rounded-xl flex-shrink-0"></div>
+                <div className="flex-grow">
+                  <div className="h-6 bg-gray-200 rounded w-1/3 mb-4"></div>
+                  <div className="h-4 bg-gray-200 rounded w-2/3 mb-4"></div>
+                  <div className="h-4 bg-gray-200 rounded w-1/2"></div>
+                </div>
+              </div>
+            ))}
+          </div>
+        ) : supplierList.length > 0 ? (
         <div className="grid grid-cols-1 gap-6">
-          {suppliers.map((supplier) => (
+          {supplierList.map((supplier) => (
             <div
               key={supplier.id}
               onClick={() => navigate(isEnglish ? `/en/supplier/${supplier.id}` : `/supplier/${supplier.id}`)}
               className="bg-white border border-gray-200 rounded-xl p-6 hover:shadow-xl hover:border-blue-300 transition-all cursor-pointer group flex flex-col md:flex-row gap-6"
             >
               <div className="w-full md:w-48 h-48 flex-shrink-0 bg-gray-100 rounded-xl flex items-center justify-center overflow-hidden border border-gray-100">
-                <img src={supplier.logo} alt={isEnglish ? supplier.nameEn : supplier.name} className="w-full h-full object-cover" />
+                {supplier.logo ? (
+                  <img src={getImagePath(supplier.logo)} alt={supplier.name} className="w-full h-full object-cover" onError={handleImageError} />
+                ) : (
+                  <Building2 size={48} className="text-gray-300" />
+                )}
               </div>
 
               <div className="flex-grow">
                 <div className="flex flex-col md:flex-row md:items-center justify-between mb-4">
                   <h2 className="text-xl font-bold text-gray-900 group-hover:text-blue-600 transition-colors">
-                    {isEnglish ? supplier.nameEn : supplier.name}
+                    {supplier.name}
                   </h2>
                   <div className="flex items-center gap-2 mt-2 md:mt-0">
-                    <span className="bg-blue-50 text-blue-600 px-3 py-1 rounded-full text-xs font-medium flex items-center gap-1">
-                      <ShieldCheck size={14} />
-                      {isEnglish ? 'Verified' : '已认证'}
-                    </span>
+                    {supplier.isVerified === 1 && (
+                      <span className="bg-blue-50 text-blue-600 px-3 py-1 rounded-full text-xs font-medium flex items-center gap-1">
+                        <ShieldCheck size={14} />
+                        {isEnglish ? 'Verified' : '已认证'}
+                      </span>
+                    )}
                   </div>
                 </div>
 
                 <p className="text-gray-600 mb-4 line-clamp-2">
-                  {isEnglish ? supplier.descriptionEn : supplier.description}
+                  {supplier.description || (isEnglish ? 'No description' : '暂无介绍')}
                 </p>
 
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-4">
+                <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mb-4">
                   <div className="flex items-center gap-2 text-sm text-gray-600">
                     <Building2 size={16} className="text-blue-500" />
-                    <span className="truncate">{isEnglish ? supplier.mainProductsEn : supplier.mainProducts}</span>
+                    <span className="truncate">{supplier.name}</span>
                   </div>
-                  <div className="flex items-center gap-2 text-sm text-gray-600">
-                    <Star size={16} className="text-yellow-400 fill-yellow-400" />
-                    <span>{supplier.rating}</span>
-                  </div>
-                  <div className="flex items-center gap-2 text-sm text-gray-600">
-                    <Clock size={16} className="text-gray-400" />
-                    <span>{supplier.years} {isEnglish ? 'Years' : '年'}</span>
-                  </div>
-                  <div className="flex items-center gap-2 text-sm text-gray-600">
-                    <ShoppingCart size={16} className="text-gray-400" />
-                    <span>{supplier.orders} {isEnglish ? 'Orders' : '成交'}</span>
-                  </div>
-                </div>
-
-                <div className="flex flex-wrap gap-2">
-                  {(isEnglish ? supplier.certificationsEn : supplier.certifications).map((cert, idx) => (
-                    <span key={idx} className="px-3 py-1 bg-gray-100 text-gray-600 text-xs rounded-md">
-                      {cert}
-                    </span>
-                  ))}
+                  {supplier.contactInfo && (
+                    <div className="flex items-center gap-2 text-sm text-gray-600">
+                      <MapPin size={16} className="text-gray-400" />
+                      <span>{isEnglish ? 'Contact Available' : '联系方式已提供'}</span>
+                    </div>
+                  )}
+                  {supplier.createTime && (
+                    <div className="flex items-center gap-2 text-sm text-gray-600">
+                      <Clock size={16} className="text-gray-400" />
+                      <span>{isEnglish ? 'Since' : '入驻于'} {supplier.createTime.substring(0, 10)}</span>
+                    </div>
+                  )}
                 </div>
               </div>
 
@@ -87,7 +158,7 @@ const Suppliers = () => {
                     e.stopPropagation();
                     setSelectedSupplier({
                       id: supplier.id,
-                      name: isEnglish ? supplier.nameEn : supplier.name,
+                      name: supplier.name,
                       logo: supplier.logo
                     });
                     setIsChatOpen(true);
@@ -109,7 +180,13 @@ const Suppliers = () => {
             </div>
           ))}
         </div>
-      </div>
+        ) : (
+          <EmptyState icon={Building2} title={isEnglish ? 'No suppliers found' : '暂无供应商'} />
+        )}
+
+        {/* 分页 */}
+        <Pagination current={currentPage} total={totalPages} onChange={loadSuppliers} />
+        </div>
 
       {/* AI助手悬浮按钮 */}
       {!isAIAssistantOpen && (

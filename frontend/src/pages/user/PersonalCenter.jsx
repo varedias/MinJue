@@ -1,12 +1,104 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
+import { favoriteApi } from '../../api/interaction';
+import { supplierProductApi } from '../../api/product';
 import { Package, Store, MessageSquare, FileText, ShoppingCart, BarChart3, Settings, Plus, Search, Eye, Edit, Trash2, Heart, Clock, List } from 'lucide-react';
 
 const PersonalCenter = () => {
   const navigate = useNavigate();
   const { user } = useAuth();
   const [activeTab, setActiveTab] = useState('overview');
+  const [favorites, setFavorites] = useState([]);
+  const [favoritesLoading, setFavoritesLoading] = useState(false);
+  const [favPage, setFavPage] = useState(1);
+  const [favTotalPages, setFavTotalPages] = useState(1);
+  const [supplierProducts, setSupplierProducts] = useState([]);
+  const [supplierProductsLoading, setSupplierProductsLoading] = useState(false);
+  const [supplierProductCount, setSupplierProductCount] = useState(0);
+
+  // 加载收藏列表
+  const loadFavorites = async (page = 1) => {
+    setFavoritesLoading(true);
+    try {
+      const res = await favoriteApi.list({ page, size: 9 });
+      if (res && res.records) {
+        setFavorites(res.records);
+        setFavTotalPages(res.pages || 1);
+        setFavPage(res.current || page);
+      } else if (Array.isArray(res)) {
+        setFavorites(res);
+      }
+    } catch (e) {
+      console.error('加载收藏失败:', e);
+    } finally {
+      setFavoritesLoading(false);
+    }
+  };
+
+  // 取消收藏
+  const handleUnfavorite = async (item) => {
+    try {
+      await favoriteApi.toggle({
+        targetId: item.targetId, targetType: item.targetType,
+        targetName: item.targetName || '', targetImage: item.targetImage || ''
+      });
+      setFavorites(prev => prev.filter(f => f.id !== item.id));
+    } catch (e) {
+      console.error('取消收藏失败:', e);
+    }
+  };
+
+  // 当切到收藏 tab 时加载数据
+  useEffect(() => {
+    if (activeTab === 'favorites' && user) {
+      loadFavorites();
+    }
+    if (activeTab === 'products' && user && isSupplier) {
+      loadSupplierProducts();
+    }
+  }, [activeTab, user]);
+
+  // 加载供应商自己的商品
+  const loadSupplierProducts = async () => {
+    setSupplierProductsLoading(true);
+    try {
+      const res = await supplierProductApi.getMyProducts();
+      if (res && res.records) {
+        setSupplierProducts(res.records);
+        setSupplierProductCount(res.total || res.records.length);
+      }
+    } catch (e) {
+      console.error('加载商品列表失败:', e);
+    } finally {
+      setSupplierProductsLoading(false);
+    }
+  };
+
+  // 删除商品
+  const handleDeleteProduct = async (id) => {
+    if (!window.confirm('确定要删除该商品吗？')) return;
+    try {
+      await supplierProductApi.deleteProduct(id);
+      setSupplierProducts(prev => prev.filter(p => p.id !== id));
+      setSupplierProductCount(prev => prev - 1);
+    } catch (e) {
+      console.error('删除商品失败:', e);
+      alert('删除失败');
+    }
+  };
+
+  // 上下架商品
+  const handleToggleProductStatus = async (product) => {
+    const newStatus = product.status === 1 ? 0 : 1;
+    try {
+      await supplierProductApi.toggleStatus(product.id, newStatus);
+      setSupplierProducts(prev => prev.map(p => p.id === product.id ? { ...p, status: newStatus } : p));
+    } catch (e) {
+      console.error('操作失败:', e);
+      alert('操作失败');
+    }
+  };
 
   // 如果未登录，重定向到登录页
   useEffect(() => {
@@ -29,12 +121,6 @@ const PersonalCenter = () => {
     quotes: 15,
   };
 
-  const myProducts = [
-    { id: 1, name: 'AI视觉检测系统 VIS-2000', status: '在售', stock: 15, price: '28,900', views: 342, orders: 12 },
-    { id: 2, name: '工业相机 500万像素', status: '在售', stock: 50, price: '3,599', views: 567, orders: 28 },
-    { id: 3, name: '3D激光位移传感器', status: '缺货', stock: 0, price: '15,800', views: 234, orders: 5 },
-  ];
-
   const supplierInquiries = [
     { id: 1, product: 'AI视觉检测系统', customer: '深圳**科技', time: '2小时前', status: '待回复' },
     { id: 2, product: '工业相机套装', customer: '杭州**制造', time: '5小时前', status: '已回复' },
@@ -55,11 +141,6 @@ const PersonalCenter = () => {
   const myOrders = [
     { id: 2025001, product: '高性能工业相机', amount: '2,500', status: '待发货', date: '2024-01-20' },
     { id: 2025002, product: '智能视觉传感器', amount: '1,200', status: '已完成', date: '2024-01-15' },
-  ];
-
-  const myFavorites = [
-    { id: 101, name: '自动化流水线镜头', price: '800', image: 'https://images.unsplash.com/photo-1581093458791-9f3c3900df4b?ixlib=rb-1.2.1&auto=format&fit=crop&w=400&q=80' },
-    { id: 102, name: '高端数控机床', price: '5,000/月', image: 'https://images.unsplash.com/photo-1565439399692-7b0076b2eb20?ixlib=rb-1.2.1&auto=format&fit=crop&w=400&q=80' },
   ];
 
   // ---------------- 菜单配置 ----------------
@@ -94,7 +175,7 @@ const PersonalCenter = () => {
               <div className="bg-gradient-to-br from-blue-500 to-blue-600 text-white p-6 rounded-xl">
                 <div className="flex items-center justify-between mb-2">
                   <Package size={24} />
-                  <span className="text-3xl font-bold">{supplierStats.products}</span>
+                  <span className="text-3xl font-bold">{supplierProductCount || supplierStats.products}</span>
                 </div>
                 <p className="text-blue-100">商品总数</p>
               </div>
@@ -206,37 +287,61 @@ const PersonalCenter = () => {
           <div>
             <div className="flex items-center justify-between mb-6">
               <h2 className="text-2xl font-bold text-gray-800">商品管理</h2>
-              <button className="bg-blue-600 text-white px-4 py-2 rounded-lg flex items-center gap-2 hover:bg-blue-700">
+              <button onClick={() => navigate('/publish-product')} className="bg-blue-600 text-white px-4 py-2 rounded-lg flex items-center gap-2 hover:bg-blue-700">
                 <Plus size={18} />
                 添加商品
               </button>
             </div>
-            {/* 简化的表格展示 */}
-            <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
-              <table className="w-full">
-                <thead className="bg-gray-50 border-b">
-                  <tr>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">商品名称</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">状态</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">价格</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">操作</th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-gray-200">
-                  {myProducts.map(product => (
-                    <tr key={product.id} className="hover:bg-gray-50">
-                      <td className="px-6 py-4 text-sm text-gray-900">{product.name}</td>
-                      <td className="px-6 py-4"><span className="px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-700">{product.status}</span></td>
-                      <td className="px-6 py-4 text-sm font-medium">¥{product.price}</td>
-                      <td className="px-6 py-4 flex gap-2">
-                        <Edit size={16} className="text-blue-600 cursor-pointer" />
-                        <Trash2 size={16} className="text-red-600 cursor-pointer" />
-                      </td>
+            {supplierProductsLoading ? (
+              <div className="text-center py-12 text-gray-500">加载中...</div>
+            ) : supplierProducts.length === 0 ? (
+              <div className="text-center py-12">
+                <Package size={48} className="mx-auto text-gray-300 mb-4" />
+                <p className="text-gray-500 mb-4">暂无商品，发布您的第一个商品吧</p>
+                <button onClick={() => navigate('/publish-product')} className="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700">
+                  发布商品
+                </button>
+              </div>
+            ) : (
+              <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
+                <table className="w-full">
+                  <thead className="bg-gray-50 border-b">
+                    <tr>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">商品名称</th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">状态</th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">价格</th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">库存</th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">操作</th>
                     </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
+                  </thead>
+                  <tbody className="divide-y divide-gray-200">
+                    {supplierProducts.map(product => (
+                      <tr key={product.id} className="hover:bg-gray-50">
+                        <td className="px-6 py-4 text-sm text-gray-900">{product.name}</td>
+                        <td className="px-6 py-4">
+                          <span className={`px-2 py-1 rounded-full text-xs font-medium ${product.status === 1 ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-600'}`}>
+                            {product.status === 1 ? '在售' : '已下架'}
+                          </span>
+                        </td>
+                        <td className="px-6 py-4 text-sm font-medium">¥{product.price}</td>
+                        <td className="px-6 py-4 text-sm">{product.stock ?? '-'}</td>
+                        <td className="px-6 py-4 flex gap-3">
+                          <button onClick={() => handleToggleProductStatus(product)} title={product.status === 1 ? '下架' : '上架'}>
+                            <Eye size={16} className={product.status === 1 ? 'text-yellow-600' : 'text-green-600'} />
+                          </button>
+                          <button onClick={() => navigate(`/publish-product/${product.id}`)} title="编辑">
+                            <Edit size={16} className="text-blue-600" />
+                          </button>
+                          <button onClick={() => handleDeleteProduct(product.id)} title="删除">
+                            <Trash2 size={16} className="text-red-600" />
+                          </button>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            )}
           </div>
         );
       case 'shop':
@@ -294,21 +399,79 @@ const PersonalCenter = () => {
         return (
           <div>
             <h2 className="text-2xl font-bold text-gray-800 mb-6">我的收藏</h2>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              {myFavorites.map(fav => (
-                <div key={fav.id} className="bg-white rounded-xl border border-gray-200 overflow-hidden group hover:shadow-lg transition-shadow">
-                  <div className="h-40 bg-gray-200 bg-cover bg-center" style={{ backgroundImage: `url(${fav.image})` }}></div>
-                  <div className="p-4">
-                    <h3 className="font-medium text-gray-900 truncate">{fav.name}</h3>
-                    <p className="text-blue-600 font-bold mt-2">¥{fav.price}</p>
-                    <div className="mt-4 flex gap-2">
-                      <button className="flex-1 px-3 py-1.5 bg-blue-600 text-white text-sm rounded hover:bg-blue-700">立即购买</button>
-                      <button className="px-3 py-1.5 border border-gray-300 rounded hover:bg-gray-50"><Trash2 size={16} className="text-gray-400" /></button>
+            {favoritesLoading ? (
+              <div className="text-center py-12 text-gray-500">加载中...</div>
+            ) : favorites.length === 0 ? (
+              <div className="text-center py-12 text-gray-400">
+                <Heart size={48} className="mx-auto mb-4 text-gray-300" />
+                <p>暂无收藏内容</p>
+                <p className="text-sm mt-2">浏览商品或内容时点击收藏按钮即可添加</p>
+              </div>
+            ) : (
+              <>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                  {favorites.map(fav => (
+                    <div
+                      key={fav.id}
+                      className="bg-white rounded-xl border border-gray-200 overflow-hidden group hover:shadow-lg transition-shadow cursor-pointer"
+                      onClick={() => {
+                        if (fav.targetType === 'product') navigate(`/product/${fav.targetId}`);
+                        else if (fav.targetType === 'content') navigate(`/content/${fav.targetId}`);
+                      }}
+                    >
+                      <div
+                        className="h-40 bg-gray-200 bg-cover bg-center"
+                        style={{ backgroundImage: fav.targetImage ? `url(${fav.targetImage})` : 'none' }}
+                      >
+                        {!fav.targetImage && (
+                          <div className="w-full h-full flex items-center justify-center text-gray-400">
+                            <Package size={32} />
+                          </div>
+                        )}
+                      </div>
+                      <div className="p-4">
+                        <h3 className="font-medium text-gray-900 truncate">{fav.targetName || '未命名'}</h3>
+                        <p className="text-xs text-gray-400 mt-1">
+                          {fav.targetType === 'product' ? '商品' : fav.targetType === 'content' ? '内容' : fav.targetType}
+                          {fav.createTime && ` · ${new Date(fav.createTime).toLocaleDateString()}`}
+                        </p>
+                        <div className="mt-4 flex gap-2">
+                          <button
+                            className="flex-1 px-3 py-1.5 bg-blue-600 text-white text-sm rounded hover:bg-blue-700"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              if (fav.targetType === 'product') navigate(`/product/${fav.targetId}`);
+                              else if (fav.targetType === 'content') navigate(`/content/${fav.targetId}`);
+                            }}
+                          >
+                            查看详情
+                          </button>
+                          <button
+                            className="px-3 py-1.5 border border-gray-300 rounded hover:bg-red-50"
+                            onClick={(e) => { e.stopPropagation(); handleUnfavorite(fav); }}
+                          >
+                            <Trash2 size={16} className="text-red-400" />
+                          </button>
+                        </div>
+                      </div>
                     </div>
-                  </div>
+                  ))}
                 </div>
-              ))}
-            </div>
+                {favTotalPages > 1 && (
+                  <div className="flex justify-center gap-2 mt-6">
+                    {Array.from({ length: favTotalPages }, (_, i) => i + 1).map(p => (
+                      <button
+                        key={p}
+                        onClick={() => loadFavorites(p)}
+                        className={`px-3 py-1 rounded text-sm ${p === favPage ? 'bg-blue-600 text-white' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'}`}
+                      >
+                        {p}
+                      </button>
+                    ))}
+                  </div>
+                )}
+              </>
+            )}
           </div>
         );
       case 'my-inquiries':

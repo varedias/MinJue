@@ -9,6 +9,7 @@ const Discovery = () => {
   
   // 辅助函数：处理图片路径
   const getImagePath = (path) => {
+    if (!path) return '/products/placeholder-content.svg';
     if (path.startsWith('http')) return path;
     return `${import.meta.env.BASE_URL}${path.replace(/^\//, '')}`;
   };
@@ -384,7 +385,7 @@ const Discovery = () => {
   return (
     <div className="min-h-screen bg-gray-50 pb-20 md:pb-0">
       {/* 顶部Banner */}
-      <div className="bg-gradient-to-r from-blue-600 via-blue-700 to-purple-600 text-white">
+      <div className="bg-gradient-to-r from-blue-600 to-blue-700 text-white">
         <div className="max-w-7xl mx-auto px-4 py-12">
           <h1 className="text-4xl font-bold mb-3">发现推荐</h1>
           <p className="text-blue-100 text-lg">探索工业视觉领域的精彩内容 · 学习 · 交流 · 成长</p>
@@ -452,10 +453,8 @@ const Discovery = () => {
                   alt={video.title}
                   className="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
                   onError={(e) => {
-                    console.error('图片加载失败:', video.cover);
-                    console.error('完整URL:', e.target.src);
+                    e.target.src = '/products/placeholder-content.svg';
                   }}
-                  onLoad={() => console.log('图片加载成功:', video.cover)}
                 />
                 {/* 时长标签 */}
                 <div className="absolute bottom-2 right-2 bg-black bg-opacity-75 text-white text-xs px-2 py-1 rounded z-10">

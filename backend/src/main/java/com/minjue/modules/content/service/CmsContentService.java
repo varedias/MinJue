@@ -14,7 +14,7 @@ public class CmsContentService extends ServiceImpl<CmsContentMapper, CmsContent>
     /**
      * 分页查询内容列表
      */
-    public Page<CmsContent> listContents(Integer page, Integer size, String type, String category) {
+    public Page<CmsContent> listContents(Integer page, Integer size, String type, String category, String keyword) {
         LambdaQueryWrapper<CmsContent> wrapper = new LambdaQueryWrapper<>();
 
         // 类型筛选
@@ -25,6 +25,13 @@ public class CmsContentService extends ServiceImpl<CmsContentMapper, CmsContent>
         // 分类筛选
         if (StringUtils.hasText(category)) {
             wrapper.eq(CmsContent::getCategory, category);
+        }
+
+        // 关键词搜索
+        if (StringUtils.hasText(keyword)) {
+            wrapper.and(w -> w.like(CmsContent::getTitle, keyword)
+                    .or().like(CmsContent::getAuthor, keyword)
+                    .or().like(CmsContent::getTags, keyword));
         }
 
         // 只查询已发布的

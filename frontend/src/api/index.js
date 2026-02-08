@@ -34,13 +34,38 @@ api.interceptors.response.use(
         if (data.code === 200) {
             return data; // 返回整个 data 对象，包含 data.data
         } else {
-            throw new Error(data.message || '请求失败');
+            // 业务错误：后端返回非200
+            const errMsg = data.message || '请求失败';
+            if (data.code === 401) {
+                // 未登录或 token 过期 — 清除本地状态，跳转登录
+                localStorage.removeItem('token');
+                localStorage.removeItem('user');
+                // 仅在非登录页时跳转，避免死循环
+                if (!window.location.hash.includes('/login')) {
+                    window.location.hash = '#/login';
+                }
+            }
+            throw new Error(errMsg);
         }
     },
     (error) => {
-        console.error('API Error:', error);
-        // 不自动跳转登录页，允许游客模式访问
-        // 具体页面可以根据需要自行处理 401 错误
+        // HTTP 级别错误（网络/超时/5xx 等）
+        if (error.response) {
+            const status = error.response.status;
+            if (status === 401) {
+                localStorage.removeItem('token');
+                localStorage.removeItem('user');
+                if (!window.location.hash.includes('/login')) {
+                    window.location.hash = '#/login';
+                }
+            } else if (status === 403) {
+                console.error('无权限访问');
+            } else if (status >= 500) {
+                console.error('服务器错误，请稍后重试');
+            }
+        } else if (error.code === 'ECONNABORTED') {
+            console.error('请求超时，请检查网络');
+        }
         throw error;
     }
 );
@@ -110,20 +135,8 @@ export const userApi = {
     getInfo: () => request('/api/v1/user/info'),
 };
 
-// 商品 API
-export const productApi = {
-    getList: (params = {}) => {
-        const query = new URLSearchParams({
-            page: params.page || 1,
-            size: params.size || 10,
-            ...(params.keyword && { keyword: params.keyword }),
-            ...(params.categoryId && { categoryId: params.categoryId }),
-        }).toString();
-        return request(`/api/v1/product/list?${query}`);
-    },
-
-    getDetail: (id) => request(`/api/v1/product/${id}`),
-};
+// 商品 API (已移至 api/product.js，使用 axios 实例，功能更完整)
+// 如需使用请 import { productApi, leasingApi } from '../api/product'
 
 // 分类 API
 export const categoryApi = {
@@ -132,8 +145,15 @@ export const categoryApi = {
 
 // 供应商 API
 export const supplierApi = {
-    getList: (page = 1, size = 10) =>
-        request(`/api/v1/supplier/list?page=${page}&size=${size}`),
+    getList: (params = {}) => {
+        const { page = 1, size = 10, keyword } = typeof params === 'object' ? params : { page: params, size: 10 };
+        const query = new URLSearchParams({
+            page,
+            size,
+            ...(keyword && { keyword }),
+        }).toString();
+        return request(`/api/v1/supplier/list?${query}`);
+    },
 
     getDetail: (id) => request(`/api/v1/supplier/${id}`),
 };
@@ -146,6 +166,7 @@ export const contentApi = {
             size: params.size || 10,
             ...(params.type && { type: params.type }),
             ...(params.category && { category: params.category }),
+            ...(params.keyword && { keyword: params.keyword }),
         }).toString();
         return request(`/api/v1/content/list?${query}`);
     },
@@ -215,14 +236,109 @@ export const orderApi = {
         }),
 };
 
+// 采购需求 API
+export const procurementApi = {
+    getList: (params = {}) => {
+        const query = new URLSearchParams({
+            page: params.page || 1,
+            size: params.size || 10,
+            ...(params.keyword && { keyword: params.keyword }),
+            ...(params.status !== undefined && { status: params.status }),
+        }).toString();
+        return request(`/api/v1/procurement/list?${query}`);
+    },
+    getDetail: (id) => request(`/api/v1/procurement/${id}`),
+    create: (data) =>
+        request('/api/v1/procurement', {
+            method: 'POST',
+            body: JSON.stringify(data),
+        }),
+    getMy: (params = {}) => {
+        const query = new URLSearchParams({
+            page: params.page || 1,
+            size: params.size || 10,
+        }).toString();
+        return request(`/api/v1/procurement/my?${query}`);
+    },
+    close: (id) =>
+        request(`/api/v1/procurement/${id}/close`, { method: 'POST' }),
+};
+
+// 统一搜索 API
+export const searchApi = {
+    search: (params = {}) => {
+        const query = new URLSearchParams({
+            keyword: params.keyword || '',
+            type: params.type || 'all',
+            page: params.page || 1,
+            size: params.size || 12,
+        }).toString();
+        return request(`/api/v1/search?${query}`);
+    },
+};
+
+// 租赁申请 API
+export const leasingApplicationApi = {
+    apply: (data) =>
+        request('/api/v1/leasing/apply', {
+            method: 'POST',
+            body: JSON.stringify(data),
+        }),
+    getMy: (params = {}) => {
+        const query = new URLSearchParams({
+            page: params.page || 1,
+            size: params.size || 10,
+        }).toString();
+        return request(`/api/v1/leasing/applications?${query}`);
+    },
+};
+
+// 从 product.js 重新导出，方便统一引用
+export { productApi, leasingApi } from './product';
+
+// AI 代理 API
+export const aiApi = {
+    chat: async (messages, options = {}) => {
+        const res = await api.post('/api/v1/ai/chat', {
+            messages,
+            temperature: options.temperature || 0.7,
+            maxTokens: options.maxTokens || 1000,
+        });
+        return res.data; // { content: '...' }
+    },
+};
+
+// IM 消息 API
+export const messageApi = {
+    send: async (data) => {
+        const res = await api.post('/api/v1/message/send', data);
+        return res.data;
+    },
+    getHistory: async (supplierId, params = {}) => {
+        const res = await api.get(`/api/v1/message/history/${supplierId}`, {
+            params: { page: params.page || 1, size: params.size || 50 },
+        });
+        return res.data;
+    },
+    markRead: async (supplierId) => {
+        const res = await api.post(`/api/v1/message/read/${supplierId}`);
+        return res.data;
+    },
+    getUnreadCount: async () => {
+        const res = await api.get('/api/v1/message/unread-count');
+        return res.data;
+    },
+};
+
 export default {
     captcha: captchaApi,
     email: emailApi,
     user: userApi,
-    product: productApi,
     category: categoryApi,
     supplier: supplierApi,
     content: contentApi,
     cart: cartApi,
     order: orderApi,
+    procurement: procurementApi,
+    search: searchApi,
 };

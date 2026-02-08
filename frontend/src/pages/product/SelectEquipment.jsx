@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Bot, Sparkles, ChevronRight, Tag, Send, Loader, X } from 'lucide-react';
+import { aiApi } from '../../api/index';
 
 const SelectEquipment = () => {
   const [activeTab, setActiveTab] = useState('new');
@@ -41,39 +42,17 @@ const SelectEquipment = () => {
   const sendMessageToAI = async (userMessage) => {
     setIsLoading(true);
     try {
-      const response = await fetch('https://open.bigmodel.cn/api/paas/v4/chat/completions', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': 'Bearer e21edf29f04c47f084b39cd3fc6e1856.G75sS0L7KYfgbHfR'
+      const allMessages = [
+        {
+          role: 'system',
+          content: '你是一个专业的工业设备选型助手,专注于AI视觉检测设备、工业相机、镜头光源、测量仪器、工业机器人、包装设备等工业设备的推荐。你需要:\n1. 理解用户的应用场景和需求\n2. 推荐合适的设备类型和具体型号\n3. 解释设备参数和性能指标\n4. 提供专业的选型建议\n5. 回答要专业、精准、实用\n6. 适当时可以推荐具体品牌如海康威视、康耐视、基恩士、Basler等'
         },
-        body: JSON.stringify({
-          model: 'glm-4-flash',
-          messages: [
-            {
-              role: 'system',
-              content: '你是一个专业的工业设备选型助手,专注于AI视觉检测设备、工业相机、镜头光源、测量仪器、工业机器人、包装设备等工业设备的推荐。你需要:\n1. 理解用户的应用场景和需求\n2. 推荐合适的设备类型和具体型号\n3. 解释设备参数和性能指标\n4. 提供专业的选型建议\n5. 回答要专业、精准、实用\n6. 适当时可以推荐具体品牌如海康威视、康耐视、基恩士、Basler等'
-            },
-            ...messages.map(msg => ({
-              role: msg.role,
-              content: msg.content
-            })),
-            {
-              role: 'user',
-              content: userMessage
-            }
-          ],
-          temperature: 0.7,
-          max_tokens: 1000
-        })
-      });
+        ...messages.map(msg => ({ role: msg.role, content: msg.content })),
+        { role: 'user', content: userMessage }
+      ];
 
-      if (!response.ok) {
-        throw new Error('API请求失败');
-      }
-
-      const data = await response.json();
-      const aiResponse = data.choices[0].message.content;
+      const data = await aiApi.chat(allMessages);
+      const aiResponse = data.content;
 
       setMessages(prev => [...prev, 
         { role: 'user', content: userMessage },

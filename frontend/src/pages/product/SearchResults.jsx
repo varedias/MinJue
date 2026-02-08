@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useSearchParams, useNavigate, useLocation } from 'react-router-dom';
-import { searchData } from '../../data/mockData';
+import { productApi } from '../../api/product';
+import { contentApi } from '../../api/index';
 import { Search, ShoppingBag, FileText, ArrowRight, Filter } from 'lucide-react';
 
 const SearchResults = () => {
@@ -11,14 +12,44 @@ const SearchResults = () => {
   const isEnglish = location.pathname.startsWith('/en');
 
   const [results, setResults] = useState({ products: [], content: [] });
-  const [activeTab, setActiveTab] = useState('all'); // all, products, content
+  const [activeTab, setActiveTab] = useState('all');
+  const [loading, setLoading] = useState(false);
+
+  const getImagePath = (path) => {
+    if (!path || path.startsWith('http')) return path;
+    return `${import.meta.env.BASE_URL}${path.replace(/^\//, '')}`;
+  };
+
+  const parseTags = (tags) => {
+    if (!tags) return [];
+    if (Array.isArray(tags)) return tags;
+    try { return JSON.parse(tags); } catch { return tags.split(',').map(t => t.trim()).filter(Boolean); }
+  };
 
   useEffect(() => {
-    if (query) {
-      const data = searchData(query, isEnglish ? 'en' : 'zh');
-      setResults(data);
+    if (!query) {
+      setResults({ products: [], content: [] });
+      return;
     }
-  }, [query, isEnglish]);
+    const loadResults = async () => {
+      setLoading(true);
+      try {
+        const [pRes, cRes] = await Promise.all([
+          productApi.getList({ page: 1, size: 20, keyword: query }).catch(() => ({ records: [] })),
+          contentApi.getList({ page: 1, size: 20, keyword: query }).catch(() => ({ records: [] }))
+        ]);
+        setResults({
+          products: pRes?.records || [],
+          content: cRes?.records || []
+        });
+      } catch (e) {
+        console.error('搜索失败:', e);
+      } finally {
+        setLoading(false);
+      }
+    };
+    loadResults();
+  }, [query]);
 
   const totalResults = results.products.length + results.content.length;
 
@@ -43,37 +74,42 @@ const SearchResults = () => {
     </div>
   );
 
-  const ContentCard = ({ item }) => (
-    <div
-      onClick={() => navigate(isEnglish ? `/en/content/${item.id}` : `/content/${item.id}`)}
-      className="bg-white border border-gray-200 rounded-lg overflow-hidden hover:shadow-lg transition-all cursor-pointer flex"
-    >
-      <div className="w-1/3 bg-gray-100 relative">
-        <img src={item.cover} alt={isEnglish ? item.titleEn : item.title} className="w-full h-full object-cover" />
-        <div className="absolute top-2 left-2 bg-black/50 text-white text-xs px-2 py-1 rounded">
-          {item.type === 'video' ? (isEnglish ? 'Video' : '视频') : (isEnglish ? 'Article' : '文章')}
-        </div>
-      </div>
-      <div className="w-2/3 p-4 flex flex-col justify-between">
-        <div>
-          <h3 className="font-bold text-gray-900 mb-2 line-clamp-2">
-            {isEnglish ? item.titleEn : item.title}
-          </h3>
-          <div className="flex flex-wrap gap-2 mb-2">
-            {item.tags.map((tag, idx) => (
-              <span key={idx} className="text-xs bg-gray-100 text-gray-600 px-2 py-1 rounded">
-                {tag}
-              </span>
-            ))}
+  const ContentCard = ({ item }) => {
+    const tags = parseTags(item.tags);
+    return (
+      <div
+        onClick={() => navigate(isEnglish ? `/en/content/${item.id}` : `/content/${item.id}`)}
+        className="bg-white border border-gray-200 rounded-lg overflow-hidden hover:shadow-lg transition-all cursor-pointer flex"
+      >
+        <div className="w-1/3 bg-gray-100 relative">
+          <img src={getImagePath(item.cover)} alt={item.title} className="w-full h-full object-cover" />
+          <div className="absolute top-2 left-2 bg-black/50 text-white text-xs px-2 py-1 rounded">
+            {item.type === 'video' ? (isEnglish ? 'Video' : '视频') : (isEnglish ? 'Article' : '文章')}
           </div>
         </div>
-        <div className="flex items-center justify-between text-xs text-gray-500">
-          <span>{item.author}</span>
-          <span>{item.views.toLocaleString()} {isEnglish ? 'Views' : '阅读'}</span>
+        <div className="w-2/3 p-4 flex flex-col justify-between">
+          <div>
+            <h3 className="font-bold text-gray-900 mb-2 line-clamp-2">
+              {item.titleEn && isEnglish ? item.titleEn : item.title}
+            </h3>
+            {tags.length > 0 && (
+              <div className="flex flex-wrap gap-2 mb-2">
+                {tags.map((tag, idx) => (
+                  <span key={idx} className="text-xs bg-gray-100 text-gray-600 px-2 py-1 rounded">
+                    {tag}
+                  </span>
+                ))}
+              </div>
+            )}
+          </div>
+          <div className="flex items-center justify-between text-xs text-gray-500">
+            <span>{item.author}</span>
+            <span>{(item.views || 0).toLocaleString()} {isEnglish ? 'Views' : '阅读'}</span>
+          </div>
         </div>
       </div>
-    </div>
-  );
+    );
+  };
 
   return (
     <div className="min-h-screen bg-gray-50 py-8">
@@ -113,8 +149,16 @@ const SearchResults = () => {
           </button>
         </div>
 
+        {/* Loading */}
+        {loading && (
+          <div className="text-center py-20 bg-white rounded-lg shadow-sm">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
+            <p className="text-gray-500">{isEnglish ? 'Searching...' : '搜索中...'}</p>
+          </div>
+        )}
+
         {/* No Results */}
-        {totalResults === 0 && (
+        {!loading && totalResults === 0 && (
           <div className="text-center py-20 bg-white rounded-lg shadow-sm">
             <div className="w-20 h-20 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
               <Search size={32} className="text-gray-400" />

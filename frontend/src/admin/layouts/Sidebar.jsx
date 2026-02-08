@@ -16,7 +16,7 @@ const Sidebar = () => {
     { key: 'suppliers', label: t('menu.suppliers'), icon: Building2, path: '/admin/suppliers' },
     { key: 'products', label: t('menu.products'), icon: Package, path: '/admin/products' },
     { key: 'leasing', label: t('menu.leasing'), icon: FileText, path: '/admin/leasing' },
-    { key: 'orders', label: '订单管理', icon: ShoppingCart, path: '/admin/orders' },
+    { key: 'orders', label: t('menu.orders'), icon: ShoppingCart, path: '/admin/orders' },
     { key: 'comments', label: t('menu.comments'), icon: MessageSquare, path: '/admin/comments' },
     { key: 'interactions', label: t('menu.interactions'), icon: Heart, path: '/admin/interactions' },
   ];

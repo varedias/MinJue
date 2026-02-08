@@ -54,4 +54,23 @@ export const leasingApi = {
     const res = await api.post('/api/admin/leasing/status', { id, status });
     return res.data;
   },
+
+  /**
+   * 获取租赁申请列表
+   */
+  getApplications: async (params = {}) => {
+    const { page = 1, size = 10, status, keyword } = params;
+    const res = await api.get('/api/admin/leasing/applications', {
+      params: { page, size, status, keyword },
+    });
+    return res.data;
+  },
+
+  /**
+   * 审核租赁申请
+   */
+  reviewApplication: async (id, status) => {
+    const res = await api.post('/api/admin/leasing/applications/review', { id, status });
+    return res.data;
+  },
 };

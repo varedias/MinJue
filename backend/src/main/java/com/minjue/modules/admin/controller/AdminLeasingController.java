@@ -5,6 +5,8 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.minjue.common.result.Result;
 import com.minjue.modules.leasing.entity.OmsLeasing;
+import com.minjue.modules.leasing.entity.OmsLeasingApplication;
+import com.minjue.modules.leasing.service.OmsLeasingApplicationService;
 import com.minjue.modules.leasing.service.OmsLeasingService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -25,6 +27,7 @@ import java.util.Map;
 public class AdminLeasingController {
 
     private final OmsLeasingService leasingService;
+    private final OmsLeasingApplicationService applicationService;
 
     @Operation(summary = "获取租赁设备列表")
     @GetMapping("/list")
@@ -118,5 +121,50 @@ public class AdminLeasingController {
         leasingService.updateById(leasing);
 
         return Result.success(status == 1 ? "已上架" : "已下架");
+    }
+
+    // ==================== 租赁申请管理 ====================
+
+    @Operation(summary = "获取租赁申请列表")
+    @GetMapping("/applications")
+    public Result<IPage<OmsLeasingApplication>> getApplications(
+            @RequestParam(defaultValue = "1") Integer page,
+            @RequestParam(defaultValue = "10") Integer size,
+            @RequestParam(required = false) Integer status,
+            @RequestParam(required = false) String keyword) {
+
+        Page<OmsLeasingApplication> pageParam = new Page<>(page, size);
+        LambdaQueryWrapper<OmsLeasingApplication> wrapper = new LambdaQueryWrapper<>();
+
+        if (status != null) {
+            wrapper.eq(OmsLeasingApplication::getStatus, status);
+        }
+        if (StringUtils.hasText(keyword)) {
+            wrapper.and(w -> w.like(OmsLeasingApplication::getCompanyName, keyword)
+                              .or().like(OmsLeasingApplication::getContactName, keyword));
+        }
+        wrapper.orderByDesc(OmsLeasingApplication::getCreateTime);
+
+        IPage<OmsLeasingApplication> result = applicationService.page(pageParam, wrapper);
+        return Result.success(result);
+    }
+
+    @Operation(summary = "审核租赁申请")
+    @PostMapping("/applications/review")
+    public Result<String> reviewApplication(@RequestBody Map<String, Object> params) {
+        Long id = Long.valueOf(params.get("id").toString());
+        Integer reviewStatus = Integer.valueOf(params.get("status").toString());
+
+        OmsLeasingApplication application = applicationService.getById(id);
+        if (application == null) {
+            return Result.error(404, "申请不存在");
+        }
+
+        application.setStatus(reviewStatus);
+        application.setUpdateTime(LocalDateTime.now());
+        applicationService.updateById(application);
+
+        String msg = reviewStatus == 1 ? "已通过" : "已驳回";
+        return Result.success(msg);
     }
 }

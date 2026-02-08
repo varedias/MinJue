@@ -30,6 +30,7 @@ import SupplierDetail from './pages/supplier/SupplierDetail';
 // User
 import PersonalCenter from './pages/user/PersonalCenter';
 import UserInfo from './pages/user/UserInfo';
+import PublishProduct from './pages/user/PublishProduct';
 
 // Content
 import Discovery from './pages/content/Discovery';
@@ -82,6 +83,8 @@ function App() {
             <Route path="supplier/:id" element={<SupplierDetail />} />
             <Route path="profile" element={<PersonalCenter />} />
             <Route path="user-info" element={<UserInfo />} />
+            <Route path="publish-product" element={<PublishProduct />} />
+            <Route path="publish-product/:id" element={<PublishProduct />} />
             <Route path="content/:id" element={<ContentDetail />} />
             <Route path="help" element={<HelpCenter />} />
             <Route path="contact" element={<ContactService />} />
@@ -101,6 +104,8 @@ function App() {
             <Route path="supplier/:id" element={<SupplierDetail />} />
             <Route path="profile" element={<PersonalCenter />} />
             <Route path="user-info" element={<UserInfo />} />
+            <Route path="publish-product" element={<PublishProduct />} />
+            <Route path="publish-product/:id" element={<PublishProduct />} />
             <Route path="content/:id" element={<ContentDetail />} />
             <Route path="discovery" element={<Discovery />} />
             <Route path="help" element={<HelpCenter />} />

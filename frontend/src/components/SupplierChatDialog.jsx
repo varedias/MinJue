@@ -1,19 +1,23 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { X, Send, Paperclip, Image as ImageIcon, Smile, Phone, Video, MoreVertical } from 'lucide-react';
+import { messageApi } from '../api/index';
+import { useAuth } from '../context/AuthContext';
 
 const SupplierChatDialog = ({ isOpen, onClose, supplier }) => {
+  const { user } = useAuth();
   const [message, setMessage] = useState('');
-  const [messages, setMessages] = useState([
-    {
-      id: 1,
-      text: `您好！欢迎咨询${supplier?.name || '我们'}，我是在线客服小王，请问有什么可以帮您？`,
-      sender: 'supplier',
-      time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-      avatar: supplier?.logo || 'https://ui-avatars.com/api/?name=CS&background=3B82F6&color=fff'
-    }
-  ]);
+  const [messages, setMessages] = useState([]);
+  const [historyLoaded, setHistoryLoaded] = useState(false);
   const messagesEndRef = useRef(null);
   const fileInputRef = useRef(null);
+
+  const welcomeMessage = {
+    id: 'welcome',
+    text: `您好！欢迎咨询${supplier?.name || '我们'}，我是在线客服小王，请问有什么可以帮您？`,
+    sender: 'supplier',
+    time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+    avatar: supplier?.logo || 'https://ui-avatars.com/api/?name=CS&background=3B82F6&color=fff'
+  };
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -23,43 +27,82 @@ const SupplierChatDialog = ({ isOpen, onClose, supplier }) => {
     scrollToBottom();
   }, [messages]);
 
+  // 打开对话时加载历史消息
   useEffect(() => {
-    if (isOpen) {
-      // 重置消息为初始欢迎消息
-      setMessages([
-        {
-          id: 1,
-          text: `您好！欢迎咨询${supplier?.name || '我们'}，我是在线客服小王，请问有什么可以帮您？`,
-          sender: 'supplier',
-          time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-          avatar: supplier?.logo || 'https://ui-avatars.com/api/?name=CS&background=3B82F6&color=fff'
-        }
-      ]);
+    if (isOpen && supplier?.id) {
       setMessage('');
+      setHistoryLoaded(false);
+      loadHistory();
     }
   }, [isOpen, supplier]);
 
-  const handleSend = (e) => {
+  const loadHistory = async () => {
+    if (!user || !supplier?.id) {
+      setMessages([welcomeMessage]);
+      setHistoryLoaded(true);
+      return;
+    }
+    try {
+      const history = await messageApi.getHistory(supplier.id);
+      if (history && history.length > 0) {
+        const formatted = history.map(msg => ({
+          id: msg.id,
+          text: msg.content,
+          sender: msg.isFromSupplier ? 'supplier' : 'user',
+          time: msg.createTime ? new Date(msg.createTime).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : '',
+          avatar: msg.isFromSupplier
+            ? (supplier?.logo || 'https://ui-avatars.com/api/?name=CS&background=3B82F6&color=fff')
+            : 'https://ui-avatars.com/api/?name=User&background=10B981&color=fff',
+        }));
+        setMessages([welcomeMessage, ...formatted]);
+        // 标记已读
+        messageApi.markRead(supplier.id).catch(() => {});
+      } else {
+        setMessages([welcomeMessage]);
+      }
+    } catch (e) {
+      console.error('加载聊天记录失败:', e);
+      setMessages([welcomeMessage]);
+    } finally {
+      setHistoryLoaded(true);
+    }
+  };
+
+  const handleSend = async (e) => {
     e.preventDefault();
     if (!message.trim()) return;
 
-    // 添加用户消息
+    const now = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
     const userMessage = {
-      id: messages.length + 1,
+      id: Date.now(),
       text: message,
       sender: 'user',
-      time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+      time: now,
       avatar: 'https://ui-avatars.com/api/?name=User&background=10B981&color=fff'
     };
 
     setMessages(prev => [...prev, userMessage]);
+    const msgText = message;
     setMessage('');
 
-    // 模拟供应商回复
+    // 持久化到后端
+    if (user && supplier?.id) {
+      try {
+        await messageApi.send({
+          supplierId: supplier.id,
+          content: msgText,
+          messageType: 'TEXT',
+        });
+      } catch (e) {
+        console.error('发送消息失败:', e);
+      }
+    }
+
+    // 自动回复（模拟供应商在线客服）
     setTimeout(() => {
       const autoReply = {
-        id: messages.length + 2,
-        text: getAutoReply(message),
+        id: Date.now() + 1,
+        text: getAutoReply(msgText),
         sender: 'supplier',
         time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
         avatar: supplier?.logo || 'https://ui-avatars.com/api/?name=CS&background=3B82F6&color=fff'
@@ -93,7 +136,7 @@ const SupplierChatDialog = ({ isOpen, onClose, supplier }) => {
     const file = e.target.files[0];
     if (file) {
       const fileMessage = {
-        id: messages.length + 1,
+        id: Date.now(),
         text: `[文件] ${file.name}`,
         sender: 'user',
         time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
@@ -105,7 +148,7 @@ const SupplierChatDialog = ({ isOpen, onClose, supplier }) => {
       // 模拟供应商回复
       setTimeout(() => {
         const reply = {
-          id: messages.length + 2,
+          id: Date.now() + 1,
           text: '收到您的文件了，我会尽快查看并回复您。',
           sender: 'supplier',
           time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),

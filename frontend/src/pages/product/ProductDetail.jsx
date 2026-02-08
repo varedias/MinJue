@@ -1,7 +1,10 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { Star, Phone, Heart, Share2, Shield, Truck, Clock, MessageCircle, ThumbsUp, ChevronRight, Package, Award, CheckCircle, ArrowLeft } from 'lucide-react';
-import { products, suppliers } from '../../data/mockData';
+import { productApi } from '../../api/product';
+import { supplierApi } from '../../api/index';
+import { commentApi, favoriteApi } from '../../api/interaction';
+import { useAuth } from '../../context/AuthContext';
 import SupplierChatDialog from '../../components/SupplierChatDialog';
 
 const ProductDetail = () => {
@@ -11,23 +14,172 @@ const ProductDetail = () => {
   const [quantity, setQuantity] = useState(1);
   const [activeTab, setActiveTab] = useState('detail');
   const [isChatOpen, setIsChatOpen] = useState(false);
+  const [productData, setProductData] = useState(null);
+  const [supplierData, setSupplierData] = useState(null);
+  const [relatedProducts, setRelatedProducts] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [isFavorited, setIsFavorited] = useState(false);
+  const [comments, setComments] = useState([]);
+  const [commentCount, setCommentCount] = useState(0);
+  const [commentPage, setCommentPage] = useState(1);
+  const [commentTotalPages, setCommentTotalPages] = useState(1);
+  const [newComment, setNewComment] = useState('');
+  const [newRating, setNewRating] = useState(5);
+  const [submittingComment, setSubmittingComment] = useState(false);
+  const { user } = useAuth();
 
-  // 辅助函数：处理图片路径
+  // 辅助函数：处理图片路径（Unsplash 在国内无法访问）
   const getImagePath = (path) => {
-    if (!path || path.startsWith('http')) return path;
+    if (!path) return '/products/placeholder-product.svg';
+    if (path.includes('unsplash.com')) return '/products/placeholder-product.svg';
+    if (path.startsWith('http')) return path;
     return `${import.meta.env.BASE_URL}${path.replace(/^\//, '')}`;
   };
 
-  // 从mockData获取商品详情
-  const productData = useMemo(() => {
-    return products.find(p => p.id === parseInt(id));
+  const handleImageError = (e) => {
+    e.target.src = '/products/placeholder-product.svg';
+  };
+
+  // 安全解析JSON
+  const safeJsonParse = (str, fallback = []) => {
+    if (!str) return fallback;
+    try { return JSON.parse(str); } catch { return fallback; }
+  };
+
+  // 加载商品详情
+  useEffect(() => {
+    const loadData = async () => {
+      setLoading(true);
+      try {
+        const res = await productApi.getDetail(id);
+        const data = res?.data || res;
+        if (!data || !data.id) {
+          setProductData(null);
+          setLoading(false);
+          return;
+        }
+        setProductData(data);
+
+        // 加载供应商信息
+        if (data.supplierId) {
+          try {
+            const sres = await supplierApi.getDetail(data.supplierId);
+            const sdata = sres?.data || sres;
+            setSupplierData(sdata);
+          } catch (e) {
+            console.error('加载供应商失败:', e);
+          }
+        }
+
+        // 加载相关商品（同分类）
+        try {
+          const rres = await productApi.getList({ page: 1, size: 6, categoryId: data.categoryId });
+          const records = rres?.records || [];
+          setRelatedProducts(records.filter(p => p.id !== data.id).slice(0, 4));
+        } catch (e) {
+          console.error('加载相关商品失败:', e);
+        }
+      } catch (e) {
+        console.error('加载商品详情失败:', e);
+        setProductData(null);
+      } finally {
+        setLoading(false);
+      }
+    };
+    loadData();
   }, [id]);
 
-  // 获取供应商信息
-  const supplierData = useMemo(() => {
-    if (!productData) return null;
-    return suppliers.find(s => s.name === productData.supplier);
-  }, [productData]);
+  // 加载评论
+  const loadComments = async (page = 1) => {
+    try {
+      const res = await commentApi.getList({ productId: id, page, size: 10 });
+      setComments(res?.records || []);
+      setCommentTotalPages(res?.pages || 1);
+      setCommentPage(page);
+    } catch (e) {
+      console.error('加载评论失败:', e);
+    }
+  };
+
+  // 加载评论数
+  const loadCommentCount = async () => {
+    try {
+      const count = await commentApi.getCount(id);
+      setCommentCount(count || 0);
+    } catch (e) { /* ignore */ }
+  };
+
+  // 检查收藏状态
+  const checkFavoriteStatus = async () => {
+    if (!user) return;
+    try {
+      const result = await favoriteApi.check({ targetId: Number(id), targetType: 'product' });
+      setIsFavorited(!!result);
+    } catch (e) { /* ignore */ }
+  };
+
+  useEffect(() => {
+    if (!loading && productData) {
+      loadComments(1);
+      loadCommentCount();
+      checkFavoriteStatus();
+    }
+  }, [loading, productData, user]);
+
+  // 提交评论
+  const handleSubmitComment = async () => {
+    if (!user) { navigate('/login'); return; }
+    if (!newComment.trim()) return;
+    setSubmittingComment(true);
+    try {
+      await commentApi.add({ productId: Number(id), rating: newRating, content: newComment.trim() });
+      setNewComment('');
+      setNewRating(5);
+      await loadComments(1);
+      await loadCommentCount();
+    } catch (e) {
+      console.error('评论失败:', e);
+    } finally {
+      setSubmittingComment(false);
+    }
+  };
+
+  // 删除评论
+  const handleDeleteComment = async (commentId) => {
+    try {
+      await commentApi.delete(commentId);
+      await loadComments(commentPage);
+      await loadCommentCount();
+    } catch (e) {
+      console.error('删除评论失败:', e);
+    }
+  };
+
+  // 切换收藏
+  const handleToggleFavorite = async () => {
+    if (!user) { navigate('/login'); return; }
+    try {
+      const res = await favoriteApi.toggle({
+        targetId: Number(id), targetType: 'product',
+        targetName: productData?.name || '', targetImage: productData?.image || ''
+      });
+      setIsFavorited(!!res?.favorited);
+    } catch (e) {
+      console.error('收藏操作失败:', e);
+    }
+  };
+
+  // 加载中
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
+          <p className="text-gray-500">加载中...</p>
+        </div>
+      </div>
+    );
+  }
 
   // 如果找不到商品，显示404
   if (!productData) {
@@ -46,86 +198,66 @@ const ProductDetail = () => {
     );
   }
 
-  // 构建商品详情对象
+  // 解析相册（JSON数组）
+  const albumImages = safeJsonParse(productData.album, []);
+  const allImages = [productData.image, ...albumImages].filter(Boolean);
+  if (allImages.length === 0) allImages.push('/Picture/default-product.jpg');
+
+  // 解析规格参数（JSON对象或数组）
+  const parsedSpecs = safeJsonParse(productData.specs, null);
+  const specsArray = Array.isArray(parsedSpecs)
+    ? parsedSpecs
+    : parsedSpecs && typeof parsedSpecs === 'object'
+      ? Object.entries(parsedSpecs).map(([label, value]) => ({ label, value: String(value) }))
+      : [
+          { label: '商品名称', value: productData.name },
+          { label: '库存', value: `${productData.stock || 0}件` },
+          { label: '销量', value: `${productData.sales || 0}件` },
+        ];
+
+  // 构建商品详情对象（适配渲染模板）
   const product = {
     id: productData.id,
     name: productData.name,
-    subtitle: productData.description,
-    price: productData.price,
-    originalPrice: Math.round(productData.price * 1.2),
-    discount: 17,
-    rating: productData.rating,
-    reviewCount: productData.sales,
-    sales: productData.sales,
-    stock: 89,
-    images: [
-      productData.image,
-      productData.parameterImage || productData.image,
-      productData.image,
-      productData.image,
-      productData.image
-    ].filter(Boolean),
-    tags: [...productData.tags, '质保2年', '7天无理由退换'],
+    subtitle: productData.description || '',
+    price: Number(productData.price || 0),
+    originalPrice: productData.originalPrice ? Number(productData.originalPrice) : null,
+    rating: 4.8,
+    reviewCount: commentCount || productData.sales || 0,
+    sales: productData.sales || 0,
+    stock: productData.stock || 0,
+    images: allImages,
+    tags: ['质保2年', '7天无理由退换'],
     supplier: {
-      id: supplierData?.id || 1,
-      name: productData.supplier,
-      logo: supplierData?.logo || 'https://ui-avatars.com/api/?name=S&background=0D8ABC&color=fff',
-      rating: supplierData?.rating || 4.9,
-      years: supplierData?.years || 8,
+      id: supplierData?.id || productData.supplierId || 0,
+      name: supplierData?.name || '供应商',
+      logo: supplierData?.logo || `https://ui-avatars.com/api/?name=S&background=0D8ABC&color=fff`,
+      rating: 4.9,
+      years: supplierData?.createTime ? new Date().getFullYear() - new Date(supplierData.createTime).getFullYear() || 1 : 1,
       responseRate: 98,
       responseTime: '2小时内',
       location: '中国',
       description: supplierData?.description || '专业设备供应商',
-      products: 156,
-      followers: 2345
+      isVerified: supplierData?.isVerified === 1,
     },
-    specs: [
-      { label: '品牌', value: productData.supplier.split(' ')[0] },
-      { label: '型号', value: productData.name.match(/[A-Z0-9-]+$/)?.[0] || 'Standard' },
-      { label: '分类', value: productData.category },
-      { label: '评分', value: productData.rating + '★' },
-      { label: '销量', value: productData.sales + '件' },
-      { label: '供应商', value: productData.supplier },
-    ],
-    features: productData.features || [
+    specs: specsArray,
+    features: [
       '✓ 高品质保证',
       '✓ 专业技术支持',
       '✓ 完善售后服务',
       '✓ 快速交付',
       '✓ 性价比高'
     ],
-    description: productData.description,
+    description: productData.description || '',
     serviceFeatures: [
-      {
-        icon: Shield,
-        title: '质量保证',
-        desc: '正品保证,支持验货'
-      },
-      {
-        icon: Truck,
-        title: '包邮配送',
-        desc: '全国包邮,48小时发货'
-      },
-      {
-        icon: Clock,
-        title: '售后无忧',
-        desc: '7天无理由退换货'
-      },
-      {
-        icon: Award,
-        title: '质保2年',
-        desc: '厂家质保,全国联保'
-      }
+      { icon: Shield, title: '质量保证', desc: '正品保证,支持验货' },
+      { icon: Truck, title: '包邮配送', desc: '全国包邮,48小时发货' },
+      { icon: Clock, title: '售后无忧', desc: '7天无理由退换货' },
+      { icon: Award, title: '质保2年', desc: '厂家质保,全国联保' },
     ],
     detailDescription: `
       <h3>产品简介</h3>
-      <p>${productData.description}</p>
-      
-      <h3>核心优势</h3>
-      <ul>
-        ${productData.features ? productData.features.map(f => `<li>${f}</li>`).join('') : '<li>高品质保证</li>'}
-      </ul>
-
+      <p>${productData.description || '暂无描述'}</p>
       <h3>应用场景</h3>
       <ul>
         <li>工业自动化检测</li>
@@ -134,44 +266,8 @@ const ProductDetail = () => {
         <li>精密测量应用</li>
       </ul>
     `,
-    reviews: [
-      {
-        id: 1,
-        user: '张先生',
-        avatar: 'https://ui-avatars.com/api/?name=ZS&background=random',
-        rating: 5,
-        date: '2024-01-15',
-        content: '设备非常好用,精度高,检测速度快,售后服务也很到位。已经用了3个月,运行稳定,推荐购买!',
-        images: [],
-        helpful: 234,
-        specs: productData.tags.join(' | ')
-      },
-      {
-        id: 2,
-        user: '李工',
-        avatar: 'https://ui-avatars.com/api/?name=LG&background=random',
-        rating: 5,
-        date: '2024-01-10',
-        content: '公司采购了多台,效果非常好。技术支持响应很快,解决问题很专业。',
-        images: [],
-        helpful: 189,
-        specs: productData.tags.join(' | ')
-      },
-      {
-        id: 3,
-        user: '王经理',
-        avatar: 'https://ui-avatars.com/api/?name=WJL&background=random',
-        rating: 4,
-        date: '2024-01-05',
-        content: '总体不错,性价比很高。操作简单,功能实用。',
-        images: [],
-        helpful: 156,
-        specs: productData.tags.join(' | ')
-      }
-    ]
+    reviews: [],
   };
-
-  const relatedProducts = products.slice(0, 6).filter(p => p.id !== product.id);
 
   return (
     <div className="pb-20 md:pb-0 bg-gray-50 min-h-screen">
@@ -208,6 +304,7 @@ const ProductDetail = () => {
                   src={getImagePath(product.images[selectedImage])}
                   alt={product.name}
                   className="w-full h-full object-cover"
+                  onError={handleImageError}
                 />
               </div>
               <div className="grid grid-cols-5 gap-2">
@@ -218,7 +315,7 @@ const ProductDetail = () => {
                     className={`aspect-square rounded-lg overflow-hidden border-2 transition-all ${selectedImage === idx ? 'border-blue-600' : 'border-transparent hover:border-gray-300'
                       }`}
                   >
-                    <img src={getImagePath(img)} alt="" className="w-full h-full object-cover" />
+                    <img src={getImagePath(img)} alt="" className="w-full h-full object-cover" onError={handleImageError} />
                   </button>
                 ))}
               </div>
@@ -314,8 +411,11 @@ const ProductDetail = () => {
                     <Phone size={20} />
                     电话咨询
                   </button>
-                  <button className="border-2 border-gray-300 text-gray-600 p-4 rounded-lg hover:bg-gray-50 transition-colors">
-                    <Heart size={20} />
+                  <button
+                    onClick={handleToggleFavorite}
+                    className={`border-2 p-4 rounded-lg transition-colors ${isFavorited ? 'border-red-500 text-red-500 bg-red-50' : 'border-gray-300 text-gray-600 hover:bg-gray-50'}`}
+                  >
+                    <Heart size={20} className={isFavorited ? 'fill-red-500' : ''} />
                   </button>
                 </div>
               </div>
@@ -361,7 +461,7 @@ const ProductDetail = () => {
                 >
                   {tab === 'detail' && '商品详情'}
                   {tab === 'specs' && '规格参数'}
-                  {tab === 'reviews' && `用户评价 (${product.reviewCount})`}
+                  {tab === 'reviews' && `用户评价 (${commentCount})`}
                 </button>
               ))}
             </div>
@@ -385,39 +485,104 @@ const ProductDetail = () => {
 
             {activeTab === 'reviews' && (
               <div className="space-y-6">
-                {product.reviews.map((review) => (
+                {/* 发表评论 */}
+                <div className="bg-gray-50 rounded-xl p-6">
+                  <h3 className="font-bold text-gray-900 mb-4">发表评价</h3>
+                  {user ? (
+                    <div>
+                      <div className="flex items-center gap-2 mb-3">
+                        <span className="text-sm text-gray-600">评分：</span>
+                        {[1,2,3,4,5].map(s => (
+                          <button key={s} onClick={() => setNewRating(s)} className="focus:outline-none">
+                            <Star size={20} className={s <= newRating ? 'text-yellow-400 fill-yellow-400' : 'text-gray-300'} />
+                          </button>
+                        ))}
+                      </div>
+                      <textarea
+                        value={newComment}
+                        onChange={(e) => setNewComment(e.target.value)}
+                        placeholder="分享您对这款产品的使用体验..."
+                        className="w-full border rounded-lg p-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"
+                        rows={3}
+                      />
+                      <div className="flex justify-end mt-3">
+                        <button
+                          onClick={handleSubmitComment}
+                          disabled={submittingComment || !newComment.trim()}
+                          className="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed text-sm font-medium"
+                        >
+                          {submittingComment ? '提交中...' : '提交评价'}
+                        </button>
+                      </div>
+                    </div>
+                  ) : (
+                    <div className="text-center text-gray-500 py-4">
+                      <button onClick={() => navigate('/login')} className="text-blue-600 hover:underline">登录</button> 后可发表评论
+                    </div>
+                  )}
+                </div>
+
+                {/* 评论列表 */}
+                {comments.length > 0 ? comments.map((review) => (
                   <div key={review.id} className="border-b pb-6">
                     <div className="flex items-start gap-4">
-                      <img src={review.avatar} alt={review.user} className="w-12 h-12 rounded-full" />
+                      <img
+                        src={review.userAvatar || `https://ui-avatars.com/api/?name=${encodeURIComponent(review.userName || 'U')}&background=random`}
+                        alt={review.userName}
+                        className="w-12 h-12 rounded-full"
+                      />
                       <div className="flex-grow">
                         <div className="flex items-center justify-between mb-2">
                           <div>
-                            <div className="font-medium text-gray-900">{review.user}</div>
-                            <div className="text-sm text-gray-500">{review.date}</div>
+                            <div className="font-medium text-gray-900">{review.userName || '匿名用户'}</div>
+                            <div className="text-sm text-gray-500">{review.createTime?.substring(0, 10)}</div>
                           </div>
-                          <div className="flex items-center gap-1">
-                            {[...Array(5)].map((_, i) => (
-                              <Star key={i} size={16} className={i < review.rating ? 'text-yellow-400 fill-yellow-400' : 'text-gray-300'} />
-                            ))}
+                          <div className="flex items-center gap-2">
+                            <div className="flex items-center gap-1">
+                              {[...Array(5)].map((_, i) => (
+                                <Star key={i} size={16} className={i < (review.rating || 5) ? 'text-yellow-400 fill-yellow-400' : 'text-gray-300'} />
+                              ))}
+                            </div>
+                            {user && user.username === review.userName && (
+                              <button onClick={() => handleDeleteComment(review.id)} className="text-xs text-red-500 hover:underline ml-2">删除</button>
+                            )}
                           </div>
                         </div>
-                        <div className="text-sm text-gray-500 mb-2">{review.specs}</div>
-                        <p className="text-gray-700 mb-3">{review.content}</p>
-                        {review.images.length > 0 && (
-                          <div className="flex gap-2 mb-3">
-                            {review.images.map((img, idx) => (
-                              <img key={idx} src={img} alt="" className="w-24 h-24 rounded-lg object-cover" />
+                        <p className="text-gray-700 mb-2">{review.content}</p>
+                        {review.images && (
+                          <div className="flex gap-2 mb-2">
+                            {review.images.split(',').filter(Boolean).map((img, idx) => (
+                              <img key={idx} src={img} alt="" className="w-16 h-16 rounded object-cover" />
                             ))}
                           </div>
                         )}
-                        <button className="text-sm text-gray-500 hover:text-blue-600 flex items-center gap-1">
-                          <ThumbsUp size={14} />
-                          有用 ({review.helpful})
+                        <button
+                          onClick={() => commentApi.helpful(review.id).then(() => loadComments(commentPage))}
+                          className="flex items-center gap-1 text-xs text-gray-400 hover:text-blue-600"
+                        >
+                          <ThumbsUp size={14} /> 有用 ({review.helpful || 0})
                         </button>
                       </div>
                     </div>
                   </div>
-                ))}
+                )) : (
+                  <div className="text-center text-gray-400 py-12">暂无评价，快来写第一条评价吧！</div>
+                )}
+
+                {/* 评论分页 */}
+                {commentTotalPages > 1 && (
+                  <div className="flex justify-center gap-2 pt-4">
+                    {Array.from({ length: commentTotalPages }, (_, i) => i + 1).map(p => (
+                      <button
+                        key={p}
+                        onClick={() => loadComments(p)}
+                        className={`w-8 h-8 rounded text-sm ${commentPage === p ? 'bg-blue-600 text-white' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'}`}
+                      >
+                        {p}
+                      </button>
+                    ))}
+                  </div>
+                )}
               </div>
             )}
           </div>
@@ -427,7 +592,7 @@ const ProductDetail = () => {
         <div className="bg-white rounded-xl shadow-sm p-6">
           <h2 className="text-xl font-bold text-gray-900 mb-6">相关推荐</h2>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
-            {relatedProducts.map((item) => (
+            {relatedProducts.length > 0 ? relatedProducts.map((item) => (
               <div
                 key={item.id}
                 onClick={() => navigate(`/product/${item.id}`)}
@@ -435,23 +600,23 @@ const ProductDetail = () => {
               >
                 <div className="aspect-square bg-gray-100 rounded-xl overflow-hidden mb-3">
                   <img
-                    src={item.image}
+                    src={getImagePath(item.image)}
                     alt={item.name}
                     className="w-full h-full object-cover group-hover:scale-110 transition-transform"
+                    onError={handleImageError}
                   />
                 </div>
                 <h3 className="text-sm text-gray-900 line-clamp-2 mb-2 group-hover:text-blue-600">
                   {item.name}
                 </h3>
                 <div className="flex items-center justify-between">
-                  <span className="text-red-600 font-bold">¥{item.price.toLocaleString()}</span>
-                  <div className="flex items-center gap-1 text-xs text-gray-500">
-                    <Star size={12} className="text-yellow-400 fill-yellow-400" />
-                    {item.rating}
-                  </div>
+                  <span className="text-red-600 font-bold">¥{Number(item.price || 0).toLocaleString()}</span>
+                  <span className="text-xs text-gray-500">已售{item.sales || 0}</span>
                 </div>
               </div>
-            ))}
+            )) : (
+              <div className="col-span-4 text-center text-gray-400 py-8">暂无相关推荐</div>
+            )}
           </div>
         </div>
       </div>

@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate, useLocation } from 'react-router-dom';
-import { procurements } from '../../data/mockData';
+import { procurementApi } from '../../api/index';
 import { ArrowLeft, MapPin, Clock, Calendar, DollarSign, Package, FileText, Send } from 'lucide-react';
 
 const ProcurementDetail = () => {
@@ -9,8 +9,31 @@ const ProcurementDetail = () => {
   const location = useLocation();
   const isEnglish = location.pathname.startsWith('/en');
 
-  const procurement = procurements.find(p => p.id === parseInt(id));
+  const [procurement, setProcurement] = useState(null);
+  const [loading, setLoading] = useState(true);
   const [quoteForm, setQuoteForm] = useState({ price: '', message: '', contact: '' });
+
+  useEffect(() => {
+    const loadDetail = async () => {
+      try {
+        const data = await procurementApi.getDetail(id);
+        setProcurement(data);
+      } catch (e) {
+        console.error('加载采购详情失败:', e);
+      } finally {
+        setLoading(false);
+      }
+    };
+    loadDetail();
+  }, [id]);
+
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-gray-500">加载中...</div>
+      </div>
+    );
+  }
 
   if (!procurement) {
     return (
@@ -50,17 +73,19 @@ const ProcurementDetail = () => {
             <div className="flex flex-col md:flex-row md:items-start justify-between gap-4">
               <div>
                 <h1 className="text-2xl font-bold text-gray-900 mb-4">
-                  {isEnglish ? procurement.titleEn : procurement.title}
+                  {procurement.title}
                 </h1>
                 <div className="flex flex-wrap gap-4 text-sm text-gray-500">
                   <span className="flex items-center gap-1">
                     <Clock size={16} />
-                    {isEnglish ? `Posted ${procurement.timeEn}` : `发布于 ${procurement.time}`}
+                    {procurement.createTime ? `发布于 ${new Date(procurement.createTime).toLocaleDateString()}` : ''}
                   </span>
-                  <span className="flex items-center gap-1">
-                    <MapPin size={16} />
-                    {isEnglish ? procurement.locationEn : procurement.location}
-                  </span>
+                  {procurement.contactName && (
+                    <span className="flex items-center gap-1">
+                      <MapPin size={16} />
+                      联系人: {procurement.contactName}
+                    </span>
+                  )}
                 </div>
               </div>
               <span className="inline-block bg-blue-50 text-blue-700 px-4 py-2 rounded-lg font-bold text-lg whitespace-nowrap">
@@ -77,7 +102,7 @@ const ProcurementDetail = () => {
                   {isEnglish ? 'Requirements' : '采购需求'}
                 </h3>
                 <div className="bg-gray-50 rounded-lg p-6 text-gray-700 leading-relaxed">
-                  {isEnglish ? procurement.descriptionEn : procurement.description}
+                  {procurement.description || '暂无详细描述'}
                 </div>
               </div>
 
@@ -140,21 +165,25 @@ const ProcurementDetail = () => {
                 <div className="space-y-4">
                   <div className="flex items-center justify-between">
                     <span className="text-gray-500 text-sm flex items-center gap-2">
-                      <Package size={16} /> {isEnglish ? 'Quantity' : '采购数量'}
+                      <Package size={16} /> 采购数量
                     </span>
-                    <span className="font-medium text-gray-900">{isEnglish ? procurement.quantityEn : procurement.quantity}</span>
+                    <span className="font-medium text-gray-900">{procurement.quantity ? `${procurement.quantity}台` : '面议'}</span>
                   </div>
                   <div className="flex items-center justify-between">
                     <span className="text-gray-500 text-sm flex items-center gap-2">
-                      <DollarSign size={16} /> {isEnglish ? 'Budget' : '预算范围'}
+                      <DollarSign size={16} /> 预算范围
                     </span>
-                    <span className="font-medium text-orange-600">{isEnglish ? procurement.budgetEn : procurement.budget}</span>
+                    <span className="font-medium text-orange-600">
+                      {procurement.budgetMin && procurement.budgetMax
+                        ? `¥${Number(procurement.budgetMin).toLocaleString()} - ¥${Number(procurement.budgetMax).toLocaleString()}`
+                        : '面议'}
+                    </span>
                   </div>
                   <div className="flex items-center justify-between">
                     <span className="text-gray-500 text-sm flex items-center gap-2">
-                      <Calendar size={16} /> {isEnglish ? 'Deadline' : '截止日期'}
+                      <Calendar size={16} /> 截止日期
                     </span>
-                    <span className="font-medium text-red-600">{isEnglish ? procurement.deadlineEn : procurement.deadline}</span>
+                    <span className="font-medium text-red-600">{procurement.deadline || '未定'}</span>
                   </div>
                 </div>
               </div>

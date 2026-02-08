@@ -1,5 +1,5 @@
 import React from 'react';
-import { Phone, Mail, MapPin, Facebook, Twitter, Linkedin, Globe } from 'lucide-react';
+import { Mail, Facebook, Twitter, Linkedin, Globe } from 'lucide-react';
 
 const FooterEn = () => {
   return (
@@ -45,22 +45,18 @@ const FooterEn = () => {
             <h4 className="text-white text-lg font-semibold mb-6">Contact Us</h4>
             <ul className="space-y-4 text-sm">
               <li className="flex items-start gap-3">
-                <Phone size={18} className="text-blue-500 mt-0.5" />
+                <Mail size={18} className="text-blue-500 mt-0.5" />
                 <div>
-                  <span className="block text-white">International Hotline</span>
-                  <span>+86 21 1234 5678</span>
+                  <span className="block text-white">Email Support</span>
+                  <span>2478686497@qq.com</span>
                 </div>
               </li>
               <li className="flex items-start gap-3">
                 <Mail size={18} className="text-blue-500 mt-0.5" />
                 <div>
-                  <span className="block text-white">Email Support</span>
-                  <span>global@dongshidi.com</span>
+                  <span className="block text-white">Business Email</span>
+                  <span>2696432359@qq.com</span>
                 </div>
-              </li>
-              <li className="flex items-start gap-3">
-                <MapPin size={18} className="text-blue-500 mt-0.5" />
-                <span>88 Tech Park Road, Pudong District, Shanghai, China</span>
               </li>
             </ul>
             

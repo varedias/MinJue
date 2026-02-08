@@ -1,21 +1,143 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Search, ChevronRight, Play, FileText, Eye, ThumbsUp, Star, Building2, ShoppingCart, Clock, ChevronDown, Menu, X } from 'lucide-react';
-import { suppliers, procurements, products } from '../../data/mockData';
+import { Search, ChevronRight, Play, FileText, Eye, Building2, Clock, ChevronDown, Menu, X } from 'lucide-react';
+import { productApi } from '../../api/product';
+import { supplierApi, contentApi, procurementApi } from '../../api/index';
 import AIAssistantFloat, { AIAssistantButton } from '../../components/AIAssistantFloat';
 
 const Home = () => {
   const navigate = useNavigate();
-  const [currentPage, setCurrentPage] = useState(1);
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isAIAssistantOpen, setIsAIAssistantOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
 
+  // Mock数据 - 发现推荐内容（来自GitHub Discovery.jsx）
+  const mockDiscoveryContent = [
+    {
+      id: 5,
+      title: '探厂实拍 | 走进深圳AI视觉检测设备制造商',
+      cover: '/videos/video-1-cover.jpg',
+      author: '工业探厂Vlog',
+      views: 234002,
+      type: 'vlog',
+      category: 'vlog',
+      thumbnail: '/videos/video-1-cover.jpg'
+    },
+    {
+      id: 1,
+      title: '海康威视AI视觉检测系统深度测评',
+      cover: '/Picture/5f45ca8db560b.jpg',
+      author: '工业视觉达人',
+      views: 125601,
+      type: 'video',
+      category: 'review',
+      thumbnail: '/Picture/5f45ca8db560b.jpg'
+    },
+    {
+      id: 3,
+      title: '基恩士vs奥普特 | 3D视觉传感器横评',
+      cover: '/Picture/R-C.jpg',
+      author: '智能制造观察',
+      views: 89200,
+      type: 'video',
+      category: 'review',
+      thumbnail: '/Picture/R-C.jpg'
+    },
+    {
+      id: 10,
+      title: '如何选择工业相机？5个关键参数详解',
+      cover: '/Picture/R-C.jpg',
+      author: '机器视觉专家',
+      views: 8500,
+      type: 'article',
+      category: 'tutorial',
+      thumbnail: '/Picture/R-C.jpg'
+    }
+  ];
+
+  // 真实数据状态
+  const [featuredProducts, setFeaturedProducts] = useState([]);
+  const [supplierList, setSupplierList] = useState([]);
+  const [discoveryContent, setDiscoveryContent] = useState([]);
+  const [procurements, setProcurements] = useState([]);
+  const [loading, setLoading] = useState({ products: true, suppliers: true, content: true, procurements: true });
+
+  // 加载首页数据
+  useEffect(() => {
+    loadHomeData();
+  }, []);
+
+  const loadHomeData = async () => {
+    // 并行加载三组数据
+    Promise.all([
+      loadProducts(),
+      loadSuppliers(),
+      loadContent(),
+      loadProcurements()
+    ]);
+  };
+
+  const loadProducts = async () => {
+    try {
+      const res = await productApi.getList({ page: 1, size: 6 });
+      if (res && res.records) {
+        setFeaturedProducts(res.records);
+      }
+    } catch (e) {
+      console.error('加载商品失败:', e);
+    } finally {
+      setLoading(prev => ({ ...prev, products: false }));
+    }
+  };
+
+  const loadSuppliers = async () => {
+    try {
+      const data = await supplierApi.getList(1, 6);
+      if (data && data.records) {
+        setSupplierList(data.records);
+      }
+    } catch (e) {
+      console.error('加载供应商失败:', e);
+    } finally {
+      setLoading(prev => ({ ...prev, suppliers: false }));
+    }
+  };
+
+  const loadContent = async () => {
+    // 使用 mock 数据（来自 GitHub Discovery.jsx）
+    try {
+      setDiscoveryContent(mockDiscoveryContent.slice(0, 3)); // 只显示前3个
+    } catch (e) {
+      console.error('加载内容失败:', e);
+    } finally {
+      setLoading(prev => ({ ...prev, content: false }));
+    }
+  };
+
+  const loadProcurements = async () => {
+    try {
+      const data = await procurementApi.getList({ page: 1, size: 6 });
+      if (data && data.records) {
+        setProcurements(data.records);
+      }
+    } catch (e) {
+      console.error('加载采购信息失败:', e);
+    } finally {
+      setLoading(prev => ({ ...prev, procurements: false }));
+    }
+  };
+
   // 辅助函数：处理图片路径
-  const getImagePath = (path) => {
-    if (!path || path.startsWith('http')) return path;
+  const getImagePath = (path, type = 'product') => {
+    if (!path) return `/products/placeholder-${type}.svg`;
+    if (path.startsWith('http')) return path;
     return `${import.meta.env.BASE_URL}${path.replace(/^\//, '')}`;
+  };
+
+  // 图片加载失败时的占位图
+  const handleImageError = (e) => {
+    e.target.src = '/products/placeholder-product.svg';
   };
 
   const handleSearch = () => {
@@ -165,51 +287,6 @@ const Home = () => {
       ]
     }
   ];
-
-  // 发现推荐内容 - 3页数据
-  const allDiscoveryContent = [
-    // 第1页
-    [
-      { id: 1, type: 'video', title: '工业视觉检测技术应用演示', author: '民崛智能', views: 15200, likes: 892, duration: '12:35', thumbnail: '/Picture/5f45ca8db560b.jpg' },
-      { id: 2, type: 'article', title: '如何选择合适的工业相机？5大关键参数详解', author: '机器视觉专家', views: 8500, likes: 456, readTime: '8分钟', thumbnail: 'https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=400&q=80' },
-      { id: 3, type: 'video', title: '自动化生产线智能检测系统', author: '民崛智能', views: 12800, likes: 723, duration: '15:20', thumbnail: '/Picture/9f1b10429b214030ab65eed8d9217246.jpeg' },
-      { id: 4, type: 'article', title: '表面缺陷检测系统部署指南与最佳实践', author: '工业4.0实验室', views: 6700, likes: 334, readTime: '10分钟', thumbnail: 'https://images.unsplash.com/photo-1581092918056-0c4c3acd3789?auto=format&fit=crop&w=400&q=80' },
-      { id: 5, type: 'video', title: 'AI+机器视觉：智能工厂质检革命', author: '智造科技', views: 19500, likes: 1205, duration: '18:45', thumbnail: '/Picture/R-C.jpg' },
-      { id: 6, type: 'article', title: '光源选型全攻略：让检测精度提升50%', author: '视觉照明专家', views: 5600, likes: 289, readTime: '6分钟', thumbnail: 'https://images.unsplash.com/photo-1581093458791-9d58b3fbbd0d?auto=format&fit=crop&w=400&q=80' },
-    ],
-    // 第2页
-    [
-      { id: 7, type: 'article', title: '工业镜头畸变校正技术深度解析', author: '光学工程师', views: 7200, likes: 412, readTime: '12分钟', thumbnail: 'https://images.unsplash.com/photo-1581092160607-ee22621dd758?auto=format&fit=crop&w=400&q=80' },
-      { id: 8, type: 'video', title: '实时缺陷检测：深度学习算法训练全流程', author: 'AI视觉算法', views: 22000, likes: 1567, duration: '25:30', thumbnail: '/Picture/OIP-C.webp' },
-      { id: 9, type: 'video', title: 'OCR字符识别在生产线上的应用', author: '智能识别技术', views: 9800, likes: 542, duration: '10:15', thumbnail: '/Picture/5f45ca8db560b.jpg' },
-      { id: 10, type: 'article', title: '图像采集卡选购指南：接口类型全对比', author: '硬件工程师', views: 4500, likes: 223, readTime: '7分钟', thumbnail: 'https://images.unsplash.com/photo-1581094271901-8022df4466f9?auto=format&fit=crop&w=400&q=80' },
-      { id: 11, type: 'video', title: '汽车零部件智能检测系统完整方案', author: '汽车工业自动化', views: 16700, likes: 934, duration: '20:10', thumbnail: '/Picture/9f1b10429b214030ab65eed8d9217246.jpeg' },
-      { id: 12, type: 'article', title: '机器视觉系统ROI计算与投资回报分析', author: '工业咨询顾问', views: 5900, likes: 301, readTime: '9分钟', thumbnail: 'https://images.unsplash.com/photo-1581094798828-37b7cf641a6e?auto=format&fit=crop&w=400&q=80' },
-    ],
-    // 第3页
-    [
-      { id: 13, type: 'video', title: '药品包装智能检测：合规性与效率双提升', author: '医药装备技术', views: 11200, likes: 678, duration: '14:25', thumbnail: '/Picture/R-C.jpg' },
-      { id: 14, type: 'article', title: '工业4.0时代的视觉检测云平台架构', author: '云计算专家', views: 6800, likes: 367, readTime: '11分钟', thumbnail: 'https://images.unsplash.com/photo-1581096723826-c0d7b2f20e9e?auto=format&fit=crop&w=400&q=80' },
-      { id: 15, type: 'video', title: '纺织品表面瘺疵检测AI算法实战', author: '纺织智能化', views: 8900, likes: 487, duration: '16:50', thumbnail: '/Picture/OIP-C.webp' },
-      { id: 16, type: 'article', title: '多相机同步技术在360度检测中的应用', author: '系统集成工程师', views: 4100, likes: 198, readTime: '8分钟', thumbnail: 'https://images.unsplash.com/photo-1581098365948-6b5a5b5f9e4f?auto=format&fit=crop&w=400&q=80' },
-      { id: 17, type: 'video', title: '食品安全检测：X射线+视觉双重保障', author: '食品安全技术', views: 13500, likes: 801, duration: '13:40', thumbnail: '/Picture/5f45ca8db560b.jpg' },
-      { id: 18, type: 'article', title: '边缘计算在工业视觉中的最新进展', author: '边缘AI研究', views: 7600, likes: 423, readTime: '10分钟', thumbnail: 'https://images.unsplash.com/photo-1581101215084-0f3a4c9f32e0?auto=format&fit=crop&w=400&q=80' },
-    ]
-  ];
-
-  // 优选商品数据 - 从mockData获取前6个产品（民崛的产品在前面）
-  const featuredProducts = products.slice(0, 6).map(product => ({
-    id: product.id,
-    name: product.name,
-    price: product.price.toLocaleString(),
-    unit: '台',
-    specs: product.tags.join(' | '),
-    sales: product.sales,
-    rating: product.rating,
-    image: product.image
-  }));
-
-  const currentDiscoveryContent = allDiscoveryContent[currentPage - 1] || [];
 
   return (
     <div className="pb-20 md:pb-0 bg-gray-50 min-h-screen">
@@ -376,23 +453,6 @@ const Home = () => {
               发现推荐
             </h2>
             <div className="flex items-center gap-4">
-              <div className="flex gap-2">
-                {[1, 2, 3].map((page) => (
-                  <button
-                    key={page}
-                    onClick={() => setCurrentPage(page)}
-                    className={`
-                      w-10 h-10 rounded-lg font-medium transition-all
-                      ${currentPage === page
-                        ? 'bg-blue-600 text-white shadow-md'
-                        : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
-                      }
-                    `}
-                  >
-                    {page}
-                  </button>
-                ))}
-              </div>
               <a
                 href="/discovery"
                 className="text-blue-600 text-sm hover:text-blue-700 font-medium flex items-center gap-1 group"
@@ -407,7 +467,15 @@ const Home = () => {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {currentDiscoveryContent.map((item) => (
+            {loading.content ? (
+              [1,2,3].map(i => (
+                <div key={i} className="border border-gray-200 rounded-xl overflow-hidden animate-pulse">
+                  <div className="h-48 bg-gray-200"></div>
+                  <div className="p-4"><div className="h-4 bg-gray-200 rounded mb-2"></div><div className="h-4 bg-gray-200 rounded w-2/3"></div></div>
+                </div>
+              ))
+            ) : discoveryContent.length > 0 ? (
+              discoveryContent.map((item) => (
               <div
                 key={item.id}
                 onClick={() => navigate(`/content/${item.id}`)}
@@ -415,19 +483,17 @@ const Home = () => {
               >
                 <div className="relative h-48 bg-gray-100 overflow-hidden">
                   <img
-                    src={getImagePath(item.thumbnail)}
+                    src={getImagePath(item.cover || item.thumbnail)}
                     alt={item.title}
                     className="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
+                    onError={handleImageError}
                   />
-                  {item.type === 'video' && (
+                  {(item.type === 'video' || item.type === 'vlog') && (
                     <>
                       <div className="absolute inset-0 bg-transparent group-hover:bg-black/20 flex items-center justify-center transition-all z-10 pointer-events-none">
                         <div className="bg-white/90 rounded-full p-4 group-hover:bg-blue-600 transition-colors">
                           <Play size={28} className="text-blue-600 group-hover:text-white" />
                         </div>
-                      </div>
-                      <div className="absolute bottom-3 right-3 bg-black/70 text-white text-xs px-3 py-1 rounded-full z-10">
-                        {item.duration}
                       </div>
                     </>
                   )}
@@ -446,16 +512,16 @@ const Home = () => {
                     <span className="font-medium">{item.author}</span>
                     <div className="flex items-center gap-4">
                       <span className="flex items-center gap-1">
-                        <Eye size={14} /> {item.views.toLocaleString()}
-                      </span>
-                      <span className="flex items-center gap-1">
-                        <ThumbsUp size={14} /> {item.likes}
+                        <Eye size={14} /> {(item.views || 0).toLocaleString()}
                       </span>
                     </div>
                   </div>
                 </div>
               </div>
-            ))}
+              ))
+            ) : (
+              <div className="col-span-3 text-center text-gray-400 py-12">暂无推荐内容</div>
+            )}
           </div>
         </div>
 
@@ -475,7 +541,16 @@ const Home = () => {
             </button>
           </div>
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-5">
-            {featuredProducts.map((product) => (
+            {loading.products ? (
+              [1,2,3,4,5,6].map(i => (
+                <div key={i} className="border border-gray-200 rounded-lg p-4 animate-pulse">
+                  <div className="h-36 bg-gray-200 rounded-lg mb-3"></div>
+                  <div className="h-4 bg-gray-200 rounded mb-2"></div>
+                  <div className="h-4 bg-gray-200 rounded w-1/2"></div>
+                </div>
+              ))
+            ) : featuredProducts.length > 0 ? (
+              featuredProducts.map((product) => (
               <div
                 key={product.id}
                 onClick={() => navigate(`/product/${product.id}`)}
@@ -486,23 +561,25 @@ const Home = () => {
                     src={getImagePath(product.image)}
                     alt={product.name}
                     className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
+                    onError={handleImageError}
                   />
                 </div>
                 <h3 className="text-sm font-medium text-gray-900 line-clamp-2 mb-2 min-h-[40px] group-hover:text-blue-600">
                   {product.name}
                 </h3>
-                <p className="text-xs text-gray-500 mb-2 line-clamp-1">{product.specs}</p>
                 <div className="flex items-center gap-1 mb-2">
-                  <Star size={14} className="text-yellow-400 fill-yellow-400" />
-                  <span className="text-xs text-gray-600 font-medium">{product.rating}</span>
-                  <span className="text-xs text-gray-400">已售{product.sales}</span>
+                  <span className="text-xs text-gray-400">已售{product.sales || 0}</span>
+                  <span className="text-xs text-gray-400 ml-auto">浏览{product.views || 0}</span>
                 </div>
                 <div className="text-red-500 font-bold">
-                  ¥<span className="text-lg">{product.price}</span>
-                  <span className="text-xs text-gray-500 font-normal">/{product.unit}</span>
+                  ¥<span className="text-lg">{Number(product.price || 0).toLocaleString()}</span>
+                  <span className="text-xs text-gray-500 font-normal">/台</span>
                 </div>
               </div>
-            ))}
+              ))
+            ) : (
+              <div className="col-span-6 text-center text-gray-400 py-12">暂无商品</div>
+            )}
           </div>
         </div>
 
@@ -519,7 +596,17 @@ const Home = () => {
             </button>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {suppliers.map((supplier) => (
+            {loading.suppliers ? (
+              [1,2].map(i => (
+                <div key={i} className="border border-gray-200 rounded-xl p-6 animate-pulse">
+                  <div className="flex gap-4">
+                    <div className="w-20 h-20 bg-gray-200 rounded-xl"></div>
+                    <div className="flex-grow"><div className="h-5 bg-gray-200 rounded mb-3 w-1/3"></div><div className="h-4 bg-gray-200 rounded mb-2 w-2/3"></div></div>
+                  </div>
+                </div>
+              ))
+            ) : supplierList.length > 0 ? (
+              supplierList.map((supplier) => (
               <div
                 key={supplier.id}
                 onClick={() => navigate(`/supplier/${supplier.id}`)}
@@ -527,39 +614,43 @@ const Home = () => {
               >
                 <div className="flex gap-4">
                   <div className="w-20 h-20 flex-shrink-0 bg-gradient-to-br from-blue-50 to-blue-100 rounded-xl flex items-center justify-center overflow-hidden">
-                    <img src={supplier.logo} alt={supplier.name} className="w-full h-full object-cover" />
+                    {supplier.logo ? (
+                      <img src={getImagePath(supplier.logo, 'supplier')} alt={supplier.name} className="w-full h-full object-cover" onError={handleImageError} />
+                    ) : (
+                      <Building2 size={32} className="text-blue-400" />
+                    )}
                   </div>
                   <div className="flex-grow">
-                    <h3 className="font-bold text-lg text-gray-900 mb-2 group-hover:text-blue-600">{supplier.name}</h3>
-                    <p className="text-sm text-gray-600 mb-3 flex items-center gap-2">
-                      <Building2 size={16} className="text-blue-600" />
-                      主营: {supplier.mainProducts}
-                    </p>
-                    <div className="flex flex-wrap gap-2 mb-3">
-                      {supplier.certifications.map((cert, idx) => (
-                        <span key={idx} className="px-3 py-1 bg-gradient-to-r from-blue-50 to-blue-100 text-blue-700 text-xs rounded-full font-medium">
-                          ✓ {cert}
-                        </span>
-                      ))}
+                    <div className="flex items-center gap-2 mb-2">
+                      <h3 className="font-bold text-lg text-gray-900 group-hover:text-blue-600">{supplier.name}</h3>
+                      {supplier.isVerified && (
+                        <span className="px-2 py-0.5 bg-green-100 text-green-700 text-xs rounded-full font-medium">✓ 已认证</span>
+                      )}
                     </div>
-                    <div className="flex items-center gap-6 text-sm text-gray-600">
-                      <span className="flex items-center gap-1 font-medium">
-                        <Star size={16} className="text-yellow-400 fill-yellow-400" />
-                        {supplier.rating}分
-                      </span>
-                      <span className="flex items-center gap-1">
-                        <Clock size={16} className="text-gray-400" />
-                        {supplier.years}年经验
-                      </span>
-                      <span className="flex items-center gap-1">
-                        <ShoppingCart size={16} className="text-gray-400" />
-                        成交{supplier.orders}笔
-                      </span>
+                    <p className="text-sm text-gray-600 mb-3 line-clamp-2">
+                      {supplier.description || '暂无介绍'}
+                    </p>
+                    <div className="flex items-center gap-4 text-sm text-gray-500">
+                      {supplier.contactInfo && (
+                        <span className="flex items-center gap-1">
+                          <Building2 size={14} className="text-blue-500" />
+                          联系方式已提供
+                        </span>
+                      )}
+                      {supplier.createTime && (
+                        <span className="flex items-center gap-1">
+                          <Clock size={14} className="text-gray-400" />
+                          入驻于 {supplier.createTime.substring(0, 10)}
+                        </span>
+                      )}
                     </div>
                   </div>
                 </div>
               </div>
-            ))}
+              ))
+            ) : (
+              <div className="col-span-2 text-center text-gray-400 py-12">暂无供应商</div>
+            )}
           </div>
         </div>
 
@@ -576,7 +667,7 @@ const Home = () => {
             </button>
           </div>
           <div className="space-y-4">
-            {procurements.map((procurement) => (
+            {procurements.length > 0 ? procurements.map((procurement) => (
               <div
                 key={procurement.id}
                 className="border border-gray-200 rounded-xl p-5 hover:shadow-xl hover:border-blue-300 transition-all cursor-pointer group"
@@ -586,27 +677,30 @@ const Home = () => {
                     {procurement.title}
                   </h3>
                   <span className="text-xs text-gray-400 flex-shrink-0 bg-gray-50 px-2 py-1 rounded">
-                    {procurement.time}
+                    {procurement.createTime ? new Date(procurement.createTime).toLocaleDateString() : ''}
                   </span>
                 </div>
                 <div className="flex flex-wrap gap-6 text-sm text-gray-600 mb-3">
                   <span className="flex items-center gap-2">
                     <span className="text-gray-400">数量:</span>
-                    <span className="font-medium text-gray-900">{procurement.quantity}</span>
+                    <span className="font-medium text-gray-900">{procurement.quantity || '-'}台</span>
                   </span>
                   <span className="flex items-center gap-2">
                     <span className="text-gray-400">预算:</span>
-                    <span className="font-medium text-orange-600">{procurement.budget}</span>
+                    <span className="font-medium text-orange-600">
+                      {procurement.budgetMin && procurement.budgetMax
+                        ? `¥${Number(procurement.budgetMin).toLocaleString()} - ¥${Number(procurement.budgetMax).toLocaleString()}`
+                        : '面议'}
+                    </span>
                   </span>
                   <span className="flex items-center gap-2">
                     <span className="text-gray-400">截止:</span>
-                    <span className="font-medium text-red-600">{procurement.deadline}</span>
-                  </span>
-                  <span className="flex items-center gap-2">
-                    <span className="text-gray-400">📍</span>
-                    <span className="font-medium">{procurement.location}</span>
+                    <span className="font-medium text-red-600">{procurement.deadline || '未定'}</span>
                   </span>
                 </div>
+                {procurement.description && (
+                  <p className="text-sm text-gray-500 mb-3 line-clamp-1">{procurement.description}</p>
+                )}
                 <div className="flex gap-3 pt-2">
                   <button
                     onClick={(e) => {
@@ -628,7 +722,9 @@ const Home = () => {
                   </button>
                 </div>
               </div>
-            ))}
+            )) : (
+              <div className="text-center text-gray-400 py-12">暂无采购信息</div>
+            )}
           </div>
         </div>
       </div>

@@ -31,6 +31,7 @@ export default {
     suppliers: 'Suppliers',
     products: 'Products',
     leasing: 'Leasing',
+    orders: 'Orders',
     comments: 'Comments',
     interactions: 'Interactions',
   },
