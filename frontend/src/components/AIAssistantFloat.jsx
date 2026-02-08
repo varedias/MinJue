@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Bot, X, Send, Loader, Minimize2, Maximize2, MessageCircle } from 'lucide-react';
 import { aiApi } from '../api/index';
+import ReactMarkdown from 'react-markdown';
 
 const AIAssistantFloat = ({ isOpen, onClose, isInline = false }) => {
   const [messages, setMessages] = useState([]);
@@ -29,7 +30,10 @@ const AIAssistantFloat = ({ isOpen, onClose, isInline = false }) => {
   }, [isOpen]);
 
   const sendMessageToAI = async (userMessage) => {
+    // 立即显示用户消息
+    setMessages(prev => [...prev, { role: 'user', content: userMessage }]);
     setIsLoading(true);
+    
     try {
       const allMessages = [
         {
@@ -43,14 +47,11 @@ const AIAssistantFloat = ({ isOpen, onClose, isInline = false }) => {
       const data = await aiApi.chat(allMessages);
       const aiResponse = data.content;
 
-      setMessages(prev => [...prev, 
-        { role: 'user', content: userMessage },
-        { role: 'assistant', content: aiResponse }
-      ]);
+      // 只添加AI回复（用户消息已经添加了）
+      setMessages(prev => [...prev, { role: 'assistant', content: aiResponse }]);
     } catch (error) {
       console.error('AI请求错误:', error);
       setMessages(prev => [...prev, 
-        { role: 'user', content: userMessage },
         { role: 'assistant', content: '抱歉,我现在遇到了一些问题。请稍后再试,或者直接浏览设备分类查找您需要的产品。' }
       ]);
     } finally {
@@ -100,7 +101,13 @@ const AIAssistantFloat = ({ isOpen, onClose, isInline = false }) => {
                       : 'bg-white text-gray-900 rounded-bl-none shadow-sm'
                   }`}
                 >
-                  <p className="text-sm whitespace-pre-wrap leading-relaxed">{msg.content}</p>
+                  {msg.role === 'user' ? (
+                    <p className="text-sm whitespace-pre-wrap leading-relaxed">{msg.content}</p>
+                  ) : (
+                    <div className="text-sm leading-relaxed prose prose-sm max-w-none prose-p:my-1 prose-ul:my-1 prose-ol:my-1 prose-li:my-0.5 prose-headings:my-2 prose-strong:text-gray-900">
+                      <ReactMarkdown>{msg.content}</ReactMarkdown>
+                    </div>
+                  )}
                 </div>
                 {msg.role === 'user' && (
                   <div className="flex justify-end mt-1">
@@ -212,7 +219,13 @@ const AIAssistantFloat = ({ isOpen, onClose, isInline = false }) => {
                           : 'bg-white text-gray-900 rounded-bl-none shadow-sm'
                       }`}
                     >
-                      <p className="text-sm whitespace-pre-wrap leading-relaxed">{msg.content}</p>
+                      {msg.role === 'user' ? (
+                        <p className="text-sm whitespace-pre-wrap leading-relaxed">{msg.content}</p>
+                      ) : (
+                        <div className="text-sm leading-relaxed prose prose-sm max-w-none prose-p:my-1 prose-ul:my-1 prose-ol:my-1 prose-li:my-0.5 prose-headings:my-2 prose-strong:text-gray-900">
+                          <ReactMarkdown>{msg.content}</ReactMarkdown>
+                        </div>
+                      )}
                     </div>
                     {msg.role === 'user' && (
                       <div className="flex justify-end mt-1">

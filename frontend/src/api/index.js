@@ -6,7 +6,7 @@ const API_BASE_URL = '';
 // 创建 axios 实例
 export const api = axios.create({
     baseURL: API_BASE_URL,
-    timeout: 10000,
+    timeout: 60000, // AI请求可能较慢，设置60秒超时
     headers: {
         'Content-Type': 'application/json',
     },

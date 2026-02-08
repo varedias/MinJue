@@ -12,6 +12,8 @@ import org.springframework.web.client.RestTemplate;
 import java.util.List;
 import java.util.Map;
 
+import org.springframework.http.client.SimpleClientHttpRequestFactory;
+
 /**
  * AI 代理接口 — 前端通过此接口调用智谱 API，避免暴露 API Key
  */
@@ -30,7 +32,15 @@ public class AiProxyController {
     @Value("${ai.zhipu.model}")
     private String model;
 
-    private final RestTemplate restTemplate = new RestTemplate();
+    private final RestTemplate restTemplate;
+
+    public AiProxyController() {
+        // 设置超时时间：连接超时10秒，读取超时60秒
+        SimpleClientHttpRequestFactory factory = new SimpleClientHttpRequestFactory();
+        factory.setConnectTimeout(10000);
+        factory.setReadTimeout(60000);
+        this.restTemplate = new RestTemplate(factory);
+    }
 
     @Operation(summary = "AI 对话代理")
     @PostMapping("/chat")
