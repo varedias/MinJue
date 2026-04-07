@@ -1,100 +1,98 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { ArrowLeft, Upload, Plus, X } from 'lucide-react';
+import { ArrowLeft } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
-import { productApi } from '../../api/product';
-import { categoryApi } from '../../api/index';
-import { api } from '../../api/index';
+import {
+  LOCAL_PRODUCT_CATEGORIES,
+  getSupplierProductById,
+  saveSupplierProduct,
+} from '../../utils/personalCenterStorage';
+
+const initialForm = {
+  name: '',
+  categoryId: '',
+  price: '',
+  originalPrice: '',
+  stock: '',
+  image: '',
+  description: '',
+  specs: '',
+  tags: '',
+};
 
 const PublishProduct = () => {
   const navigate = useNavigate();
-  const { id } = useParams(); // 编辑模式下有 id
+  const { id } = useParams();
   const { user } = useAuth();
-  const isEdit = !!id;
+  const isEdit = Boolean(id);
 
-  const [categories, setCategories] = useState([]);
   const [submitting, setSubmitting] = useState(false);
-  const [form, setForm] = useState({
-    name: '',
-    categoryId: '',
-    price: '',
-    originalPrice: '',
-    stock: '',
-    image: '',
-    album: '',
-    description: '',
-    specs: '',
-  });
+  const [form, setForm] = useState(initialForm);
 
   useEffect(() => {
     if (!user || user.role !== 'SUPPLIER') {
       navigate('/login');
       return;
     }
-    loadCategories();
-    if (isEdit) loadProduct();
-  }, []);
 
-  const loadCategories = async () => {
-    try {
-      const data = await categoryApi.getList();
-      setCategories(Array.isArray(data) ? data : []);
-    } catch (e) {
-      console.error('加载分类失败:', e);
-    }
-  };
-
-  const loadProduct = async () => {
-    try {
-      const res = await productApi.getDetail(id);
-      if (res) {
-        setForm({
-          name: res.name || '',
-          categoryId: res.categoryId || '',
-          price: res.price || '',
-          originalPrice: res.originalPrice || '',
-          stock: res.stock || '',
-          image: res.image || '',
-          album: res.album || '',
-          description: res.description || '',
-          specs: res.specs || '',
-        });
+    if (isEdit) {
+      const product = getSupplierProductById(user, id);
+      if (!product) {
+        alert('未找到对应商品，已返回供应中心');
+        navigate('/profile');
+        return;
       }
-    } catch (e) {
-      console.error('加载商品详情失败:', e);
+
+      setForm({
+        name: product.name || '',
+        categoryId: product.categoryId || '',
+        price: product.price || '',
+        originalPrice: product.originalPrice || '',
+        stock: product.stock || '',
+        image: product.image || '',
+        description: product.description || '',
+        specs: typeof product.specs === 'string' ? product.specs : JSON.stringify(product.specs || '', null, 2),
+        tags: Array.isArray(product.tags) ? product.tags.join('，') : '',
+      });
     }
-  };
+  }, [user, navigate, isEdit, id]);
 
   const handleChange = (field, value) => {
-    setForm(prev => ({ ...prev, [field]: value }));
+    setForm((prev) => ({ ...prev, [field]: value }));
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    if (!form.name.trim()) { alert('请输入商品名称'); return; }
-    if (!form.price) { alert('请输入价格'); return; }
-    if (!form.stock) { alert('请输入库存'); return; }
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    if (!form.name.trim()) {
+      alert('请输入商品名称');
+      return;
+    }
+    if (!form.price) {
+      alert('请输入价格');
+      return;
+    }
+    if (!form.stock) {
+      alert('请输入库存');
+      return;
+    }
 
     setSubmitting(true);
     try {
-      const payload = {
-        ...form,
-        categoryId: form.categoryId ? Number(form.categoryId) : null,
+      saveSupplierProduct(user, {
+        id: isEdit ? Number(id) : undefined,
+        name: form.name.trim(),
+        categoryId: form.categoryId,
         price: Number(form.price),
-        originalPrice: form.originalPrice ? Number(form.originalPrice) : null,
+        originalPrice: form.originalPrice ? Number(form.originalPrice) : 0,
         stock: Number(form.stock),
-      };
+        image: form.image.trim(),
+        description: form.description.trim(),
+        specs: form.specs.trim(),
+        tags: form.tags.trim(),
+      });
 
-      if (isEdit) {
-        await api.put(`/api/v1/product/supplier/${id}`, payload);
-        alert('商品更新成功！');
-      } else {
-        await api.post('/api/v1/product/supplier/create', payload);
-        alert('商品发布成功！');
-      }
+      alert(isEdit ? '商品信息已更新到本地供应中心。' : '商品已加入本地商品库。');
       navigate('/profile');
-    } catch (e) {
-      alert('操作失败: ' + (e.message || '网络错误'));
     } finally {
       setSubmitting(false);
     }
@@ -112,12 +110,17 @@ const PublishProduct = () => {
         </button>
 
         <div className="bg-white rounded-xl shadow-sm p-8">
-          <h1 className="text-2xl font-bold text-gray-900 mb-8">
-            {isEdit ? '编辑商品' : '发布新商品'}
-          </h1>
+          <div className="flex items-start justify-between gap-4 mb-8">
+            <div>
+              <h1 className="text-2xl font-bold text-gray-900">{isEdit ? '编辑商品' : '发布新商品'}</h1>
+              <p className="text-sm text-gray-500 mt-2">当前为纯前端静态模式，提交后会保存到本地供应中心。</p>
+            </div>
+            <div className="rounded-xl bg-blue-50 px-4 py-3 text-sm text-blue-700">
+              支持字段: 分类、价格、库存、标签、描述
+            </div>
+          </div>
 
           <form onSubmit={handleSubmit} className="space-y-6">
-            {/* 商品名称 */}
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">商品名称 *</label>
               <input
@@ -125,99 +128,111 @@ const PublishProduct = () => {
                 className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 placeholder="请输入商品名称"
                 value={form.name}
-                onChange={e => handleChange('name', e.target.value)}
+                onChange={(event) => handleChange('name', event.target.value)}
               />
             </div>
 
-            {/* 分类 */}
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">商品分类</label>
               <select
                 className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
                 value={form.categoryId}
-                onChange={e => handleChange('categoryId', e.target.value)}
+                onChange={(event) => handleChange('categoryId', event.target.value)}
               >
                 <option value="">请选择分类</option>
-                {categories.map(cat => (
-                  <option key={cat.id} value={cat.id}>{cat.name}</option>
+                {LOCAL_PRODUCT_CATEGORIES.map((category) => (
+                  <option key={category.id} value={category.id}>
+                    {category.name}
+                  </option>
                 ))}
               </select>
             </div>
 
-            {/* 价格区域 */}
-            <div className="grid grid-cols-3 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">销售价格 * (元)</label>
                 <input
-                  type="number" step="0.01" min="0"
+                  type="number"
+                  min="0"
+                  step="0.01"
                   className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
                   placeholder="0.00"
                   value={form.price}
-                  onChange={e => handleChange('price', e.target.value)}
+                  onChange={(event) => handleChange('price', event.target.value)}
                 />
               </div>
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">原价 (元)</label>
                 <input
-                  type="number" step="0.01" min="0"
+                  type="number"
+                  min="0"
+                  step="0.01"
                   className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
                   placeholder="0.00"
                   value={form.originalPrice}
-                  onChange={e => handleChange('originalPrice', e.target.value)}
+                  onChange={(event) => handleChange('originalPrice', event.target.value)}
                 />
               </div>
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">库存 *</label>
                 <input
-                  type="number" min="0"
+                  type="number"
+                  min="0"
                   className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
                   placeholder="0"
                   value={form.stock}
-                  onChange={e => handleChange('stock', e.target.value)}
+                  onChange={(event) => handleChange('stock', event.target.value)}
                 />
               </div>
             </div>
 
-            {/* 商品图片 */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">主图URL</label>
+              <label className="block text-sm font-medium text-gray-700 mb-1">主图链接</label>
               <input
                 type="text"
                 className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
                 placeholder="https://example.com/image.jpg"
                 value={form.image}
-                onChange={e => handleChange('image', e.target.value)}
+                onChange={(event) => handleChange('image', event.target.value)}
               />
               {form.image && (
                 <img src={form.image} alt="预览" className="mt-2 w-32 h-32 object-cover rounded-lg border" />
               )}
             </div>
 
-            {/* 商品描述 */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">标签</label>
+              <input
+                type="text"
+                className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                placeholder="例如: 7天交付，支持打样，可联调"
+                value={form.tags}
+                onChange={(event) => handleChange('tags', event.target.value)}
+              />
+            </div>
+
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">商品描述</label>
               <textarea
                 className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
                 rows={4}
-                placeholder="详细描述商品特点、参数等信息..."
+                placeholder="详细描述商品特点、参数、适用场景和交付说明..."
                 value={form.description}
-                onChange={e => handleChange('description', e.target.value)}
+                onChange={(event) => handleChange('description', event.target.value)}
               />
             </div>
 
-            {/* 规格参数 */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">规格参数 (JSON格式)</label>
+              <label className="block text-sm font-medium text-gray-700 mb-1">规格参数 / 备注</label>
               <textarea
                 className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 font-mono text-sm"
-                rows={3}
-                placeholder='[{"key": "品牌", "value": "XXX"}, {"key": "型号", "value": "YYY"}]'
+                rows={4}
+                placeholder='可填写 JSON 或普通文字，例如: {"精度":"0.02mm","节拍":"1.2s/pcs"}'
                 value={form.specs}
-                onChange={e => handleChange('specs', e.target.value)}
+                onChange={(event) => handleChange('specs', event.target.value)}
               />
             </div>
 
-            {/* 提交按钮 */}
             <div className="flex gap-4 pt-4">
               <button
                 type="button"

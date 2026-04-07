@@ -1,60 +1,17 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Search, ChevronRight, Play, FileText, Eye, Building2, Clock, ChevronDown, Menu, X } from 'lucide-react';
+import { Search, ChevronRight, Play, FileText, Eye, Building2, Clock, Menu, X } from 'lucide-react';
 import { productApi } from '../../api/product';
-import { supplierApi, contentApi, procurementApi } from '../../api/index';
+import { supplierApi, procurementApi } from '../../api/index';
 import AIAssistantFloat, { AIAssistantButton } from '../../components/AIAssistantFloat';
+import { discoveryVideos } from '../../data/discoveryVideos';
 
 const Home = () => {
   const navigate = useNavigate();
-  const [selectedCategory, setSelectedCategory] = useState(null);
+  const [selectedCategory, setSelectedCategory] = useState(1);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isAIAssistantOpen, setIsAIAssistantOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
-
-  // Mock数据 - 发现推荐内容（来自GitHub Discovery.jsx）
-  const mockDiscoveryContent = [
-    {
-      id: 5,
-      title: '探厂实拍 | 走进深圳AI视觉检测设备制造商',
-      cover: '/videos/video-1-cover.jpg',
-      author: '工业探厂Vlog',
-      views: 234002,
-      type: 'vlog',
-      category: 'vlog',
-      thumbnail: '/videos/video-1-cover.jpg'
-    },
-    {
-      id: 1,
-      title: '海康威视AI视觉检测系统深度测评',
-      cover: '/Picture/5f45ca8db560b.jpg',
-      author: '工业视觉达人',
-      views: 125601,
-      type: 'video',
-      category: 'review',
-      thumbnail: '/Picture/5f45ca8db560b.jpg'
-    },
-    {
-      id: 3,
-      title: '基恩士vs奥普特 | 3D视觉传感器横评',
-      cover: '/Picture/R-C.jpg',
-      author: '智能制造观察',
-      views: 89200,
-      type: 'video',
-      category: 'review',
-      thumbnail: '/Picture/R-C.jpg'
-    },
-    {
-      id: 10,
-      title: '如何选择工业相机？5个关键参数详解',
-      cover: '/Picture/R-C.jpg',
-      author: '机器视觉专家',
-      views: 8500,
-      type: 'article',
-      category: 'tutorial',
-      thumbnail: '/Picture/R-C.jpg'
-    }
-  ];
 
   // 真实数据状态
   const [featuredProducts, setFeaturedProducts] = useState([]);
@@ -69,8 +26,8 @@ const Home = () => {
   }, []);
 
   const loadHomeData = async () => {
-    // 并行加载三组数据
-    Promise.all([
+    // 并行加载首页数据
+    await Promise.all([
       loadProducts(),
       loadSuppliers(),
       loadContent(),
@@ -105,9 +62,8 @@ const Home = () => {
   };
 
   const loadContent = async () => {
-    // 使用 mock 数据（来自 GitHub Discovery.jsx）
     try {
-      setDiscoveryContent(mockDiscoveryContent.slice(0, 3)); // 只显示前3个
+      setDiscoveryContent(getFeaturedDiscoveryContent());
     } catch (e) {
       console.error('加载内容失败:', e);
     } finally {
@@ -150,6 +106,52 @@ const Home = () => {
     if (e.key === 'Enter') {
       handleSearch();
     }
+  };
+
+  const getDiscoveryTypeLabel = (type) => {
+    if (type === 'article') return '文章';
+    if (type === 'vlog') return '探厂';
+    return '视频';
+  };
+
+  const getDiscoveryCategoryLabel = (category) => {
+    if (category === 'review') return '测评';
+    if (category === 'tutorial') return '选型指南';
+    if (category === 'vlog') return '产线实拍';
+    if (category === 'analysis') return '行业观察';
+    if (category === 'trading') return '买卖行情';
+    return '推荐内容';
+  };
+
+  const getDiscoverySummary = (item) => {
+    if (item.summary) return item.summary;
+
+    const [primaryTag = '工业视觉', secondaryTag = '设备选型'] = item.tags || [];
+    return `${item.author}围绕${primaryTag}、${secondaryTag}和${getDiscoveryCategoryLabel(item.category)}做了完整分享，适合快速了解应用场景、方案亮点与采购判断点。`;
+  };
+
+  const getFeaturedDiscoveryContent = () => {
+    const rankedVideos = [...discoveryVideos].sort((a, b) => {
+      const scoreA = (a.views || 0) + (a.likes || 0) * 20;
+      const scoreB = (b.views || 0) + (b.likes || 0) * 20;
+      return scoreB - scoreA;
+    });
+
+    const preferredCategories = ['review', 'vlog', 'tutorial', 'analysis'];
+    const curatedItems = preferredCategories
+      .map((category) => rankedVideos.find((item) => item.category === category))
+      .filter(Boolean);
+
+    const fallbackItems = rankedVideos.filter(
+      (item) => !curatedItems.some((selectedItem) => selectedItem.id === item.id)
+    );
+
+    return [...curatedItems, ...fallbackItems]
+      .slice(0, 4)
+      .map((item) => ({
+        ...item,
+        summary: getDiscoverySummary(item),
+      }));
   };
 
   // 完整的设备分类数据
@@ -288,6 +290,8 @@ const Home = () => {
     }
   ];
 
+  const activeEquipmentCategory = equipmentCategories.find((category) => category.id === selectedCategory);
+
   return (
     <div className="pb-20 md:pb-0 bg-gray-50 min-h-screen">
       {/* 搜索栏 */}
@@ -316,8 +320,121 @@ const Home = () => {
       </div>
 
       <div className="max-w-7xl mx-auto px-4 py-8">
+        {/* 发现推荐模块 */}
+        <div className="bg-white rounded-2xl shadow-lg p-8 lg:p-10 mb-8">
+          <div className="flex items-start justify-between gap-4 mb-6">
+            <div>
+              <h2 className="text-2xl lg:text-3xl font-bold text-gray-900 flex items-center gap-3">
+                <span className="w-1 h-8 bg-blue-600 rounded-full"></span>
+                发现推荐
+              </h2>
+              <p className="text-sm text-gray-500 mt-3 ml-5">
+                精选测评、探厂与实战内容，首页直接展示更完整的标题、摘要与标签信息。
+              </p>
+            </div>
+            <button
+              onClick={() => navigate('/discovery')}
+              className="text-blue-600 text-sm hover:text-blue-700 font-medium flex items-center gap-1 group flex-shrink-0"
+            >
+              查看更多
+              <ChevronRight size={18} className="group-hover:translate-x-1 transition-transform" />
+            </button>
+          </div>
+
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-8">
+            {loading.content ? (
+              [1, 2, 3, 4].map((i) => (
+                <div key={i} className="border border-gray-200 rounded-2xl overflow-hidden animate-pulse">
+                  <div className="h-64 lg:h-72 bg-gray-200"></div>
+                  <div className="p-6 lg:p-7">
+                    <div className="h-4 bg-gray-200 rounded mb-3 w-24"></div>
+                    <div className="h-6 bg-gray-200 rounded mb-3"></div>
+                    <div className="h-6 bg-gray-200 rounded mb-3 w-5/6"></div>
+                    <div className="h-4 bg-gray-200 rounded mb-3"></div>
+                    <div className="h-4 bg-gray-200 rounded mb-3 w-4/5"></div>
+                    <div className="h-4 bg-gray-200 rounded mb-6 w-3/5"></div>
+                    <div className="h-4 bg-gray-200 rounded w-2/3"></div>
+                  </div>
+                </div>
+              ))
+            ) : discoveryContent.length > 0 ? (
+              discoveryContent.map((item) => (
+              <div
+                key={item.id}
+                onClick={() => navigate(`/content/${item.id}`)}
+                className="group border border-gray-200 rounded-2xl overflow-hidden hover:shadow-xl hover:-translate-y-1 hover:border-blue-300 transition-all cursor-pointer bg-white flex flex-col"
+              >
+                <div className="relative h-64 lg:h-72 bg-gray-100 overflow-hidden">
+                  <img
+                    src={getImagePath(item.cover || item.thumbnail)}
+                    alt={item.title}
+                    className="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
+                    onError={handleImageError}
+                  />
+                  {(item.type === 'video' || item.type === 'vlog') && (
+                    <>
+                      <div className="absolute inset-0 bg-transparent group-hover:bg-black/20 flex items-center justify-center transition-all z-10 pointer-events-none">
+                        <div className="bg-white/90 rounded-full p-4 lg:p-5 group-hover:bg-blue-600 transition-colors shadow-lg">
+                          <Play size={30} className="text-blue-600 group-hover:text-white" />
+                        </div>
+                      </div>
+                    </>
+                  )}
+                </div>
+                <div className="p-6 lg:p-7 flex flex-col flex-1">
+                  <div className="flex flex-wrap items-center gap-2 mb-4">
+                    <span className={`text-xs font-medium px-3 py-1 rounded-full ${
+                      item.type === 'article'
+                        ? 'bg-green-100 text-green-700'
+                        : 'bg-blue-100 text-blue-700'
+                    }`}>
+                      {item.type === 'article' && <FileText size={12} className="inline mr-1" />}
+                      {getDiscoveryTypeLabel(item.type)}
+                    </span>
+                    <span className="text-xs font-medium px-3 py-1 rounded-full bg-gray-100 text-gray-600">
+                      {getDiscoveryCategoryLabel(item.category)}
+                    </span>
+                    {item.uploadTime && (
+                      <span className="text-xs font-medium px-3 py-1 rounded-full bg-orange-50 text-orange-600">
+                        {item.uploadTime}
+                      </span>
+                    )}
+                  </div>
+                  <h3 className="font-semibold text-xl leading-9 text-gray-900 line-clamp-3 mb-3 group-hover:text-blue-600 min-h-[108px]">
+                    {item.title}
+                  </h3>
+                  <p className="text-sm lg:text-[15px] leading-7 text-gray-500 line-clamp-3 min-h-[84px] mb-5">
+                    {item.summary}
+                  </p>
+                  <div className="flex flex-wrap gap-2 mb-6">
+                    {(item.tags || []).slice(0, 3).map((tag) => (
+                      <span
+                        key={tag}
+                        className="text-xs text-gray-600 bg-gray-100 px-3 py-1.5 rounded-full"
+                      >
+                        #{tag}
+                      </span>
+                    ))}
+                  </div>
+                  <div className="mt-auto flex items-center justify-between text-sm text-gray-500 gap-4 pt-4 border-t border-gray-100">
+                    <span className="font-medium truncate">{item.author}</span>
+                    <div className="flex items-center gap-4 flex-shrink-0">
+                      <span className="flex items-center gap-1">
+                        <Eye size={14} /> {(item.views || 0).toLocaleString()}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              ))
+            ) : (
+              <div className="col-span-full text-center text-gray-400 py-12">暂无推荐内容</div>
+            )}
+          </div>
+        </div>
+
         {/* 企业级产品分类模块 */}
-        <div className="bg-white rounded-xl shadow-lg overflow-hidden">
+        <div className="bg-white rounded-xl shadow-lg overflow-hidden mb-8">
           {/* 标题栏 */}
           <div className="bg-gradient-to-r from-blue-600 via-blue-700 to-blue-800 px-8 py-5 flex items-center justify-between">
             <h2 className="text-white font-bold text-2xl flex items-center gap-3">
@@ -329,7 +446,7 @@ const Home = () => {
               className="md:hidden text-white"
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
             >
-              {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
+              {isMobileMenuOpen ? <X size={22} /> : <Menu size={22} />}
             </button>
           </div>
 
@@ -339,7 +456,7 @@ const Home = () => {
               w-full md:w-72 lg:w-80 border-r border-gray-200 flex-shrink-0 bg-gray-50
               ${isMobileMenuOpen ? 'block' : 'hidden md:block'}
             `}>
-              <div className="sticky top-0 max-h-[calc(100vh-200px)] overflow-y-auto">
+              <div className="h-full">
                 {equipmentCategories.map((category, index) => (
                   <div
                     key={category.id}
@@ -355,10 +472,10 @@ const Home = () => {
                       setIsMobileMenuOpen(false);
                     }}
                   >
-                    <div className="flex items-center justify-between group">
-                      <div className="flex items-center gap-3">
+                    <div className="flex items-center justify-between gap-3 group">
+                      <div className="flex items-center gap-3 min-w-0">
                         <span className={`
-                          w-8 h-8 rounded-lg flex items-center justify-center text-sm font-bold
+                          w-8 h-8 rounded-lg flex items-center justify-center text-sm font-bold flex-shrink-0
                           ${selectedCategory === category.id
                             ? 'bg-white text-blue-600'
                             : 'bg-blue-100 text-blue-600 group-hover:bg-blue-600 group-hover:text-white'
@@ -367,12 +484,12 @@ const Home = () => {
                         `}>
                           {String(index + 1).padStart(2, '0')}
                         </span>
-                        <span className="font-semibold text-base">{category.name}</span>
+                        <span className="font-semibold text-base leading-6">{category.name}</span>
                       </div>
                       <ChevronRight
                         size={20}
                         className={`
-                          transition-transform
+                          flex-shrink-0 transition-transform
                           ${selectedCategory === category.id ? 'rotate-180 text-white' : 'text-gray-400 group-hover:text-blue-600'}
                         `}
                       />
@@ -389,17 +506,17 @@ const Home = () => {
                   {/* 分类标题 */}
                   <div className="mb-8 pb-6 border-b-2 border-gray-200">
                     <h3 className="text-3xl font-bold text-gray-900 mb-2">
-                      {equipmentCategories.find(c => c.id === selectedCategory)?.name}
+                      {activeEquipmentCategory?.name}
                     </h3>
                     <p className="text-gray-500 text-sm">
-                      共 {equipmentCategories.find(c => c.id === selectedCategory)?.subcategories.length} 个子分类 ·
+                      共 {activeEquipmentCategory?.subcategories.length} 个子分类 ·
                       优质供应商认证 · 全方位技术支持
                     </p>
                   </div>
 
                   {/* 子分类网格布局 */}
                   <div className="space-y-8">
-                    {equipmentCategories.find(c => c.id === selectedCategory)?.subcategories.map((sub, subIdx) => (
+                    {activeEquipmentCategory?.subcategories.map((sub, subIdx) => (
                       <div
                         key={subIdx}
                         className="bg-gradient-to-br from-gray-50 to-white rounded-xl p-6 border border-gray-200 hover:border-blue-300 hover:shadow-lg transition-all duration-300"
@@ -415,7 +532,7 @@ const Home = () => {
                           </span>
                         </div>
 
-                        {/* 产品列表 - 水平排列，用竖线分隔 */}
+                        {/* 产品列表 */}
                         <div className="flex flex-wrap items-center gap-x-4 gap-y-3">
                           {sub.products.map((product, pIdx) => (
                             <React.Fragment key={pIdx}>
@@ -442,86 +559,6 @@ const Home = () => {
                 </div>
               )}
             </div>
-          </div>
-        </div>
-
-        {/* 发现推荐模块 */}
-        <div className="bg-white rounded-xl shadow-lg p-8 mb-8 mt-8">
-          <div className="flex items-center justify-between mb-6">
-            <h2 className="text-2xl font-bold text-gray-900 flex items-center gap-3">
-              <span className="w-1 h-8 bg-blue-600 rounded-full"></span>
-              发现推荐
-            </h2>
-            <div className="flex items-center gap-4">
-              <a
-                href="/discovery"
-                className="text-blue-600 text-sm hover:text-blue-700 font-medium flex items-center gap-1 group"
-              >
-                查看更多
-                <ChevronRight size={18} className="group-hover:translate-x-1 transition-transform" />
-              </a>
-            </div>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {loading.content ? (
-              [1,2,3].map(i => (
-                <div key={i} className="border border-gray-200 rounded-xl overflow-hidden animate-pulse">
-                  <div className="h-48 bg-gray-200"></div>
-                  <div className="p-4"><div className="h-4 bg-gray-200 rounded mb-2"></div><div className="h-4 bg-gray-200 rounded w-2/3"></div></div>
-                </div>
-              ))
-            ) : discoveryContent.length > 0 ? (
-              discoveryContent.map((item) => (
-              <div
-                key={item.id}
-                onClick={() => navigate(`/content/${item.id}`)}
-                className="group border border-gray-200 rounded-xl overflow-hidden hover:shadow-xl hover:border-blue-300 transition-all cursor-pointer"
-              >
-                <div className="relative h-48 bg-gray-100 overflow-hidden">
-                  <img
-                    src={getImagePath(item.cover || item.thumbnail)}
-                    alt={item.title}
-                    className="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
-                    onError={handleImageError}
-                  />
-                  {(item.type === 'video' || item.type === 'vlog') && (
-                    <>
-                      <div className="absolute inset-0 bg-transparent group-hover:bg-black/20 flex items-center justify-center transition-all z-10 pointer-events-none">
-                        <div className="bg-white/90 rounded-full p-4 group-hover:bg-blue-600 transition-colors">
-                          <Play size={28} className="text-blue-600 group-hover:text-white" />
-                        </div>
-                      </div>
-                    </>
-                  )}
-                  {item.type === 'article' && (
-                    <div className="absolute top-3 left-3 bg-green-500 text-white text-xs px-3 py-1 rounded-full flex items-center gap-1 z-10">
-                      <FileText size={14} />
-                      文章
-                    </div>
-                  )}
-                </div>
-                <div className="p-4">
-                  <h3 className="font-semibold text-gray-900 line-clamp-2 mb-3 group-hover:text-blue-600 min-h-[48px]">
-                    {item.title}
-                  </h3>
-                  <div className="flex items-center justify-between text-xs text-gray-500">
-                    <span className="font-medium">{item.author}</span>
-                    <div className="flex items-center gap-4">
-                      <span className="flex items-center gap-1">
-                        <Eye size={14} /> {(item.views || 0).toLocaleString()}
-                      </span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              ))
-            ) : (
-              <div className="col-span-3 text-center text-gray-400 py-12">暂无推荐内容</div>
-            )}
           </div>
         </div>
 

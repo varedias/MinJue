@@ -20,6 +20,7 @@ const Dashboard = () => {
     productCount: 0,
     orderCount: 0,
     pendingAuditCount: 0,
+    pendingLeasingCount: 0,
   });
   const [interactionStats, setInteractionStats] = useState({
     totalComments: 0,
@@ -164,6 +165,16 @@ const Dashboard = () => {
             <div><p className="font-medium text-orange-800">{t('dashboard.pendingAudit')}</p><p className="text-sm text-orange-600">{stats.pendingAuditCount} {t('dashboard.pendingAuditTip')}</p></div>
           </div>
           <ArrowRight size={20} className="text-orange-600" />
+        </div>
+      )}
+
+      {stats.pendingLeasingCount > 0 && (
+        <div onClick={() => navigate('/admin/leasing')} className="bg-sky-50 border border-sky-200 rounded-lg p-4 flex items-center justify-between cursor-pointer hover:bg-sky-100 transition-colors">
+          <div className="flex items-center gap-3">
+            <div className="p-2 bg-sky-100 rounded-lg"><MessageSquare size={20} className="text-sky-600" /></div>
+            <div><p className="font-medium text-sky-800">{t('dashboard.pendingLeasing')}</p><p className="text-sm text-sky-600">{stats.pendingLeasingCount} {t('dashboard.pendingLeasingTip')}</p></div>
+          </div>
+          <ArrowRight size={20} className="text-sky-600" />
         </div>
       )}
 

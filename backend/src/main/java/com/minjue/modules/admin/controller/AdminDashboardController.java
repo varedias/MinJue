@@ -7,6 +7,8 @@ import com.minjue.modules.order.entity.OmsOrder;
 import com.minjue.modules.order.service.OmsOrderService;
 import com.minjue.modules.product.entity.PmsProduct;
 import com.minjue.modules.product.service.PmsProductService;
+import com.minjue.modules.leasing.entity.OmsLeasingApplication;
+import com.minjue.modules.leasing.service.OmsLeasingApplicationService;
 import com.minjue.modules.supplier.entity.OmsSupplier;
 import com.minjue.modules.supplier.service.OmsSupplierService;
 import com.minjue.modules.system.entity.SysUser;
@@ -33,6 +35,7 @@ public class AdminDashboardController {
     private final OmsSupplierService supplierService;
     private final PmsProductService productService;
     private final OmsOrderService orderService;
+    private final OmsLeasingApplicationService leasingApplicationService;
 
     /**
      * 获取统计数据
@@ -55,6 +58,11 @@ public class AdminDashboardController {
                 new LambdaQueryWrapper<OmsSupplier>().eq(OmsSupplier::getIsVerified, 0)
         );
         stats.put("pendingAuditCount", pendingAuditCount);
+
+        long pendingLeasingCount = leasingApplicationService.count(
+                new LambdaQueryWrapper<OmsLeasingApplication>().eq(OmsLeasingApplication::getStatus, 0)
+        );
+        stats.put("pendingLeasingCount", pendingLeasingCount);
 
         // 商品总数
         long productCount = productService.count();

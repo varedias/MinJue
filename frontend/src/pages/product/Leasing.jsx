@@ -17,9 +17,21 @@ const Leasing = () => {
   // 租赁申请弹窗状态
   const [applyModal, setApplyModal] = useState({ visible: false, product: null });
   const [applyForm, setApplyForm] = useState({
-    leasePeriod: 'MONTH', leaseDuration: 1, companyName: '', contactName: '', contactPhone: '', remark: ''
+    leasePeriod: 'MONTH',
+    leaseDuration: 1,
+    companyName: '',
+    contactName: '',
+    contactPhone: '',
+    deliveryAddress: '',
+    onsiteAddress: '',
+    expectedStartDate: '',
+    remark: ''
   });
   const [submitting, setSubmitting] = useState(false);
+
+  const closeApplyModal = useCallback(() => {
+    setApplyModal({ visible: false, product: null });
+  }, []);
 
   // 获取租赁设备列表
   const fetchProducts = useCallback(async () => {
@@ -52,15 +64,47 @@ const Leasing = () => {
   // 打开租赁申请弹窗
   const openApplyModal = (product) => {
     if (!user) { navigate('/login'); return; }
-    setApplyForm({ leasePeriod: 'MONTH', leaseDuration: 1, companyName: '', contactName: '', contactPhone: '', remark: '' });
+    setApplyForm({
+      leasePeriod: product.type === 'operating' ? 'DAY' : 'MONTH',
+      leaseDuration: 1,
+      companyName: '',
+      contactName: '',
+      contactPhone: '',
+      deliveryAddress: '',
+      onsiteAddress: '',
+      expectedStartDate: '',
+      remark: ''
+    });
     setApplyModal({ visible: true, product });
   };
+
+  useEffect(() => {
+    if (!applyModal.visible) {
+      return undefined;
+    }
+
+    const previousOverflow = document.body.style.overflow;
+    const handleEsc = (event) => {
+      if (event.key === 'Escape') {
+        closeApplyModal();
+      }
+    };
+
+    document.body.style.overflow = 'hidden';
+    window.addEventListener('keydown', handleEsc);
+
+    return () => {
+      document.body.style.overflow = previousOverflow;
+      window.removeEventListener('keydown', handleEsc);
+    };
+  }, [applyModal.visible, closeApplyModal]);
 
   // 提交租赁申请
   const handleApplySubmit = async () => {
     if (!applyForm.companyName.trim()) { alert('请输入企业名称'); return; }
     if (!applyForm.contactName.trim()) { alert('请输入联系人'); return; }
     if (!applyForm.contactPhone.trim()) { alert('请输入联系电话'); return; }
+    if (!applyForm.deliveryAddress.trim()) { alert('请输入配送地址'); return; }
     setSubmitting(true);
     try {
       const p = applyModal.product;
@@ -78,6 +122,9 @@ const Leasing = () => {
         companyName: applyForm.companyName,
         contactName: applyForm.contactName,
         contactPhone: applyForm.contactPhone,
+        deliveryAddress: applyForm.deliveryAddress,
+        onsiteAddress: applyForm.onsiteAddress,
+        expectedStartDate: applyForm.expectedStartDate || null,
         remark: applyForm.remark,
       });
       alert('租赁申请已提交，请等待审核！');
@@ -113,6 +160,7 @@ const Leasing = () => {
   // 设备卡片组件
   const ProductCard = ({ product }) => {
     const isOffShelf = product.status === 0;
+    const isRentedOut = product.inventoryStatus === 1;
     const isFinancing = product.type === 'financing';
 
     // 解析benefits和tags
@@ -131,6 +179,12 @@ const Leasing = () => {
             <div className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center">
               <div className="bg-gray-800 text-white px-4 py-2 rounded-lg flex items-center gap-2">
                 <AlertCircle size={18} /><span className="font-medium">设备已下架</span>
+              </div>
+            </div>
+          ) : isRentedOut ? (
+            <div className="absolute inset-0 bg-black bg-opacity-45 flex items-center justify-center">
+              <div className="bg-orange-600 text-white px-4 py-2 rounded-lg font-medium">
+                设备租赁中
               </div>
             </div>
           ) : (
@@ -153,6 +207,12 @@ const Leasing = () => {
             <Building2 size={14} /><span>{product.supplier}</span>
           </div>
 
+          {(product.warehouseAddress || product.deliveryAddress) && (
+            <div className="mb-3 text-xs text-gray-500 line-clamp-2">
+              发货地: {product.warehouseAddress || product.deliveryAddress}
+            </div>
+          )}
+
           <div className="flex flex-wrap gap-2 mb-4">
             {tags.slice(0, 2).map((tag, idx) => (
               <span key={idx} className={`px-2 py-1 text-xs rounded-full ${isFinancing ? 'bg-blue-50 text-blue-700' : 'bg-green-50 text-green-700'}`}>{tag}</span>
@@ -174,8 +234,8 @@ const Leasing = () => {
                 </div>
               </div>
               {product.totalPrice && <div className="text-xs text-gray-500 mb-3">设备总价: ¥{Number(product.totalPrice).toLocaleString()}</div>}
-              <button disabled={isOffShelf} onClick={() => !isOffShelf && openApplyModal(product)} className={`w-full py-2.5 rounded-lg font-medium transition-all ${isOffShelf ? 'bg-gray-300 text-gray-500 cursor-not-allowed' : 'bg-gradient-to-r from-blue-600 to-blue-700 text-white hover:from-blue-700 hover:to-blue-800'}`}>
-                {isOffShelf ? '暂不可租' : '立即租赁'}
+              <button disabled={isOffShelf || isRentedOut} onClick={() => !isOffShelf && !isRentedOut && openApplyModal(product)} className={`w-full py-2.5 rounded-lg font-medium transition-all ${isOffShelf || isRentedOut ? 'bg-gray-300 text-gray-500 cursor-not-allowed' : 'bg-gradient-to-r from-blue-600 to-blue-700 text-white hover:from-blue-700 hover:to-blue-800'}`}>
+                {isOffShelf ? '暂不可租' : isRentedOut ? '租赁中' : '立即租赁'}
               </button>
             </div>
           ) : (
@@ -185,8 +245,8 @@ const Leasing = () => {
                 <div><p className="text-xs text-gray-500 mb-1">周租</p><p className={`text-sm font-bold ${isOffShelf ? 'text-gray-400' : 'text-orange-600'}`}>¥{product.weeklyPrice}</p></div>
                 <div><p className="text-xs text-gray-500 mb-1">月租</p><p className={`text-sm font-bold ${isOffShelf ? 'text-gray-400' : 'text-orange-600'}`}>¥{product.monthlyPrice}</p></div>
               </div>
-              <button disabled={isOffShelf} onClick={() => !isOffShelf && openApplyModal(product)} className={`w-full py-2.5 rounded-lg font-medium transition-all ${isOffShelf ? 'bg-gray-300 text-gray-500 cursor-not-allowed' : 'bg-gradient-to-r from-green-600 to-green-700 text-white hover:from-green-700 hover:to-green-800'}`}>
-                {isOffShelf ? '暂不可租' : '立即租赁'}
+              <button disabled={isOffShelf || isRentedOut} onClick={() => !isOffShelf && !isRentedOut && openApplyModal(product)} className={`w-full py-2.5 rounded-lg font-medium transition-all ${isOffShelf || isRentedOut ? 'bg-gray-300 text-gray-500 cursor-not-allowed' : 'bg-gradient-to-r from-green-600 to-green-700 text-white hover:from-green-700 hover:to-green-800'}`}>
+                {isOffShelf ? '暂不可租' : isRentedOut ? '租赁中' : '立即租赁'}
               </button>
             </div>
           )}
@@ -203,6 +263,11 @@ const Leasing = () => {
         </div>
       </div>
     );
+  };
+
+  const dialogBackdropStyle = {
+    backdropFilter: 'blur(16px) saturate(120%)',
+    WebkitBackdropFilter: 'blur(16px) saturate(120%)',
   };
 
   return (
@@ -325,11 +390,21 @@ const Leasing = () => {
 
       {/* 租赁申请弹窗 */}
       {applyModal.visible && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
-          <div className="bg-white rounded-xl w-full max-w-lg max-h-[90vh] overflow-y-auto">
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/20 p-4"
+          style={dialogBackdropStyle}
+          onClick={closeApplyModal}
+          role="dialog"
+          aria-modal="true"
+          aria-label="租赁申请表单"
+        >
+          <div
+            className="w-full max-w-2xl max-h-[90vh] overflow-y-auto rounded-2xl border border-white/60 bg-white/95 shadow-2xl"
+            onClick={(event) => event.stopPropagation()}
+          >
             <div className="flex items-center justify-between p-6 border-b">
               <h3 className="text-lg font-bold text-gray-900">申请租赁</h3>
-              <button onClick={() => setApplyModal({ visible: false, product: null })} className="text-gray-400 hover:text-gray-600">
+              <button onClick={closeApplyModal} className="text-gray-400 hover:text-gray-600">
                 <X size={20} />
               </button>
             </div>
@@ -340,6 +415,9 @@ const Leasing = () => {
                 <p className="text-sm text-gray-500 mt-1">
                   {applyModal.product?.type === 'financing' ? '融资租赁' : '经营租赁'} · {applyModal.product?.supplier}
                 </p>
+                {applyModal.product?.warehouseAddress && (
+                  <p className="text-sm text-gray-500 mt-1">发货地: {applyModal.product.warehouseAddress}</p>
+                )}
               </div>
 
               {/* 租赁周期 */}
@@ -405,6 +483,39 @@ const Leasing = () => {
               </div>
 
               <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">配送地址 *</label>
+                <input
+                  type="text"
+                  className="w-full px-3 py-2 border rounded-lg text-sm"
+                  placeholder="请输入收货/配送地址"
+                  value={applyForm.deliveryAddress}
+                  onChange={e => setApplyForm(f => ({ ...f, deliveryAddress: e.target.value }))}
+                />
+              </div>
+
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">使用地址</label>
+                  <input
+                    type="text"
+                    className="w-full px-3 py-2 border rounded-lg text-sm"
+                    placeholder="设备实际使用地点"
+                    value={applyForm.onsiteAddress}
+                    onChange={e => setApplyForm(f => ({ ...f, onsiteAddress: e.target.value }))}
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">期望开始日期</label>
+                  <input
+                    type="date"
+                    className="w-full px-3 py-2 border rounded-lg text-sm"
+                    value={applyForm.expectedStartDate}
+                    onChange={e => setApplyForm(f => ({ ...f, expectedStartDate: e.target.value }))}
+                  />
+                </div>
+              </div>
+
+              <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">备注</label>
                 <textarea
                   className="w-full px-3 py-2 border rounded-lg text-sm"
@@ -431,7 +542,7 @@ const Leasing = () => {
             </div>
             <div className="p-6 border-t flex gap-3">
               <button
-                onClick={() => setApplyModal({ visible: false, product: null })}
+                onClick={closeApplyModal}
                 className="flex-1 py-2.5 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50"
               >
                 取消

@@ -53,6 +53,8 @@ export default {
     totalOrders: '订单数量',
     pendingAudit: '待审核供应商',
     pendingAuditTip: '个供应商等待审核',
+    pendingLeasing: '待处理租赁申请',
+    pendingLeasingTip: '条租赁申请等待处理',
     recentUsers: '最新注册用户',
     recentProducts: '最新上架商品',
     viewAll: '查看全部',

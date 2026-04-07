@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 /**
@@ -38,6 +39,9 @@ public class OmsLeasing implements Serializable {
     /** 供应商ID */
     private Long supplierId;
 
+    /** 仓库/设备所在地 */
+    private String warehouseAddress;
+
     /** 月租金 */
     private BigDecimal monthlyPrice;
 
@@ -67,6 +71,57 @@ public class OmsLeasing implements Serializable {
 
     /** 状态: 1-上架, 0-下架 */
     private Integer status;
+
+    /** 库存状态: 0-待租, 1-已租出 */
+    private Integer inventoryStatus;
+
+    /** 当前承租企业 */
+    private String lesseeCompany;
+
+    /** 当前联系人 */
+    private String lesseeContactName;
+
+    /** 当前联系电话 */
+    private String lesseeContactPhone;
+
+    /** 配送地址 */
+    private String deliveryAddress;
+
+    /** 使用地址 */
+    private String onsiteAddress;
+
+    /** 当前租赁开始日期 */
+    private LocalDate leaseStartDate;
+
+    /** 预计收回日期 */
+    private LocalDate expectedReturnDate;
+
+    /** 当前租赁周期 */
+    private String currentLeasePeriod;
+
+    /** 当前租赁时长 */
+    private Integer currentLeaseDuration;
+
+    /** 当前租赁金额 */
+    private BigDecimal currentRentalAmount;
+
+    /** 当前租赁备注 */
+    private String rentalRemark;
+
+    /** 最近收回地址 */
+    private String returnAddress;
+
+    /** 最近收回接收人 */
+    private String returnReceiverName;
+
+    /** 设备收回状态 */
+    private String equipmentCondition;
+
+    /** 收回备注 */
+    private String returnNote;
+
+    /** 收回日期 */
+    private LocalDate returnDate;
 
     /** 创建时间 */
     private LocalDateTime createTime;

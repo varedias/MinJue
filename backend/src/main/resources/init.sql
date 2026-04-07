@@ -117,6 +117,7 @@ CREATE TABLE IF NOT EXISTS oms_leasing (
     description TEXT COMMENT '设备描述',
     supplier VARCHAR(100) COMMENT '供应商名称',
     supplier_id BIGINT COMMENT '供应商ID',
+    warehouse_address VARCHAR(255) COMMENT '仓库/设备所在地',
     monthly_price DECIMAL(10, 2) COMMENT '月租金',
     total_price DECIMAL(10, 2) COMMENT '设备总价(融资租赁)',
     duration VARCHAR(50) COMMENT '租期',
@@ -127,9 +128,47 @@ CREATE TABLE IF NOT EXISTS oms_leasing (
     leased INT DEFAULT 0 COMMENT '已租次数',
     rating DECIMAL(2, 1) DEFAULT 5.0 COMMENT '评分',
     status TINYINT DEFAULT 1 COMMENT '状态: 1-上架, 0-下架',
+    inventory_status TINYINT DEFAULT 0 COMMENT '库存状态: 0-待租, 1-已租出',
+    lessee_company VARCHAR(100) COMMENT '当前承租企业',
+    lessee_contact_name VARCHAR(50) COMMENT '当前联系人',
+    lessee_contact_phone VARCHAR(20) COMMENT '当前联系电话',
+    delivery_address VARCHAR(255) COMMENT '配送地址',
+    onsite_address VARCHAR(255) COMMENT '使用地址',
+    lease_start_date DATE COMMENT '当前租赁开始日期',
+    expected_return_date DATE COMMENT '预计收回日期',
+    current_lease_period VARCHAR(20) COMMENT '当前租赁周期',
+    current_lease_duration INT COMMENT '当前租赁时长',
+    current_rental_amount DECIMAL(12, 2) COMMENT '当前租赁金额',
+    rental_remark TEXT COMMENT '当前租赁备注',
+    return_address VARCHAR(255) COMMENT '最近收回地址',
+    return_receiver_name VARCHAR(50) COMMENT '最近收回接收人',
+    equipment_condition VARCHAR(100) COMMENT '设备收回状态',
+    return_note TEXT COMMENT '收回备注',
+    return_date DATE COMMENT '收回日期',
     create_time DATETIME DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
     update_time DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='租赁设备表';
+
+-- 9. 租赁申请表
+CREATE TABLE IF NOT EXISTS oms_leasing_application (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY COMMENT '主键ID',
+    leasing_id BIGINT NOT NULL COMMENT '租赁设备ID',
+    user_id BIGINT NOT NULL COMMENT '申请用户ID',
+    lease_type VARCHAR(20) COMMENT '租赁类型: FINANCIAL/OPERATING',
+    lease_period VARCHAR(20) COMMENT '租赁周期: DAY/WEEK/MONTH',
+    lease_duration INT COMMENT '租赁时长',
+    estimated_cost DECIMAL(12, 2) COMMENT '预估费用',
+    company_name VARCHAR(100) COMMENT '企业名称',
+    contact_name VARCHAR(50) COMMENT '联系人',
+    contact_phone VARCHAR(20) COMMENT '联系电话',
+    delivery_address VARCHAR(255) COMMENT '配送地址',
+    onsite_address VARCHAR(255) COMMENT '使用地址',
+    expected_start_date DATE COMMENT '期望开始日期',
+    remark TEXT COMMENT '备注',
+    status TINYINT DEFAULT 0 COMMENT '状态: 0-待审核, 1-已通过, 2-已驳回',
+    create_time DATETIME DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+    update_time DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='租赁申请表';
 
 -- ===========================================
 -- 初始用户数据

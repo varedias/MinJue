@@ -36,6 +36,27 @@ const SupplierChatDialog = ({ isOpen, onClose, supplier }) => {
     }
   }, [isOpen, supplier]);
 
+  useEffect(() => {
+    if (!isOpen) {
+      return undefined;
+    }
+
+    const previousOverflow = document.body.style.overflow;
+    const handleEsc = (event) => {
+      if (event.key === 'Escape') {
+        onClose();
+      }
+    };
+
+    document.body.style.overflow = 'hidden';
+    window.addEventListener('keydown', handleEsc);
+
+    return () => {
+      document.body.style.overflow = previousOverflow;
+      window.removeEventListener('keydown', handleEsc);
+    };
+  }, [isOpen, onClose]);
+
   const loadHistory = async () => {
     if (!user || !supplier?.id) {
       setMessages([welcomeMessage]);
@@ -170,11 +191,26 @@ const SupplierChatDialog = ({ isOpen, onClose, supplier }) => {
     setMessage(text);
   };
 
+  const dialogBackdropStyle = {
+    backdropFilter: 'blur(16px) saturate(120%)',
+    WebkitBackdropFilter: 'blur(16px) saturate(120%)',
+  };
+
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 backdrop-blur-sm">
-      <div className="bg-white rounded-2xl shadow-2xl w-full max-w-4xl h-[600px] flex flex-col m-4 animate-in fade-in zoom-in duration-200">
+    <div
+      className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/20 p-4"
+      style={dialogBackdropStyle}
+      onClick={onClose}
+      role="dialog"
+      aria-modal="true"
+      aria-label="联系供应商"
+    >
+      <div
+        className="w-full max-w-4xl h-[600px] max-h-[calc(100vh-2rem)] flex flex-col rounded-2xl border border-white/60 bg-white/95 shadow-2xl animate-in fade-in zoom-in duration-200"
+        onClick={(event) => event.stopPropagation()}
+      >
         {/* Header */}
         <div className="bg-gradient-to-r from-blue-600 to-blue-500 text-white p-4 rounded-t-2xl flex items-center justify-between">
           <div className="flex items-center gap-4">

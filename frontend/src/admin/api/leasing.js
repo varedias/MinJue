@@ -8,9 +8,9 @@ export const leasingApi = {
    * 获取租赁设备列表
    */
   getList: async (params = {}) => {
-    const { page = 1, size = 10, type, status, keyword } = params;
+    const { page = 1, size = 10, type, status, inventoryStatus, keyword } = params;
     const res = await api.get('/api/admin/leasing/list', {
-      params: { page, size, type, status, name: keyword },
+      params: { page, size, type, status, inventoryStatus, name: keyword },
     });
     return res.data;
   },
@@ -52,6 +52,22 @@ export const leasingApi = {
    */
   updateStatus: async (id, status) => {
     const res = await api.post('/api/admin/leasing/status', { id, status });
+    return res.data;
+  },
+
+  /**
+   * 设备租出
+   */
+  rentOut: async (id, data) => {
+    const res = await api.post(`/api/admin/leasing/${id}/rent-out`, data);
+    return res.data;
+  },
+
+  /**
+   * 设备收回
+   */
+  takeBack: async (id, data) => {
+    const res = await api.post(`/api/admin/leasing/${id}/take-back`, data);
     return res.data;
   },
 

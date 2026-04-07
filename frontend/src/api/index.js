@@ -293,6 +293,24 @@ export const leasingApplicationApi = {
     },
 };
 
+// 供应商租赁审核 API
+export const supplierLeasingApi = {
+    getMyApplications: (params = {}) => {
+        const query = new URLSearchParams({
+            page: params.page || 1,
+            size: params.size || 10,
+            ...(params.status !== undefined && params.status !== '' ? { status: params.status } : {}),
+            ...(params.keyword ? { keyword: params.keyword } : {}),
+        }).toString();
+        return request(`/api/v1/leasing/supplier/applications?${query}`);
+    },
+    reviewApplication: (id, status) =>
+        request(`/api/v1/leasing/supplier/applications/${id}/review`, {
+            method: 'POST',
+            body: JSON.stringify({ status }),
+        }),
+};
+
 // 从 product.js 重新导出，方便统一引用
 export { productApi, leasingApi } from './product';
 

@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 /**
@@ -46,6 +47,15 @@ public class OmsLeasingApplication implements Serializable {
 
     /** 联系电话 */
     private String contactPhone;
+
+    /** 配送地址 */
+    private String deliveryAddress;
+
+    /** 使用地址 */
+    private String onsiteAddress;
+
+    /** 期望开始日期 */
+    private LocalDate expectedStartDate;
 
     /** 备注 */
     private String remark;

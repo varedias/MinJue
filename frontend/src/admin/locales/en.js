@@ -53,6 +53,8 @@ export default {
     totalOrders: 'Orders',
     pendingAudit: 'Pending Audit',
     pendingAuditTip: 'suppliers waiting for audit',
+    pendingLeasing: 'Pending Leasing',
+    pendingLeasingTip: 'leasing applications waiting for processing',
     recentUsers: 'Recent Users',
     recentProducts: 'Recent Products',
     viewAll: 'View All',

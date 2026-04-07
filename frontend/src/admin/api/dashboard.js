@@ -19,6 +19,7 @@ export const dashboardApi = {
         userCount: 0,
         supplierCount: 0,
         pendingAuditCount: 0,
+        pendingLeasingCount: 0,
         productCount: 0,
         orderCount: 0,
       };

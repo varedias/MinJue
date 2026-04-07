@@ -28,6 +28,8 @@ const Button = ({
     secondary: 'bg-gray-200 text-gray-700 hover:bg-gray-300 focus:ring-gray-500',
     outline: 'bg-white text-gray-700 border border-gray-300 hover:bg-gray-50 focus:ring-gray-500',
     success: 'bg-green-600 text-white hover:bg-green-700 focus:ring-green-500',
+    warning: 'bg-orange-500 text-white hover:bg-orange-600 focus:ring-orange-500',
+    default: 'bg-white text-gray-700 border border-gray-300 hover:bg-gray-50 focus:ring-gray-500',
   };
 
   // 尺寸对应的样式
