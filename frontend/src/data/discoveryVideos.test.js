@@ -1,10 +1,15 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
+import fs from 'node:fs';
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
 import {
   buildDiscoveryVideoDetail,
   discoveryVideos,
   getDiscoveryVideos,
 } from './discoveryVideos.js';
+
+const projectRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../..');
 
 const expectedTopTitles = [
   '基于视觉的智能分拣机市场——全球预测2026-2032',
@@ -56,4 +61,18 @@ test('discovery 全部内容综合排序时新增三条内容固定在前三位'
     getDiscoveryVideos({ activeCategory: 'all', sortBy: 'hot' }).slice(0, 3).map((item) => item.id),
     [25, 24, 23],
   );
+});
+
+test('discovery 本地视频资源存在于 public 目录', () => {
+  const localVideoUrls = discoveryVideos
+    .map((item) => item.videoUrl)
+    .filter((videoUrl) => typeof videoUrl === 'string' && videoUrl.startsWith('/'));
+
+  assert.ok(localVideoUrls.length > 0, 'expected at least one local discovery video URL');
+
+  for (const videoUrl of localVideoUrls) {
+    const assetPath = path.join(projectRoot, 'public', videoUrl.replace(/^\//, ''));
+    assert.ok(fs.existsSync(assetPath), `${videoUrl} must exist in frontend/public`);
+    assert.ok(fs.statSync(assetPath).size > 0, `${videoUrl} must not be empty`);
+  }
 });
