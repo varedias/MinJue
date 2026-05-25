@@ -87,6 +87,7 @@ const ContentDetail = () => {
       if (data) {
         setContent({
           ...data,
+          content: data.content || data.contentUrl || '',
           authorAvatar:
             data.authorAvatar ||
             `https://ui-avatars.com/api/?name=${encodeURIComponent(data.author?.charAt(0) || 'U')}&background=0D8ABC&color=fff`,
@@ -230,6 +231,8 @@ const ContentDetail = () => {
 
   const isVideo = content.type === 'video' || content.type === 'vlog';
   const isArticle = content.type === 'article';
+  const articleVideoUrl = isArticle && content.videoUrl ? getImagePath(content.videoUrl) : '';
+  const articleVideoPoster = isArticle ? getImagePath(content.thumbnail || content.cover) : '';
   const articlePages = isArticle
     ? (Array.isArray(content.articlePages) && content.articlePages.length > 0
       ? content.articlePages
@@ -321,18 +324,30 @@ const ContentDetail = () => {
             )}
           </div>
         ) : (
-          <div className="relative rounded-xl overflow-hidden mb-8">
-            <img
-              src={getImagePath(content.thumbnail)}
-              alt={content.title}
-              className="w-full max-h-96 object-cover"
-              onError={(event) => {
-                event.target.src = '/products/placeholder-content.svg';
-              }}
-            />
-            <div className="absolute top-4 left-4 bg-green-500 text-white px-3 py-1 rounded-full text-sm flex items-center gap-1">
-              <FileText size={14} />
-              文章
+          <div className="mb-8 space-y-4">
+            {articleVideoUrl && (
+              <div className="overflow-hidden rounded-2xl bg-black shadow-sm">
+                <video
+                  src={articleVideoUrl}
+                  poster={articleVideoPoster}
+                  controls
+                  className="aspect-video w-full bg-black"
+                />
+              </div>
+            )}
+            <div className="relative rounded-xl overflow-hidden">
+              <img
+                src={getImagePath(content.thumbnail)}
+                alt={content.title}
+                className="w-full max-h-96 object-cover"
+                onError={(event) => {
+                  event.target.src = '/products/placeholder-content.svg';
+                }}
+              />
+              <div className="absolute top-4 left-4 bg-green-500 text-white px-3 py-1 rounded-full text-sm flex items-center gap-1">
+                <FileText size={14} />
+                文章
+              </div>
             </div>
           </div>
         )}

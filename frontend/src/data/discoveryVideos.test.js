@@ -12,14 +12,14 @@ import {
 const projectRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../..');
 
 const expectedTopTitles = [
-  '基于视觉的智能分拣机市场——全球预测2026-2032',
-  '民崛智能分拣现场实拍：高速识别与自动分流演示',
-  '民崛智能方案纪实：复杂来料下的视觉分拣稳定性验证',
+  'AI视觉检测机：赋能智能制造，铸就精准质检新标杆',
+  '视觉筛选机的主要技术有哪些？',
+  '名德智能分选机：矿山深处的“AI眼”与“慧眼”',
 ];
 
-test('discovery 推荐列表最前面保留三条新增补充内容', () => {
+test('discovery 推荐列表最前面保留三篇资料目录文章', () => {
   assert.deepEqual(
-    discoveryVideos.slice(0, 3).map((item) => item.title),
+    getDiscoveryVideos({ activeCategory: 'all', sortBy: 'hot' }).slice(0, 3).map((item) => item.title),
     expectedTopTitles,
   );
 });
@@ -56,10 +56,10 @@ test('discovery 文案补充内容可以生成文章详情结构', () => {
   assert.ok(detail.articlePages.length >= 3);
 });
 
-test('discovery 全部内容综合排序时新增三条内容固定在前三位', () => {
+test('discovery 全部内容综合排序时三篇资料目录文章固定在前三位', () => {
   assert.deepEqual(
     getDiscoveryVideos({ activeCategory: 'all', sortBy: 'hot' }).slice(0, 3).map((item) => item.id),
-    [25, 24, 23],
+    [47, 46, 45],
   );
 });
 
