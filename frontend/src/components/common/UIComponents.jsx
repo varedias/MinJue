@@ -6,7 +6,7 @@ import { Loader, Package, AlertCircle, RefreshCw } from 'lucide-react';
  */
 export const LoadingSpinner = ({ text = '加载中...', className = '' }) => (
   <div className={`flex flex-col items-center justify-center py-16 ${className}`}>
-    <Loader size={36} className="animate-spin text-blue-600 mb-3" />
+    <Loader size={36} className="animate-spin text-slate-700 mb-3" />
     <p className="text-gray-500 text-sm">{text}</p>
   </div>
 );
@@ -67,7 +67,7 @@ export const EmptyState = ({
     <h3 className="text-lg font-medium text-gray-700 mb-1">{title}</h3>
     {description && <p className="text-sm text-gray-400 mb-4">{description}</p>}
     {action && (
-      <button onClick={action} className="text-blue-600 hover:text-blue-700 text-sm font-medium flex items-center gap-1">
+      <button onClick={action} className="text-slate-700 hover:text-slate-800 text-sm font-medium flex items-center gap-1">
         {actionText}
       </button>
     )}
@@ -89,7 +89,7 @@ export const ErrorDisplay = ({
     <h3 className="text-lg font-medium text-gray-700 mb-1">出错了</h3>
     <p className="text-sm text-gray-400 mb-4">{message}</p>
     {onRetry && (
-      <button onClick={onRetry} className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 flex items-center gap-2 text-sm">
+      <button onClick={onRetry} className="bg-slate-700 text-white px-4 py-2 rounded-lg hover:bg-slate-800 flex items-center gap-2 text-sm">
         <RefreshCw size={16} />
         重新加载
       </button>
@@ -132,7 +132,7 @@ export const Pagination = ({ current, total, onChange, className = '' }) => {
         <button
           key={p}
           onClick={() => onChange(p)}
-          className={`px-3 py-1.5 text-sm border rounded-lg ${p === current ? 'bg-blue-600 text-white border-blue-600' : 'hover:bg-gray-50'}`}
+          className={`px-3 py-1.5 text-sm border rounded-lg ${p === current ? 'bg-slate-700 text-white border-slate-700' : 'hover:bg-gray-50'}`}
         >
           {p}
         </button>

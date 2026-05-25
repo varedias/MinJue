@@ -215,7 +215,7 @@ const SupplierList = () => {
       {/* 头部 */}
       <div className="p-6 border-b border-gray-100 flex justify-between items-center flex-wrap gap-4">
         <h2 className="text-xl font-bold flex items-center gap-2">
-          <Building2 className="text-blue-600" />
+          <Building2 className="text-slate-700" />
           供应商管理
         </h2>
         <div className="flex items-center gap-3 flex-wrap">

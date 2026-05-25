@@ -128,31 +128,31 @@ const SearchResults = () => {
         <div className="flex gap-4 mb-6 border-b border-gray-200 pb-1">
           <button
             onClick={() => setActiveTab('all')}
-            className={`pb-3 px-2 font-medium text-sm transition-colors relative ${activeTab === 'all' ? 'text-blue-600' : 'text-gray-500 hover:text-gray-700'}`}
+            className={`pb-3 px-2 font-medium text-sm transition-colors relative ${activeTab === 'all' ? 'text-slate-700' : 'text-gray-500 hover:text-gray-700'}`}
           >
             {isEnglish ? 'All Results' : '全部结果'}
-            {activeTab === 'all' && <span className="absolute bottom-0 left-0 w-full h-0.5 bg-blue-600"></span>}
+            {activeTab === 'all' && <span className="absolute bottom-0 left-0 w-full h-0.5 bg-slate-700"></span>}
           </button>
           <button
             onClick={() => setActiveTab('products')}
-            className={`pb-3 px-2 font-medium text-sm transition-colors relative ${activeTab === 'products' ? 'text-blue-600' : 'text-gray-500 hover:text-gray-700'}`}
+            className={`pb-3 px-2 font-medium text-sm transition-colors relative ${activeTab === 'products' ? 'text-slate-700' : 'text-gray-500 hover:text-gray-700'}`}
           >
             {isEnglish ? `Products (${results.products.length})` : `商品 (${results.products.length})`}
-            {activeTab === 'products' && <span className="absolute bottom-0 left-0 w-full h-0.5 bg-blue-600"></span>}
+            {activeTab === 'products' && <span className="absolute bottom-0 left-0 w-full h-0.5 bg-slate-700"></span>}
           </button>
           <button
             onClick={() => setActiveTab('content')}
-            className={`pb-3 px-2 font-medium text-sm transition-colors relative ${activeTab === 'content' ? 'text-blue-600' : 'text-gray-500 hover:text-gray-700'}`}
+            className={`pb-3 px-2 font-medium text-sm transition-colors relative ${activeTab === 'content' ? 'text-slate-700' : 'text-gray-500 hover:text-gray-700'}`}
           >
             {isEnglish ? `Content (${results.content.length})` : `内容 (${results.content.length})`}
-            {activeTab === 'content' && <span className="absolute bottom-0 left-0 w-full h-0.5 bg-blue-600"></span>}
+            {activeTab === 'content' && <span className="absolute bottom-0 left-0 w-full h-0.5 bg-slate-700"></span>}
           </button>
         </div>
 
         {/* Loading */}
         {loading && (
           <div className="text-center py-20 bg-white rounded-lg shadow-sm">
-            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-slate-700 mx-auto mb-4"></div>
             <p className="text-gray-500">{isEnglish ? 'Searching...' : '搜索中...'}</p>
           </div>
         )}
@@ -179,7 +179,7 @@ const SearchResults = () => {
             <div>
               {activeTab === 'all' && (
                 <h2 className="text-lg font-bold text-gray-900 mb-4 flex items-center gap-2">
-                  <ShoppingBag size={20} className="text-blue-600" />
+                  <ShoppingBag size={20} className="text-slate-700" />
                   {isEnglish ? 'Products' : '相关商品'}
                 </h2>
               )}

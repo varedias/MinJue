@@ -27,7 +27,7 @@ const InteractionList = () => {
   const tabs = [
     { key: 'likes', label: t('interactions.likes'), icon: Heart, color: 'text-red-500' },
     { key: 'favorites', label: t('interactions.favorites'), icon: Star, color: 'text-yellow-500' },
-    { key: 'shares', label: t('interactions.shares'), icon: Share2, color: 'text-blue-500' },
+    { key: 'shares', label: t('interactions.shares'), icon: Share2, color: 'text-slate-600' },
   ];
 
   // 获取当前API
@@ -193,7 +193,7 @@ const InteractionList = () => {
       title: t('interactions.platform'), 
       width: 100,
       render: (_, record) => (
-        <span className="px-2 py-1 bg-blue-50 text-blue-600 rounded text-xs">
+        <span className="px-2 py-1 bg-slate-50 text-slate-700 rounded text-xs">
           {record.platform}
         </span>
       )
@@ -235,7 +235,7 @@ const InteractionList = () => {
                 onClick={() => handleTabChange(tab.key)}
                 className={`flex items-center gap-2 px-4 py-2 rounded-lg transition-colors ${
                   activeTab === tab.key
-                    ? 'bg-blue-50 text-blue-600 font-medium'
+                    ? 'bg-slate-50 text-slate-700 font-medium'
                     : 'text-gray-600 hover:bg-gray-50'
                 }`}
               >

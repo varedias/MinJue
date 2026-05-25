@@ -82,7 +82,7 @@ const Pagination = ({ current = 1, pageSize = 10, total = 0, onChange }) => {
             disabled={page === '...'}
             className={`min-w-[36px] h-9 px-3 rounded-md text-sm font-medium transition-colors ${
               page === current
-                ? 'bg-blue-600 text-white'
+                ? 'bg-slate-700 text-white'
                 : page === '...'
                 ? 'text-gray-400 cursor-default'
                 : 'text-gray-600 hover:bg-gray-100'

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Search, ChevronRight, Play, FileText, Eye, Building2, Clock, Menu, X } from 'lucide-react';
+import { Search, ChevronRight, Play, FileText, Eye, Building2, Clock, Menu, X, CheckCircle2 } from 'lucide-react';
 import { productApi } from '../../api/product';
 import { supplierApi, procurementApi } from '../../api/index';
 import AIAssistantFloat, { AIAssistantButton } from '../../components/AIAssistantFloat';
@@ -306,12 +306,12 @@ const Home = () => {
                 onChange={(e) => setSearchQuery(e.target.value)}
                 onKeyDown={handleKeyDown}
                 placeholder="搜索设备分类、产品型号、供应商..."
-                className="w-full bg-gray-50 text-gray-900 rounded-lg py-4 pl-12 pr-4 border border-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className="w-full bg-gray-50 text-gray-900 rounded-lg py-4 pl-12 pr-4 border border-gray-200 focus:outline-none focus:ring-2 focus:ring-slate-600 focus:border-transparent"
               />
             </div>
             <button
               onClick={handleSearch}
-              className="bg-gradient-to-r from-blue-600 to-blue-700 text-white px-10 py-4 rounded-lg font-medium hover:from-blue-700 hover:to-blue-800 transition-all shadow-md"
+              className="bg-gradient-to-r from-slate-700 to-slate-800 text-white px-10 py-4 rounded-lg font-medium hover:from-slate-800 hover:to-slate-900 transition-all shadow-md"
             >
               搜索
             </button>
@@ -325,16 +325,14 @@ const Home = () => {
           <div className="flex items-start justify-between gap-4 mb-6">
             <div>
               <h2 className="text-2xl lg:text-3xl font-bold text-gray-900 flex items-center gap-3">
-                <span className="w-1 h-8 bg-blue-600 rounded-full"></span>
+                <span className="w-1 h-8 bg-slate-700 rounded-full"></span>
                 发现推荐
               </h2>
-              <p className="text-sm text-gray-500 mt-3 ml-5">
-                精选测评、探厂与实战内容，首页直接展示更完整的标题、摘要与标签信息。
-              </p>
+              {/* subtitle removed */}
             </div>
             <button
               onClick={() => navigate('/discovery')}
-              className="text-blue-600 text-sm hover:text-blue-700 font-medium flex items-center gap-1 group flex-shrink-0"
+              className="text-slate-700 text-sm hover:text-slate-800 font-medium flex items-center gap-1 group flex-shrink-0"
             >
               查看更多
               <ChevronRight size={18} className="group-hover:translate-x-1 transition-transform" />
@@ -362,7 +360,7 @@ const Home = () => {
               <div
                 key={item.id}
                 onClick={() => navigate(`/content/${item.id}`)}
-                className="group border border-gray-200 rounded-2xl overflow-hidden hover:shadow-xl hover:-translate-y-1 hover:border-blue-300 transition-all cursor-pointer bg-white flex flex-col"
+                className="group border border-gray-200 rounded-2xl overflow-hidden hover:shadow-xl hover:-translate-y-1 hover:border-slate-300 transition-all cursor-pointer bg-white flex flex-col"
               >
                 <div className="relative h-64 lg:h-72 bg-gray-100 overflow-hidden">
                   <img
@@ -374,8 +372,8 @@ const Home = () => {
                   {(item.type === 'video' || item.type === 'vlog') && (
                     <>
                       <div className="absolute inset-0 bg-transparent group-hover:bg-black/20 flex items-center justify-center transition-all z-10 pointer-events-none">
-                        <div className="bg-white/90 rounded-full p-4 lg:p-5 group-hover:bg-blue-600 transition-colors shadow-lg">
-                          <Play size={30} className="text-blue-600 group-hover:text-white" />
+                        <div className="bg-white/90 rounded-full p-4 lg:p-5 group-hover:bg-slate-700 transition-colors shadow-lg">
+                          <Play size={30} className="text-slate-700 group-hover:text-white" />
                         </div>
                       </div>
                     </>
@@ -386,7 +384,7 @@ const Home = () => {
                     <span className={`text-xs font-medium px-3 py-1 rounded-full ${
                       item.type === 'article'
                         ? 'bg-green-100 text-green-700'
-                        : 'bg-blue-100 text-blue-700'
+                        : 'bg-slate-100 text-slate-800'
                     }`}>
                       {item.type === 'article' && <FileText size={12} className="inline mr-1" />}
                       {getDiscoveryTypeLabel(item.type)}
@@ -400,7 +398,7 @@ const Home = () => {
                       </span>
                     )}
                   </div>
-                  <h3 className="font-semibold text-xl leading-9 text-gray-900 line-clamp-3 mb-3 group-hover:text-blue-600 min-h-[108px]">
+                  <h3 className="font-semibold text-xl leading-9 text-gray-900 line-clamp-3 mb-3 group-hover:text-slate-700 min-h-[108px]">
                     {item.title}
                   </h3>
                   <p className="text-sm lg:text-[15px] leading-7 text-gray-500 line-clamp-3 min-h-[84px] mb-5">
@@ -436,7 +434,7 @@ const Home = () => {
         {/* 企业级产品分类模块 */}
         <div className="bg-white rounded-xl shadow-lg overflow-hidden mb-8">
           {/* 标题栏 */}
-          <div className="bg-gradient-to-r from-blue-600 via-blue-700 to-blue-800 px-8 py-5 flex items-center justify-between">
+          <div className="bg-gradient-to-r from-slate-700 via-slate-800 to-slate-900 px-8 py-5 flex items-center justify-between">
             <h2 className="text-white font-bold text-2xl flex items-center gap-3">
               <span className="w-1 h-8 bg-white rounded-full"></span>
               设备分类
@@ -463,8 +461,8 @@ const Home = () => {
                     className={`
                       px-6 py-5 border-b border-gray-200 cursor-pointer transition-all duration-200
                       ${selectedCategory === category.id
-                        ? 'bg-blue-600 text-white border-l-4 border-l-white shadow-md'
-                        : 'hover:bg-white hover:shadow-sm text-gray-700 hover:text-blue-600'
+                        ? 'bg-slate-700 text-white border-l-4 border-l-white shadow-md'
+                        : 'hover:bg-white hover:shadow-sm text-gray-700 hover:text-slate-700'
                       }
                     `}
                     onClick={() => {
@@ -477,8 +475,8 @@ const Home = () => {
                         <span className={`
                           w-8 h-8 rounded-lg flex items-center justify-center text-sm font-bold flex-shrink-0
                           ${selectedCategory === category.id
-                            ? 'bg-white text-blue-600'
-                            : 'bg-blue-100 text-blue-600 group-hover:bg-blue-600 group-hover:text-white'
+                            ? 'bg-white text-slate-700'
+                            : 'bg-slate-100 text-slate-700 group-hover:bg-slate-700 group-hover:text-white'
                           }
                           transition-colors
                         `}>
@@ -490,7 +488,7 @@ const Home = () => {
                         size={20}
                         className={`
                           flex-shrink-0 transition-transform
-                          ${selectedCategory === category.id ? 'rotate-180 text-white' : 'text-gray-400 group-hover:text-blue-600'}
+                          ${selectedCategory === category.id ? 'rotate-180 text-white' : 'text-gray-400 group-hover:text-slate-700'}
                         `}
                       />
                     </div>
@@ -519,11 +517,11 @@ const Home = () => {
                     {activeEquipmentCategory?.subcategories.map((sub, subIdx) => (
                       <div
                         key={subIdx}
-                        className="bg-gradient-to-br from-gray-50 to-white rounded-xl p-6 border border-gray-200 hover:border-blue-300 hover:shadow-lg transition-all duration-300"
+                        className="bg-gradient-to-br from-gray-50 to-white rounded-xl p-6 border border-gray-200 hover:border-slate-300 hover:shadow-lg transition-all duration-300"
                       >
                         {/* 子分类标题 */}
                         <div className="flex items-center gap-3 mb-4">
-                          <div className="w-1 h-6 bg-blue-600 rounded-full"></div>
+                          <div className="w-1 h-6 bg-slate-700 rounded-full"></div>
                           <h4 className="font-bold text-xl text-gray-900">
                             {sub.name}
                           </h4>
@@ -536,7 +534,7 @@ const Home = () => {
                         <div className="flex flex-wrap items-center gap-x-4 gap-y-3">
                           {sub.products.map((product, pIdx) => (
                             <React.Fragment key={pIdx}>
-                              <span className="text-sm text-gray-700 hover:text-blue-600 cursor-pointer hover:font-medium transition-all px-2 py-1 rounded hover:bg-blue-50">
+                              <span className="text-sm text-gray-700 hover:text-slate-700 cursor-pointer hover:font-medium transition-all px-2 py-1 rounded hover:bg-slate-50">
                                 {product}
                               </span>
                               {pIdx < sub.products.length - 1 && (
@@ -551,8 +549,8 @@ const Home = () => {
                 </div>
               ) : (
                 <div className="flex flex-col items-center justify-center h-full min-h-[600px] text-gray-400">
-                  <div className="w-32 h-32 mb-6 bg-gradient-to-br from-blue-100 to-blue-50 rounded-full flex items-center justify-center">
-                    <Search size={64} className="text-blue-300" />
+                  <div className="w-32 h-32 mb-6 bg-gradient-to-br from-slate-100 to-slate-50 rounded-full flex items-center justify-center">
+                    <Search size={64} className="text-slate-300" />
                   </div>
                   <p className="text-xl font-medium text-gray-500 mb-2">请选择左侧分类</p>
                   <p className="text-sm text-gray-400">点击左侧分类查看详细的子分类和产品信息</p>
@@ -567,12 +565,12 @@ const Home = () => {
           <div className="flex items-center justify-between mb-4">
             <div>
               <h2 className="text-2xl font-bold text-gray-900 flex items-center gap-3">
-                <span className="w-1 h-8 bg-blue-600 rounded-full"></span>
+                <span className="w-1 h-8 bg-slate-700 rounded-full"></span>
                 优选商品
               </h2>
               <p className="text-sm text-gray-500 mt-2 ml-5">以下价格仅供参考,实际价格请联系供应商议价</p>
             </div>
-            <button onClick={() => navigate('/mall')} className="text-blue-600 text-sm hover:text-blue-700 font-medium flex items-center gap-1 group">
+            <button onClick={() => navigate('/mall')} className="text-slate-700 text-sm hover:text-slate-800 font-medium flex items-center gap-1 group">
               查看更多
               <ChevronRight size={18} className="group-hover:translate-x-1 transition-transform" />
             </button>
@@ -591,7 +589,7 @@ const Home = () => {
               <div
                 key={product.id}
                 onClick={() => navigate(`/product/${product.id}`)}
-                className="border border-gray-200 rounded-lg p-4 hover:shadow-xl hover:border-blue-300 transition-all cursor-pointer group"
+                className="border border-gray-200 rounded-lg p-4 hover:shadow-xl hover:border-slate-300 transition-all cursor-pointer group"
               >
                 <div className="h-36 bg-gray-100 rounded-lg mb-3 overflow-hidden">
                   <img
@@ -601,7 +599,7 @@ const Home = () => {
                     onError={handleImageError}
                   />
                 </div>
-                <h3 className="text-sm font-medium text-gray-900 line-clamp-2 mb-2 min-h-[40px] group-hover:text-blue-600">
+                <h3 className="text-sm font-medium text-gray-900 line-clamp-2 mb-2 min-h-[40px] group-hover:text-slate-700">
                   {product.name}
                 </h3>
                 <div className="flex items-center gap-1 mb-2">
@@ -624,10 +622,10 @@ const Home = () => {
         <div className="bg-white rounded-xl shadow-lg p-8 mb-8">
           <div className="flex items-center justify-between mb-6">
             <h2 className="text-2xl font-bold text-gray-900 flex items-center gap-3">
-              <span className="w-1 h-8 bg-blue-600 rounded-full"></span>
+              <span className="w-1 h-8 bg-slate-700 rounded-full"></span>
               优质供应商
             </h2>
-            <button onClick={() => navigate('/suppliers')} className="text-blue-600 text-sm hover:text-blue-700 font-medium flex items-center gap-1 group">
+            <button onClick={() => navigate('/suppliers')} className="text-slate-700 text-sm hover:text-slate-800 font-medium flex items-center gap-1 group">
               更多供应商
               <ChevronRight size={18} className="group-hover:translate-x-1 transition-transform" />
             </button>
@@ -647,21 +645,21 @@ const Home = () => {
               <div
                 key={supplier.id}
                 onClick={() => navigate(`/supplier/${supplier.id}`)}
-                className="border border-gray-200 rounded-xl p-6 hover:shadow-xl hover:border-blue-300 transition-all cursor-pointer group"
+                className="border border-gray-200 rounded-xl p-6 hover:shadow-xl hover:border-slate-300 transition-all cursor-pointer group"
               >
                 <div className="flex gap-4">
-                  <div className="w-20 h-20 flex-shrink-0 bg-gradient-to-br from-blue-50 to-blue-100 rounded-xl flex items-center justify-center overflow-hidden">
+                  <div className="w-20 h-20 flex-shrink-0 bg-gradient-to-br from-slate-50 to-slate-100 rounded-xl flex items-center justify-center overflow-hidden">
                     {supplier.logo ? (
                       <img src={getImagePath(supplier.logo, 'supplier')} alt={supplier.name} className="w-full h-full object-cover" onError={handleImageError} />
                     ) : (
-                      <Building2 size={32} className="text-blue-400" />
+                      <Building2 size={32} className="text-slate-400" />
                     )}
                   </div>
                   <div className="flex-grow">
                     <div className="flex items-center gap-2 mb-2">
-                      <h3 className="font-bold text-lg text-gray-900 group-hover:text-blue-600">{supplier.name}</h3>
+                      <h3 className="font-bold text-lg text-gray-900 group-hover:text-slate-700">{supplier.name}</h3>
                       {supplier.isVerified && (
-                        <span className="px-2 py-0.5 bg-green-100 text-green-700 text-xs rounded-full font-medium">✓ 已认证</span>
+                        <span className="px-2 py-0.5 bg-green-100 text-green-700 text-xs rounded-full font-medium flex items-center gap-1"><CheckCircle2 size={12} />已认证</span>
                       )}
                     </div>
                     <p className="text-sm text-gray-600 mb-3 line-clamp-2">
@@ -670,7 +668,7 @@ const Home = () => {
                     <div className="flex items-center gap-4 text-sm text-gray-500">
                       {supplier.contactInfo && (
                         <span className="flex items-center gap-1">
-                          <Building2 size={14} className="text-blue-500" />
+                          <Building2 size={14} className="text-slate-600" />
                           联系方式已提供
                         </span>
                       )}
@@ -695,10 +693,10 @@ const Home = () => {
         <div className="bg-white rounded-xl shadow-lg p-8 mb-8">
           <div className="flex items-center justify-between mb-6">
             <h2 className="text-2xl font-bold text-gray-900 flex items-center gap-3">
-              <span className="w-1 h-8 bg-blue-600 rounded-full"></span>
+              <span className="w-1 h-8 bg-slate-700 rounded-full"></span>
               最新采购
             </h2>
-            <button onClick={() => navigate('/suppliers')} className="text-blue-600 text-sm hover:text-blue-700 font-medium flex items-center gap-1 group">
+            <button onClick={() => navigate('/suppliers')} className="text-slate-700 text-sm hover:text-slate-800 font-medium flex items-center gap-1 group">
               查看全部
               <ChevronRight size={18} className="group-hover:translate-x-1 transition-transform" />
             </button>
@@ -707,10 +705,10 @@ const Home = () => {
             {procurements.length > 0 ? procurements.map((procurement) => (
               <div
                 key={procurement.id}
-                className="border border-gray-200 rounded-xl p-5 hover:shadow-xl hover:border-blue-300 transition-all cursor-pointer group"
+                className="border border-gray-200 rounded-xl p-5 hover:shadow-xl hover:border-slate-300 transition-all cursor-pointer group"
               >
                 <div className="flex items-start justify-between mb-3">
-                  <h3 className="font-semibold text-gray-900 flex-grow pr-4 group-hover:text-blue-600 text-base">
+                  <h3 className="font-semibold text-gray-900 flex-grow pr-4 group-hover:text-slate-700 text-base">
                     {procurement.title}
                   </h3>
                   <span className="text-xs text-gray-400 flex-shrink-0 bg-gray-50 px-2 py-1 rounded">
@@ -744,7 +742,7 @@ const Home = () => {
                       e.stopPropagation();
                       navigate(`/procurement/${procurement.id}`);
                     }}
-                    className="flex-1 px-5 py-2 bg-gradient-to-r from-blue-600 to-blue-700 text-white text-sm font-medium rounded-lg hover:from-blue-700 hover:to-blue-800 transition-all shadow-md"
+                    className="flex-1 px-5 py-2 bg-gradient-to-r from-slate-700 to-slate-800 text-white text-sm font-medium rounded-lg hover:from-slate-800 hover:to-slate-900 transition-all shadow-md"
                   >
                     我要报价
                   </button>
@@ -753,7 +751,7 @@ const Home = () => {
                       e.stopPropagation();
                       navigate(`/procurement/${procurement.id}`);
                     }}
-                    className="flex-1 px-5 py-2 border-2 border-gray-300 text-gray-700 text-sm font-medium rounded-lg hover:border-blue-600 hover:text-blue-600 hover:bg-blue-50 transition-all"
+                    className="flex-1 px-5 py-2 border-2 border-gray-300 text-gray-700 text-sm font-medium rounded-lg hover:border-slate-700 hover:text-slate-700 hover:bg-slate-50 transition-all"
                   >
                     查看详情
                   </button>

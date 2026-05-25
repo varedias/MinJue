@@ -348,7 +348,7 @@ const LeasingList = () => {
       {/* 头部 */}
       <div className="p-6 border-b border-gray-100 flex justify-between items-center flex-wrap gap-4">
         <h2 className="text-xl font-bold flex items-center gap-2">
-          <FileText className="text-blue-600" />
+          <FileText className="text-slate-700" />
           租赁管理
         </h2>
         <div className="flex items-center gap-3 flex-wrap">
@@ -377,8 +377,8 @@ const LeasingList = () => {
 
       {/* 统计卡片 */}
       <div className="p-6 grid grid-cols-2 md:grid-cols-4 gap-4">
-        <div className="bg-blue-50 rounded-lg p-4 flex items-center gap-3">
-          <div className="w-10 h-10 bg-blue-600 rounded-lg flex items-center justify-center"><TrendingUp className="text-white" size={20} /></div>
+        <div className="bg-slate-50 rounded-lg p-4 flex items-center gap-3">
+          <div className="w-10 h-10 bg-slate-700 rounded-lg flex items-center justify-center"><TrendingUp className="text-white" size={20} /></div>
           <div><p className="text-xs text-gray-500">融资租赁</p><p className="text-lg font-bold text-gray-900">{stats.financing}</p></div>
         </div>
         <div className="bg-green-50 rounded-lg p-4 flex items-center gap-3">
@@ -423,7 +423,7 @@ const LeasingList = () => {
                     </div>
                     <div className="text-left lg:text-right">
                       <Badge type="warning">待审核</Badge>
-                      <div className="mt-2 text-sm font-medium text-blue-600">¥{Number(item.estimatedCost || 0).toLocaleString()}</div>
+                      <div className="mt-2 text-sm font-medium text-slate-700">¥{Number(item.estimatedCost || 0).toLocaleString()}</div>
                     </div>
                   </div>
                 </div>
@@ -583,9 +583,9 @@ const LeasingList = () => {
               <input type="number" min="0" className="w-full px-3 py-2 border rounded-lg text-sm" placeholder={`默认 ${formatCurrency(calcRentalAmount(rentModal.item, rentalForm))}`} value={rentalForm.rentalAmount} onChange={(e) => setRentalForm(p => ({ ...p, rentalAmount: e.target.value }))} />
             </div>
           </div>
-          <div className="bg-blue-50 rounded-lg p-4">
+          <div className="bg-slate-50 rounded-lg p-4">
             <p className="text-sm text-gray-600">系统预估租金</p>
-            <p className="text-2xl font-bold text-blue-600 mt-1">{formatCurrency(calcRentalAmount(rentModal.item, rentalForm))}</p>
+            <p className="text-2xl font-bold text-slate-700 mt-1">{formatCurrency(calcRentalAmount(rentModal.item, rentalForm))}</p>
           </div>
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">备注</label>

@@ -42,7 +42,7 @@ const ProcurementDetail = () => {
           <h2 className="text-2xl font-bold text-gray-900 mb-2">{isEnglish ? 'Procurement Not Found' : '未找到采购信息'}</h2>
           <button
             onClick={() => navigate(-1)}
-            className="text-blue-600 hover:underline"
+            className="text-slate-700 hover:underline"
           >
             {isEnglish ? 'Go Back' : '返回上一页'}
           </button>
@@ -88,7 +88,7 @@ const ProcurementDetail = () => {
                   )}
                 </div>
               </div>
-              <span className="inline-block bg-blue-50 text-blue-700 px-4 py-2 rounded-lg font-bold text-lg whitespace-nowrap">
+              <span className="inline-block bg-slate-50 text-slate-800 px-4 py-2 rounded-lg font-bold text-lg whitespace-nowrap">
                 {isEnglish ? 'Open for Quotes' : '正在询价'}
               </span>
             </div>
@@ -98,7 +98,7 @@ const ProcurementDetail = () => {
             <div className="md:col-span-2 space-y-8">
               <div>
                 <h3 className="text-lg font-bold text-gray-900 mb-4 flex items-center gap-2">
-                  <FileText size={20} className="text-blue-600" />
+                  <FileText size={20} className="text-slate-700" />
                   {isEnglish ? 'Requirements' : '采购需求'}
                 </h3>
                 <div className="bg-gray-50 rounded-lg p-6 text-gray-700 leading-relaxed">
@@ -108,7 +108,7 @@ const ProcurementDetail = () => {
 
               <div>
                 <h3 className="text-lg font-bold text-gray-900 mb-4 flex items-center gap-2">
-                  <Send size={20} className="text-blue-600" />
+                  <Send size={20} className="text-slate-700" />
                   {isEnglish ? 'Submit Quote' : '立即报价'}
                 </h3>
                 <form onSubmit={handleSubmit} className="space-y-4">
@@ -119,7 +119,7 @@ const ProcurementDetail = () => {
                     <input
                       type="text"
                       required
-                      className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none"
+                      className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-slate-600 focus:border-transparent outline-none"
                       placeholder={isEnglish ? 'e.g. $5000' : '例如：5000元'}
                       value={quoteForm.price}
                       onChange={e => setQuoteForm({ ...quoteForm, price: e.target.value })}
@@ -132,7 +132,7 @@ const ProcurementDetail = () => {
                     <input
                       type="text"
                       required
-                      className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none"
+                      className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-slate-600 focus:border-transparent outline-none"
                       placeholder={isEnglish ? 'Email or Phone' : '手机号或邮箱'}
                       value={quoteForm.contact}
                       onChange={e => setQuoteForm({ ...quoteForm, contact: e.target.value })}
@@ -143,7 +143,7 @@ const ProcurementDetail = () => {
                       {isEnglish ? 'Message' : '留言备注'}
                     </label>
                     <textarea
-                      className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none h-32 resize-none"
+                      className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-slate-600 focus:border-transparent outline-none h-32 resize-none"
                       placeholder={isEnglish ? 'Describe your offer...' : '请简要描述您的产品优势...'}
                       value={quoteForm.message}
                       onChange={e => setQuoteForm({ ...quoteForm, message: e.target.value })}
@@ -151,7 +151,7 @@ const ProcurementDetail = () => {
                   </div>
                   <button
                     type="submit"
-                    className="w-full bg-blue-600 text-white py-3 rounded-lg font-bold hover:bg-blue-700 transition-colors shadow-md"
+                    className="w-full bg-slate-700 text-white py-3 rounded-lg font-bold hover:bg-slate-800 transition-colors shadow-md"
                   >
                     {isEnglish ? 'Send Quote' : '提交报价'}
                   </button>
@@ -160,7 +160,7 @@ const ProcurementDetail = () => {
             </div>
 
             <div className="space-y-6">
-              <div className="bg-blue-50 rounded-xl p-6">
+              <div className="bg-slate-50 rounded-xl p-6">
                 <h4 className="font-bold text-gray-900 mb-4">{isEnglish ? 'Key Details' : '关键信息'}</h4>
                 <div className="space-y-4">
                   <div className="flex items-center justify-between">

@@ -60,8 +60,14 @@ const LoginEn = () => {
       // Get User Info
       const userInfo = await userApi.getInfo();
       setUser(userInfo);
+      localStorage.setItem('user', JSON.stringify(userInfo));
 
-      navigate('/en');
+      // Auto-redirect admin to dashboard
+      if (userInfo.role === 'ADMIN') {
+        navigate('/admin/dashboard');
+      } else {
+        navigate('/en');
+      }
     } catch (err) {
       setError(err.message || 'Login failed');
       fetchCaptcha(); // Refresh captcha on failure
@@ -80,7 +86,7 @@ const LoginEn = () => {
         .login-left {
           display: none;
           width: 50%;
-          background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+          background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
           color: white;
           flex-direction: column;
           justify-content: center;
@@ -148,12 +154,12 @@ const LoginEn = () => {
           background: white;
         }
         .role-btn:hover {
-          border-color: #a5b4fc;
+          border-color: #d97706;
         }
         .role-btn.active {
-          border-color: #1e3c72;
-          background: #eef2ff;
-          color: #1e3c72;
+          border-color: #1e293b;
+          background: #fffbeb;
+          color: #1e293b;
         }
         .role-btn span {
           font-size: 0.875rem;
@@ -190,7 +196,7 @@ const LoginEn = () => {
         }
         .form-input:focus {
           outline: none;
-          border-color: #667eea;
+          border-color: #64748b;
           box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
         }
         .captcha-wrapper {
@@ -214,7 +220,7 @@ const LoginEn = () => {
         .captcha-refresh {
           padding: 0.5rem;
           cursor: pointer;
-          color: #667eea;
+          color: #64748b;
           transition: transform 0.3s;
         }
         .captcha-refresh:hover {
@@ -238,7 +244,7 @@ const LoginEn = () => {
           gap: 0.5rem;
         }
         .forgot-link {
-          color: #667eea;
+          color: #64748b;
           font-size: 0.875rem;
           text-decoration: none;
         }
@@ -248,7 +254,7 @@ const LoginEn = () => {
         .submit-btn {
           width: 100%;
           padding: 0.875rem;
-          background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+          background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
           color: white;
           border: none;
           border-radius: 8px;
@@ -271,7 +277,7 @@ const LoginEn = () => {
           font-size: 0.875rem;
         }
         .register-link a {
-          color: #667eea;
+          color: #64748b;
           text-decoration: none;
           font-weight: 500;
         }
@@ -291,13 +297,13 @@ const LoginEn = () => {
           transition: color 0.2s;
         }
         .lang-switch:hover {
-          color: #667eea;
+          color: #64748b;
         }
       `}</style>
 
       {/* Left Side - Branding */}
       <div className="login-left">
-        <h1>👁️ DongShiDi</h1>
+        <h1>DongShiDi</h1>
         <p>AI Vision Detection Leader</p>
       </div>
 

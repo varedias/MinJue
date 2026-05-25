@@ -22,10 +22,10 @@ const FooterEn = () => {
           <div>
             <h4 className="text-white text-lg font-semibold mb-6">Company</h4>
             <ul className="space-y-3 text-sm">
-              <li><a href="#" className="hover:text-blue-400 transition-colors">About Us</a></li>
-              <li><a href="#" className="hover:text-blue-400 transition-colors">Global Partners</a></li>
-              <li><a href="#" className="hover:text-blue-400 transition-colors">Terms of Service</a></li>
-              <li><a href="#" className="hover:text-blue-400 transition-colors">Privacy Policy</a></li>
+              <li><a href="#" className="hover:text-slate-400 transition-colors">About Us</a></li>
+              <li><a href="#" className="hover:text-slate-400 transition-colors">Global Partners</a></li>
+              <li><a href="#" className="hover:text-slate-400 transition-colors">Terms of Service</a></li>
+              <li><a href="#" className="hover:text-slate-400 transition-colors">Privacy Policy</a></li>
             </ul>
           </div>
 
@@ -33,10 +33,10 @@ const FooterEn = () => {
           <div>
             <h4 className="text-white text-lg font-semibold mb-6">Support</h4>
             <ul className="space-y-3 text-sm">
-              <li><a href="#" className="hover:text-blue-400 transition-colors">Help Center</a></li>
-              <li><a href="#" className="hover:text-blue-400 transition-colors">Submit a Ticket</a></li>
-              <li><a href="#" className="hover:text-blue-400 transition-colors">Sourcing Request</a></li>
-              <li><a href="#" className="hover:text-blue-400 transition-colors">Supplier Verification</a></li>
+              <li><a href="#" className="hover:text-slate-400 transition-colors">Help Center</a></li>
+              <li><a href="#" className="hover:text-slate-400 transition-colors">Submit a Ticket</a></li>
+              <li><a href="#" className="hover:text-slate-400 transition-colors">Sourcing Request</a></li>
+              <li><a href="#" className="hover:text-slate-400 transition-colors">Supplier Verification</a></li>
             </ul>
           </div>
 
@@ -45,14 +45,14 @@ const FooterEn = () => {
             <h4 className="text-white text-lg font-semibold mb-6">Contact Us</h4>
             <ul className="space-y-4 text-sm">
               <li className="flex items-start gap-3">
-                <Mail size={18} className="text-blue-500 mt-0.5" />
+                <Mail size={18} className="text-slate-600 mt-0.5" />
                 <div>
                   <span className="block text-white">Email Support</span>
                   <span>2478686497@qq.com</span>
                 </div>
               </li>
               <li className="flex items-start gap-3">
-                <Mail size={18} className="text-blue-500 mt-0.5" />
+                <Mail size={18} className="text-slate-600 mt-0.5" />
                 <div>
                   <span className="block text-white">Business Email</span>
                   <span>2696432359@qq.com</span>
@@ -61,13 +61,13 @@ const FooterEn = () => {
             </ul>
             
             <div className="flex space-x-4 mt-6">
-              <a href="#" className="bg-slate-800 p-2 rounded-full hover:bg-blue-600 hover:text-white transition-all">
+              <a href="#" className="bg-slate-800 p-2 rounded-full hover:bg-slate-700 hover:text-white transition-all">
                 <Facebook size={18} />
               </a>
-              <a href="#" className="bg-slate-800 p-2 rounded-full hover:bg-blue-400 hover:text-white transition-all">
+              <a href="#" className="bg-slate-800 p-2 rounded-full hover:bg-slate-400 hover:text-white transition-all">
                 <Twitter size={18} />
               </a>
-              <a href="#" className="bg-slate-800 p-2 rounded-full hover:bg-blue-700 hover:text-white transition-all">
+              <a href="#" className="bg-slate-800 p-2 rounded-full hover:bg-slate-800 hover:text-white transition-all">
                 <Linkedin size={18} />
               </a>
             </div>

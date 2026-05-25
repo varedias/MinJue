@@ -87,7 +87,7 @@ const Login = () => {
         .login-left {
           display: none;
           width: 50%;
-          background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+          background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
           color: white;
           flex-direction: column;
           justify-content: center;
@@ -154,12 +154,12 @@ const Login = () => {
           background: white;
         }
         .role-btn:hover {
-          border-color: #a5b4fc;
+          border-color: #d97706;
         }
         .role-btn.active {
-          border-color: #667eea;
-          background: #eef2ff;
-          color: #667eea;
+          border-color: #64748b;
+          background: #fffbeb;
+          color: #64748b;
         }
         .role-btn span {
           font-size: 0.875rem;
@@ -196,7 +196,7 @@ const Login = () => {
         }
         .form-input:focus {
           outline: none;
-          border-color: #667eea;
+          border-color: #64748b;
           box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
         }
         .captcha-wrapper {
@@ -220,7 +220,7 @@ const Login = () => {
         .captcha-refresh {
           padding: 0.5rem;
           cursor: pointer;
-          color: #667eea;
+          color: #64748b;
           transition: transform 0.3s;
         }
         .captcha-refresh:hover {
@@ -244,7 +244,7 @@ const Login = () => {
           gap: 0.5rem;
         }
         .forgot-link {
-          color: #667eea;
+          color: #64748b;
           font-size: 0.875rem;
           text-decoration: none;
         }
@@ -254,7 +254,7 @@ const Login = () => {
         .submit-btn {
           width: 100%;
           padding: 0.875rem;
-          background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+          background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
           color: white;
           border: none;
           border-radius: 8px;
@@ -277,7 +277,7 @@ const Login = () => {
           font-size: 0.875rem;
         }
         .register-link a {
-          color: #667eea;
+          color: #64748b;
           text-decoration: none;
           font-weight: 500;
         }
@@ -297,13 +297,13 @@ const Login = () => {
           transition: color 0.2s;
         }
         .lang-switch:hover {
-          color: #1e3c72;
+          color: #1e293b;
         }
       `}</style>
 
       {/* Left Side - Branding */}
       <div className="login-left">
-        <h1>👁️ 懂视帝</h1>
+        <h1>懂视帝</h1>
         <p>AI视觉检测领导者</p>
       </div>
 

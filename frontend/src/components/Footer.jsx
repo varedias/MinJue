@@ -7,7 +7,7 @@ const Footer = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
           <div>
-            <h3 className="text-xl font-bold mb-4 text-blue-400">懂视帝</h3>
+            <h3 className="text-xl font-bold mb-4 text-slate-400">懂视帝</h3>
             <p className="text-gray-400 text-sm leading-relaxed">
               专注于AI视觉检测设备领域的专业服务平台，为您提供最优质的设备租赁、买卖及技术咨询服务。
             </p>
@@ -40,19 +40,19 @@ const Footer = () => {
           <div>
             <h4 className="text-lg font-semibold mb-4">关注我们</h4>
             <div className="flex space-x-4">
-              <a href="#" className="bg-gray-800 p-2 rounded-full hover:bg-blue-600 transition-colors">
+              <a href="#" className="bg-gray-800 p-2 rounded-full hover:bg-slate-700 transition-colors">
                 <Facebook size={20} />
               </a>
-              <a href="#" className="bg-gray-800 p-2 rounded-full hover:bg-blue-400 transition-colors">
+              <a href="#" className="bg-gray-800 p-2 rounded-full hover:bg-slate-400 transition-colors">
                 <Twitter size={20} />
               </a>
-              <a href="#" className="bg-gray-800 p-2 rounded-full hover:bg-blue-700 transition-colors">
+              <a href="#" className="bg-gray-800 p-2 rounded-full hover:bg-slate-800 transition-colors">
                 <Linkedin size={20} />
               </a>
             </div>
             <div className="mt-6">
               <h5 className="text-sm font-semibold mb-2">意见反馈</h5>
-              <button className="bg-blue-600 text-white px-4 py-2 rounded text-sm hover:bg-blue-700 transition-colors w-full">
+              <button className="bg-slate-700 text-white px-4 py-2 rounded text-sm hover:bg-slate-800 transition-colors w-full">
                 提交反馈
               </button>
             </div>

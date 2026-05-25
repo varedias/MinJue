@@ -87,19 +87,19 @@ const SelectEquipment = () => {
   return (
     <div className="pb-20 md:pb-0 bg-gray-50 min-h-screen">
       {/* AI Assistant Banner */}
-      <div className="bg-gradient-to-r from-blue-600 to-indigo-700 p-6 text-white">
+      <div className="bg-gradient-to-r from-slate-700 to-amber-600 p-6 text-white">
         <div className="flex items-start justify-between">
           <div>
             <h1 className="text-2xl font-bold mb-2 flex items-center gap-2">
               <Bot size={28} />
               AI 选机助手
             </h1>
-            <p className="text-blue-100 text-sm mb-4 max-w-xs">
+            <p className="text-slate-100 text-sm mb-4 max-w-xs">
               不知道选什么？告诉我您的需求，AI 帮您智能匹配最合适的设备。
             </p>
             <button 
               onClick={handleStartChat}
-              className="bg-white text-blue-600 px-4 py-2 rounded-full text-sm font-bold shadow-lg hover:bg-blue-50 transition-colors flex items-center gap-1"
+              className="bg-white text-slate-700 px-4 py-2 rounded-full text-sm font-bold shadow-lg hover:bg-slate-50 transition-colors flex items-center gap-1"
             >
               <Sparkles size={16} />
               开始智能选机
@@ -116,14 +116,14 @@ const SelectEquipment = () => {
         <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
           <div className="bg-white rounded-2xl shadow-2xl w-full max-w-3xl h-[80vh] flex flex-col">
             {/* Chat Header */}
-            <div className="bg-gradient-to-r from-blue-600 to-indigo-700 text-white p-4 rounded-t-2xl flex items-center justify-between">
+            <div className="bg-gradient-to-r from-slate-700 to-amber-600 text-white p-4 rounded-t-2xl flex items-center justify-between">
               <div className="flex items-center gap-3">
                 <div className="w-10 h-10 bg-white rounded-full flex items-center justify-center">
-                  <Bot size={24} className="text-blue-600" />
+                  <Bot size={24} className="text-slate-700" />
                 </div>
                 <div>
                   <h3 className="font-bold">AI 设备选型助手</h3>
-                  <p className="text-xs text-blue-100">在线为您服务</p>
+                  <p className="text-xs text-slate-100">在线为您服务</p>
                 </div>
               </div>
               <button 
@@ -144,14 +144,14 @@ const SelectEquipment = () => {
                   <div className={`max-w-[80%] ${msg.role === 'user' ? 'order-2' : 'order-1'}`}>
                     {msg.role === 'assistant' && (
                       <div className="flex items-center gap-2 mb-1">
-                        <Bot size={16} className="text-blue-600" />
+                        <Bot size={16} className="text-slate-700" />
                         <span className="text-xs text-gray-500">AI助手</span>
                       </div>
                     )}
                     <div 
                       className={`rounded-2xl px-4 py-3 ${
                         msg.role === 'user' 
-                          ? 'bg-blue-600 text-white rounded-br-none' 
+                          ? 'bg-slate-700 text-white rounded-br-none' 
                           : 'bg-gray-100 text-gray-900 rounded-bl-none'
                       }`}
                     >
@@ -168,7 +168,7 @@ const SelectEquipment = () => {
               {isLoading && (
                 <div className="flex justify-start">
                   <div className="bg-gray-100 rounded-2xl rounded-bl-none px-4 py-3 flex items-center gap-2">
-                    <Loader size={16} className="animate-spin text-blue-600" />
+                    <Loader size={16} className="animate-spin text-slate-700" />
                     <span className="text-sm text-gray-600">正在思考...</span>
                   </div>
                 </div>
@@ -185,13 +185,13 @@ const SelectEquipment = () => {
                   onChange={(e) => setInputValue(e.target.value)}
                   onKeyPress={handleKeyPress}
                   placeholder="描述您的设备需求..."
-                  className="flex-1 px-4 py-3 border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="flex-1 px-4 py-3 border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-slate-600 focus:border-transparent"
                   disabled={isLoading}
                 />
                 <button 
                   onClick={handleSendMessage}
                   disabled={!inputValue.trim() || isLoading}
-                  className="bg-blue-600 text-white px-6 py-3 rounded-full hover:bg-blue-700 transition-colors disabled:bg-gray-300 disabled:cursor-not-allowed flex items-center gap-2"
+                  className="bg-slate-700 text-white px-6 py-3 rounded-full hover:bg-slate-800 transition-colors disabled:bg-gray-300 disabled:cursor-not-allowed flex items-center gap-2"
                 >
                   <Send size={18} />
                   发送
@@ -206,13 +206,13 @@ const SelectEquipment = () => {
       <div className="bg-white border-b border-gray-200 sticky top-0 z-30">
         <div className="flex">
           <button
-            className={`flex-1 py-4 text-center font-medium text-sm ${activeTab === 'new' ? 'text-blue-600 border-b-2 border-blue-600' : 'text-gray-500'}`}
+            className={`flex-1 py-4 text-center font-medium text-sm ${activeTab === 'new' ? 'text-slate-700 border-b-2 border-slate-700' : 'text-gray-500'}`}
             onClick={() => setActiveTab('new')}
           >
             新设备
           </button>
           <button
-            className={`flex-1 py-4 text-center font-medium text-sm ${activeTab === 'used' ? 'text-blue-600 border-b-2 border-blue-600' : 'text-gray-500'}`}
+            className={`flex-1 py-4 text-center font-medium text-sm ${activeTab === 'used' ? 'text-slate-700 border-b-2 border-slate-700' : 'text-gray-500'}`}
             onClick={() => setActiveTab('used')}
           >
             二手设备
@@ -250,7 +250,7 @@ const SelectEquipment = () => {
                 </p>
                 <div className="mt-3 flex items-center justify-between">
                   <span className="text-red-500 font-bold">¥ 12,999</span>
-                  <button className="text-blue-600 text-xs font-medium">查看详情</button>
+                  <button className="text-slate-700 text-xs font-medium">查看详情</button>
                 </div>
               </div>
             </div>

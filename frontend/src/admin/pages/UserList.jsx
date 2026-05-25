@@ -245,7 +245,7 @@ const UserList = () => {
       {/* 头部 */}
       <div className="p-6 border-b border-gray-100 flex justify-between items-center flex-wrap gap-4">
         <h2 className="text-xl font-bold flex items-center gap-2">
-          <Users className="text-blue-600" />
+          <Users className="text-slate-700" />
           用户管理
         </h2>
         <div className="flex items-center gap-3 flex-wrap">
@@ -272,8 +272,8 @@ const UserList = () => {
 
       {/* 批量操作栏 */}
       {selectedIds.length > 0 && (
-        <div className="px-6 py-3 bg-blue-50 border-t border-blue-100 flex items-center gap-4">
-          <span className="text-sm text-blue-700">已选择 {selectedIds.length} 项</span>
+        <div className="px-6 py-3 bg-slate-50 border-t border-slate-100 flex items-center gap-4">
+          <span className="text-sm text-slate-800">已选择 {selectedIds.length} 项</span>
           <button onClick={handleBatchEnable} className="px-3 py-1.5 text-sm bg-green-500 text-white rounded-lg hover:bg-green-600 flex items-center gap-1">
             <UserCheck size={14} />批量启用
           </button>

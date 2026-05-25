@@ -212,7 +212,7 @@ const SupplierChatDialog = ({ isOpen, onClose, supplier }) => {
         onClick={(event) => event.stopPropagation()}
       >
         {/* Header */}
-        <div className="bg-gradient-to-r from-blue-600 to-blue-500 text-white p-4 rounded-t-2xl flex items-center justify-between">
+        <div className="bg-gradient-to-r from-slate-700 to-slate-600 text-white p-4 rounded-t-2xl flex items-center justify-between">
           <div className="flex items-center gap-4">
             <img
               src={supplier?.logo || 'https://ui-avatars.com/api/?name=S&background=fff&color=3B82F6'}
@@ -221,7 +221,7 @@ const SupplierChatDialog = ({ isOpen, onClose, supplier }) => {
             />
             <div>
               <h3 className="font-bold text-lg">{supplier?.name || '供应商'}</h3>
-              <p className="text-xs text-blue-100 flex items-center gap-1">
+              <p className="text-xs text-slate-100 flex items-center gap-1">
                 <span className="inline-block w-2 h-2 bg-green-400 rounded-full animate-pulse"></span>
                 在线
               </p>
@@ -263,7 +263,7 @@ const SupplierChatDialog = ({ isOpen, onClose, supplier }) => {
                   <div
                     className={`rounded-2xl px-4 py-2 ${
                       msg.sender === 'user'
-                        ? 'bg-blue-600 text-white rounded-tr-none'
+                        ? 'bg-slate-700 text-white rounded-tr-none'
                         : 'bg-white text-gray-800 shadow-sm rounded-tl-none'
                     } ${msg.isFile ? 'border-2 border-dashed border-gray-300' : ''}`}
                   >
@@ -286,7 +286,7 @@ const SupplierChatDialog = ({ isOpen, onClose, supplier }) => {
                 <button
                   key={index}
                   onClick={() => handleQuickReply(reply)}
-                  className="px-3 py-1.5 text-sm bg-blue-50 text-blue-600 hover:bg-blue-100 rounded-full transition-colors"
+                  className="px-3 py-1.5 text-sm bg-slate-50 text-slate-700 hover:bg-slate-100 rounded-full transition-colors"
                 >
                   {reply}
                 </button>
@@ -303,21 +303,21 @@ const SupplierChatDialog = ({ isOpen, onClose, supplier }) => {
                 <button
                   type="button"
                   onClick={handleFileClick}
-                  className="text-gray-400 hover:text-blue-600 p-2 rounded-lg hover:bg-gray-100 transition-colors"
+                  className="text-gray-400 hover:text-slate-700 p-2 rounded-lg hover:bg-gray-100 transition-colors"
                   title="发送文件"
                 >
                   <Paperclip size={20} />
                 </button>
                 <button
                   type="button"
-                  className="text-gray-400 hover:text-blue-600 p-2 rounded-lg hover:bg-gray-100 transition-colors"
+                  className="text-gray-400 hover:text-slate-700 p-2 rounded-lg hover:bg-gray-100 transition-colors"
                   title="发送图片"
                 >
                   <ImageIcon size={20} />
                 </button>
                 <button
                   type="button"
-                  className="text-gray-400 hover:text-blue-600 p-2 rounded-lg hover:bg-gray-100 transition-colors"
+                  className="text-gray-400 hover:text-slate-700 p-2 rounded-lg hover:bg-gray-100 transition-colors"
                   title="表情"
                 >
                   <Smile size={20} />
@@ -333,14 +333,14 @@ const SupplierChatDialog = ({ isOpen, onClose, supplier }) => {
                   }
                 }}
                 placeholder="输入消息... (Shift+Enter换行，Enter发送)"
-                className="w-full px-4 py-2 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none"
+                className="w-full px-4 py-2 border border-gray-300 rounded-xl focus:ring-2 focus:ring-slate-600 focus:border-transparent resize-none"
                 rows="2"
               />
             </div>
             <button
               type="submit"
               disabled={!message.trim()}
-              className="bg-blue-600 text-white p-3 rounded-xl hover:bg-blue-700 disabled:bg-gray-300 disabled:cursor-not-allowed transition-colors flex-shrink-0 self-end"
+              className="bg-slate-700 text-white p-3 rounded-xl hover:bg-slate-800 disabled:bg-gray-300 disabled:cursor-not-allowed transition-colors flex-shrink-0 self-end"
             >
               <Send size={20} />
             </button>

@@ -120,7 +120,7 @@ const ForgotPasswordEn = () => {
         .forgot-container {
           min-height: 100vh;
           display: flex;
-          background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+          background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
         }
         .forgot-card {
           width: 100%;
@@ -176,7 +176,7 @@ const ForgotPasswordEn = () => {
         }
         .form-input:focus {
           outline: none;
-          border-color: #1e3c72;
+          border-color: #1e293b;
           box-shadow: 0 0 0 3px rgba(30, 60, 114, 0.1);
         }
         .email-wrapper {
@@ -188,7 +188,7 @@ const ForgotPasswordEn = () => {
         }
         .send-btn {
           padding: 0.75rem 1rem;
-          background: #1e3c72;
+          background: #1e293b;
           color: white;
           border: none;
           border-radius: 8px;
@@ -224,7 +224,7 @@ const ForgotPasswordEn = () => {
         .captcha-refresh {
           padding: 0.5rem;
           cursor: pointer;
-          color: #1e3c72;
+          color: #1e293b;
           transition: transform 0.3s;
         }
         .captcha-refresh:hover {
@@ -251,7 +251,7 @@ const ForgotPasswordEn = () => {
         .submit-btn {
           width: 100%;
           padding: 0.875rem;
-          background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+          background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
           color: white;
           border: none;
           border-radius: 8px;
@@ -273,7 +273,7 @@ const ForgotPasswordEn = () => {
           margin-top: 1.5rem;
         }
         .back-link a {
-          color: #1e3c72;
+          color: #1e293b;
           text-decoration: none;
           font-weight: 500;
           display: inline-flex;
@@ -296,7 +296,7 @@ const ForgotPasswordEn = () => {
           transition: color 0.2s;
         }
         .lang-switch:hover {
-          color: #1e3c72;
+          color: #1e293b;
         }
       `}</style>
 
@@ -307,7 +307,7 @@ const ForgotPasswordEn = () => {
         </Link>
 
         <div className="forgot-header">
-          <h1>🔒 Forgot Password</h1>
+          <h1>Forgot Password</h1>
           <p>Reset your password via email verification</p>
         </div>
 

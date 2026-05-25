@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import {
   BarChart3,
   Bell,
@@ -58,12 +58,12 @@ const getImagePath = (path) => {
 const statusClassMap = {
   '待回复': 'bg-red-50 text-red-600 border-red-100',
   '待确认': 'bg-amber-50 text-amber-700 border-amber-100',
-  '待发货': 'bg-blue-50 text-blue-600 border-blue-100',
+  '待发货': 'bg-slate-50 text-slate-700 border-slate-100',
   '待验收': 'bg-violet-50 text-violet-700 border-violet-100',
   '方案沟通中': 'bg-sky-50 text-sky-700 border-sky-100',
   '跟进中': 'bg-sky-50 text-sky-700 border-sky-100',
-  '已转报价': 'bg-indigo-50 text-indigo-700 border-indigo-100',
-  '已收到报价': 'bg-indigo-50 text-indigo-700 border-indigo-100',
+  '已转报价': 'bg-amber-50 text-amber-600 border-amber-100',
+  '已收到报价': 'bg-amber-50 text-amber-600 border-amber-100',
   '已完成': 'bg-emerald-50 text-emerald-700 border-emerald-100',
   '已成交': 'bg-emerald-50 text-emerald-700 border-emerald-100',
   '供应商比选': 'bg-orange-50 text-orange-700 border-orange-100',
@@ -121,7 +121,7 @@ const EmptyState = ({ icon: Icon, title, description, actionLabel, onAction }) =
       <button
         type="button"
         onClick={onAction}
-        className="mt-5 rounded-full bg-blue-600 px-5 py-2.5 text-sm font-medium text-white hover:bg-blue-700"
+        className="mt-5 rounded-full bg-slate-700 px-5 py-2.5 text-sm font-medium text-white hover:bg-slate-800"
       >
         {actionLabel}
       </button>
@@ -157,6 +157,10 @@ const DetailDrawer = ({ detail, onClose, children }) => {
 
 const PersonalCenter = () => {
   const navigate = useNavigate();
+  const location = useLocation();
+  const isEnglish = location.pathname.startsWith('/en');
+  const t = (zh, en) => isEnglish ? en : zh;
+  const to = (path) => isEnglish ? `/en${path}` : path;
   const { user, setUser } = useAuth();
   const isSupplier = user?.role === 'SUPPLIER';
 
@@ -176,9 +180,9 @@ const PersonalCenter = () => {
 
   useEffect(() => {
     if (!user) {
-      navigate('/login');
+      navigate(to('/login'));
     } else if (user.role === 'ADMIN') {
-      navigate('/admin/dashboard');
+      navigate(to('/admin/dashboard'));
     }
   }, [user, navigate]);
 
@@ -426,9 +430,9 @@ const PersonalCenter = () => {
 
   const openContent = (item) => {
     if (item.targetType === 'product') {
-      navigate(`/product/${item.targetId}`);
+      navigate(to(`/product/${item.targetId}`));
     } else {
-      navigate(`/content/${item.targetId}`);
+      navigate(to(`/content/${item.targetId}`));
     }
   };
 
@@ -459,27 +463,27 @@ const PersonalCenter = () => {
   });
 
   const buyerMenuItems = [
-    { key: 'overview', label: '概览', icon: BarChart3, badge: null },
-    { key: 'liked-videos', label: '点赞视频', icon: Heart, badge: buyerStats.likedVideos },
-    { key: 'history', label: '浏览足迹', icon: History, badge: buyerStats.viewed },
-    { key: 'favorites', label: '收藏夹', icon: Bookmark, badge: buyerStats.favorites },
-    { key: 'orders', label: '我的订单', icon: ShoppingCart, badge: buyerStats.orders },
-    { key: 'inquiries', label: '我的询盘', icon: MessageSquare, badge: buyerStats.inquiries },
-    { key: 'projects', label: '采购项目', icon: Briefcase, badge: centerData.buyer.projects.length },
-    { key: 'notifications', label: '消息中心', icon: Bell, badge: buyerStats.unread },
-    { key: 'settings', label: '个人设置', icon: Settings, badge: null },
+    { key: 'overview', label: t('概览', 'Overview'), icon: BarChart3, badge: null },
+    { key: 'liked-videos', label: t('点赞视频', 'Liked Videos'), icon: Heart, badge: buyerStats.likedVideos },
+    { key: 'history', label: t('浏览足迹', 'History'), icon: History, badge: buyerStats.viewed },
+    { key: 'favorites', label: t('收藏夹', 'Favorites'), icon: Bookmark, badge: buyerStats.favorites },
+    { key: 'orders', label: t('我的订单', 'My Orders'), icon: ShoppingCart, badge: buyerStats.orders },
+    { key: 'inquiries', label: t('我的询盘', 'My Inquiries'), icon: MessageSquare, badge: buyerStats.inquiries },
+    { key: 'projects', label: t('采购项目', 'Procurement'), icon: Briefcase, badge: centerData.buyer.projects.length },
+    { key: 'notifications', label: t('消息中心', 'Messages'), icon: Bell, badge: buyerStats.unread },
+    { key: 'settings', label: t('个人设置', 'Settings'), icon: Settings, badge: null },
   ];
 
   const supplierMenuItems = [
-    { key: 'overview', label: '数据概览', icon: BarChart3, badge: null },
-    { key: 'products', label: '商品管理', icon: Package, badge: supplierStats.products },
-    { key: 'leasing-reviews', label: '租赁审核', icon: Briefcase, badge: supplierStats.leasingReviews },
-    { key: 'inquiries', label: '询盘管理', icon: MessageSquare, badge: supplierStats.pendingInquiries },
-    { key: 'quotes', label: '报价管理', icon: FileText, badge: supplierStats.quotes },
-    { key: 'shop', label: '店铺管理', icon: Store, badge: null },
-    { key: 'tasks', label: '今日待办', icon: ListChecks, badge: supplierStats.todos },
-    { key: 'notifications', label: '消息中心', icon: Bell, badge: supplierStats.unread },
-    { key: 'settings', label: '账号设置', icon: Settings, badge: null },
+    { key: 'overview', label: t('数据概览', 'Dashboard'), icon: BarChart3, badge: null },
+    { key: 'products', label: t('商品管理', 'Products'), icon: Package, badge: supplierStats.products },
+    { key: 'leasing-reviews', label: t('租赁审核', 'Leasing Review'), icon: Briefcase, badge: supplierStats.leasingReviews },
+    { key: 'inquiries', label: t('询盘管理', 'Inquiry Mgmt'), icon: MessageSquare, badge: supplierStats.pendingInquiries },
+    { key: 'quotes', label: t('报价管理', 'Quotes'), icon: FileText, badge: supplierStats.quotes },
+    { key: 'shop', label: t('店铺管理', 'Store'), icon: Store, badge: null },
+    { key: 'tasks', label: t('今日待办', 'Tasks'), icon: ListChecks, badge: supplierStats.todos },
+    { key: 'notifications', label: t('消息中心', 'Messages'), icon: Bell, badge: supplierStats.unread },
+    { key: 'settings', label: t('账号设置', 'Account'), icon: Settings, badge: null },
   ];
 
   const menuItems = isSupplier ? supplierMenuItems : buyerMenuItems;
@@ -515,195 +519,195 @@ const PersonalCenter = () => {
 
     if (detail.type === 'liked-video') {
       return {
-        label: '点赞视频',
+        label: t('点赞视频', 'Liked Video'),
         title: detail.data.title,
         image: detail.data.cover,
-        subtitle: `${detail.data.author} · ${detail.data.duration || '未标注时长'}`,
+        subtitle: `${detail.data.author} · ${detail.data.duration || t('未标注时长', 'No duration')}`,
         meta: [
-          ['发布时间', detail.data.publishDate || '未记录'],
-          ['播放量', (detail.data.views || 0).toLocaleString()],
-          ['点赞时间', detail.data.likedAt ? new Date(detail.data.likedAt).toLocaleString('zh-CN') : '刚刚'],
+          [t('发布时间', 'Published'), detail.data.publishDate || t('未记录', 'N/A')],
+          [t('播放量', 'Views'), (detail.data.views || 0).toLocaleString()],
+          [t('点赞时间', 'Liked at'), detail.data.likedAt ? new Date(detail.data.likedAt).toLocaleString('zh-CN') : t('刚刚', 'Just now')],
         ],
         tags: detail.data.tags || [],
-        paragraphs: ['这条视频已同步到你的个人中心，后续可以直接回看、移除或继续分享给同事。'],
+        paragraphs: [t('这条视频已同步到你的个人中心，后续可以直接回看、移除或继续分享给同事。', 'This video has been synced to your personal center.')],
         actions: [
-          { label: '打开详情', variant: 'primary', onClick: () => navigate(`/content/${detail.data.targetId}`) },
-          { label: '取消点赞', variant: 'danger', onClick: () => handleRemoveLikedVideo(detail.data) },
+          { label: t('打开详情', 'Open Details'), variant: 'primary', onClick: () => navigate(to(`/content/${detail.data.targetId}`)) },
+          { label: t('取消点赞', 'Unlike'), variant: 'danger', onClick: () => handleRemoveLikedVideo(detail.data) },
         ],
       };
     }
 
     if (detail.type === 'history') {
       return {
-        label: '浏览足迹',
+        label: t('浏览足迹', 'History'),
         title: detail.data.title,
         image: detail.data.cover,
-        subtitle: `${detail.data.author} · ${detail.data.duration || '内容浏览'}`,
+        subtitle: `${detail.data.author} · ${detail.data.duration || t('内容浏览', 'Content view')}`,
         meta: [
-          ['最近浏览', detail.data.viewedAt ? new Date(detail.data.viewedAt).toLocaleString('zh-CN') : '刚刚'],
-          ['播放量', (detail.data.views || 0).toLocaleString()],
-          ['内容类型', detail.data.type || 'video'],
+          [t('最近浏览', 'Recently viewed'), detail.data.viewedAt ? new Date(detail.data.viewedAt).toLocaleString('zh-CN') : t('刚刚', 'Just now')],
+          [t('播放量', 'Views'), (detail.data.views || 0).toLocaleString()],
+          [t('内容类型', 'Type'), detail.data.type || 'video'],
         ],
         tags: detail.data.tags || [],
-        paragraphs: ['这是你最近浏览过的内容，方便回到项目评估时继续查看。'],
+        paragraphs: [t('这是你最近浏览过的内容，方便回到项目评估时继续查看。', 'Recently viewed content for easy reference during project evaluation.')],
         actions: [
-          { label: '重新查看', variant: 'primary', onClick: () => navigate(`/content/${detail.data.targetId}`) },
-          { label: '移除记录', variant: 'danger', onClick: () => handleRemoveViewedContent(detail.data) },
+          { label: t('重新查看', 'Review'), variant: 'primary', onClick: () => navigate(to(`/content/${detail.data.targetId}`)) },
+          { label: t('移除记录', 'Remove'), variant: 'danger', onClick: () => handleRemoveViewedContent(detail.data) },
         ],
       };
     }
 
     if (detail.type === 'favorite') {
       return {
-        label: detail.data.targetType === 'product' ? '收藏商品' : '收藏内容',
+        label: detail.data.targetType === 'product' ? t('收藏商品', 'Favorite Product') : t('收藏内容', 'Favorite Content'),
         title: detail.data.title,
         image: detail.data.image,
-        subtitle: detail.data.supplier || '已加入收藏夹',
+        subtitle: detail.data.supplier || t('已加入收藏夹', 'Added to favorites'),
         meta: [
-          ['收藏时间', detail.data.savedAt ? new Date(detail.data.savedAt).toLocaleString('zh-CN') : '刚刚'],
-          ['类型', detail.data.targetType === 'product' ? '商品' : '内容'],
+          [t('收藏时间', 'Saved at'), detail.data.savedAt ? new Date(detail.data.savedAt).toLocaleString('zh-CN') : t('刚刚', 'Just now')],
+          [t('类型', 'Type'), detail.data.targetType === 'product' ? t('商品', 'Product') : t('内容', 'Content')],
         ],
         tags: detail.data.tags || [],
-        paragraphs: detail.data.note ? [detail.data.note] : ['这条内容被保存进了你的个人收藏夹。'],
+        paragraphs: detail.data.note ? [detail.data.note] : [t('这条内容被保存进了你的个人收藏夹。', 'This item was saved to your favorites.')],
         actions: [
-          { label: '打开详情', variant: 'primary', onClick: () => openContent(detail.data) },
-          { label: '移除收藏', variant: 'danger', onClick: () => handleRemoveFavorite(detail.data) },
+          { label: t('打开详情', 'Open Details'), variant: 'primary', onClick: () => openContent(detail.data) },
+          { label: t('移除收藏', 'Remove'), variant: 'danger', onClick: () => handleRemoveFavorite(detail.data) },
         ],
       };
     }
 
     if (detail.type === 'order') {
       return {
-        label: '订单详情',
+        label: t('订单详情', 'Order Details'),
         title: detail.data.product,
         subtitle: `${detail.data.supplier} · ${detail.data.id}`,
         meta: [
-          ['订单金额', formatCurrency(detail.data.amount)],
-          ['下单时间', detail.data.orderDate],
-          ['预计送达', detail.data.expectedDate],
-          ['进度', `${detail.data.progress}%`],
+          [t('订单金额', 'Amount'), formatCurrency(detail.data.amount)],
+          [t('下单时间', 'Order Date'), detail.data.orderDate],
+          [t('预计送达', 'Expected Delivery'), detail.data.expectedDate],
+          [t('进度', 'Progress'), `${detail.data.progress}%`],
         ],
         tags: detail.data.tags || [],
         paragraphs: [detail.data.stage],
-        actions: [{ label: '前往商城', variant: 'primary', onClick: () => navigate('/mall') }],
+        actions: [{ label: t('前往商城', 'Go to Mall'), variant: 'primary', onClick: () => navigate(to('/mall')) }],
       };
     }
 
     if (detail.type === 'buyer-inquiry') {
       return {
-        label: '询盘详情',
+        label: t('询盘详情', 'Inquiry Details'),
         title: detail.data.title,
         subtitle: `${detail.data.supplier} · ${detail.data.contact}`,
         meta: [
-          ['预算', detail.data.budget],
-          ['创建时间', detail.data.createdAt],
-          ['期望答复', detail.data.deadline],
+          [t('预算', 'Budget'), detail.data.budget],
+          [t('创建时间', 'Created'), detail.data.createdAt],
+          [t('期望答复', 'Expected Reply'), detail.data.deadline],
         ],
         tags: detail.data.tags || [],
         paragraphs: [detail.data.message],
-        actions: [{ label: '查看消息中心', variant: 'primary', onClick: () => setActiveTab('notifications') }],
+        actions: [{ label: t('查看消息中心', 'View Messages'), variant: 'primary', onClick: () => setActiveTab('notifications') }],
       };
     }
 
     if (detail.type === 'project') {
       return {
-        label: '采购项目',
+        label: t('采购项目', 'Procurement'),
         title: detail.data.title,
-        subtitle: `${detail.data.owner} · 当前阶段 ${detail.data.stage}`,
+        subtitle: `${detail.data.owner} · ${t('当前阶段', 'Current Stage')} ${detail.data.stage}`,
         meta: [
-          ['预算', detail.data.budget],
-          ['截止时间', detail.data.deadline],
-          ['匹配供应商', `${detail.data.matches} 家`],
-          ['项目进度', `${detail.data.progress}%`],
+          [t('预算', 'Budget'), detail.data.budget],
+          [t('截止时间', 'Deadline'), detail.data.deadline],
+          [t('匹配供应商', 'Matched Suppliers'), `${detail.data.matches} ${t('家', '')}`],
+          [t('项目进度', 'Progress'), `${detail.data.progress}%`],
         ],
         paragraphs: [detail.data.summary],
-        actions: [{ label: '查看供应商', variant: 'primary', onClick: () => navigate('/suppliers') }],
+        actions: [{ label: t('查看供应商', 'View Suppliers'), variant: 'primary', onClick: () => navigate(to('/suppliers')) }],
       };
     }
 
     if (detail.type === 'supplier-product') {
       return {
-        label: '商品详情',
+        label: t('商品详情', 'Product Details'),
         title: detail.data.name,
         image: detail.data.image,
         subtitle: `${detail.data.categoryName} · ${detail.data.supplierName}`,
         meta: [
-          ['价格', formatCurrency(detail.data.price)],
-          ['库存', `${detail.data.stock}`],
-          ['近7天访问', `${detail.data.views}`],
-          ['最近更新', detail.data.updatedAt],
+          [t('价格', 'Price'), formatCurrency(detail.data.price)],
+          [t('库存', 'Stock'), `${detail.data.stock}`],
+          [t('近7天访问', '7-day Views'), `${detail.data.views}`],
+          [t('最近更新', 'Updated'), detail.data.updatedAt],
         ],
         tags: detail.data.tags || [],
-        paragraphs: [detail.data.description || '暂无更多描述。'],
+        paragraphs: [detail.data.description || t('暂无更多描述。', 'No additional description.')],
         actions: [
-          { label: '编辑商品', variant: 'primary', onClick: () => navigate(`/publish-product/${detail.data.id}`) },
-          { label: detail.data.status === 1 ? '立即下架' : '重新上架', variant: 'secondary', onClick: () => handleToggleProductStatus(detail.data) },
-          { label: '删除商品', variant: 'danger', onClick: () => handleDeleteProduct(detail.data) },
+          { label: t('编辑商品', 'Edit Product'), variant: 'primary', onClick: () => navigate(to(`/publish-product/${detail.data.id}`)) },
+          { label: detail.data.status === 1 ? t('立即下架', 'Delist') : t('重新上架', 'Relist'), variant: 'secondary', onClick: () => handleToggleProductStatus(detail.data) },
+          { label: t('删除商品', 'Delete'), variant: 'danger', onClick: () => handleDeleteProduct(detail.data) },
         ],
       };
     }
 
     if (detail.type === 'supplier-inquiry') {
       return {
-        label: '供应商询盘',
+        label: t('供应商询盘', 'Supplier Inquiry'),
         title: detail.data.product,
         subtitle: `${detail.data.customer} · ${detail.data.contact}`,
         meta: [
-          ['需求数量', detail.data.quantity],
-          ['预算区间', detail.data.budget],
-          ['截止时间', detail.data.deadline],
-          ['当前状态', detail.data.status],
+          [t('需求数量', 'Quantity'), detail.data.quantity],
+          [t('预算区间', 'Budget'), detail.data.budget],
+          [t('截止时间', 'Deadline'), detail.data.deadline],
+          [t('当前状态', 'Status'), detail.data.status],
         ],
         tags: detail.data.tags || [],
-        paragraphs: [detail.data.demand, `最新留言：${detail.data.lastMessage}`],
+        paragraphs: [detail.data.demand, `${t('最新留言：', 'Latest message:')}${detail.data.lastMessage}`],
         actions: [
           detail.data.status !== '方案沟通中'
-            ? { label: '转为沟通中', variant: 'primary', onClick: () => handleSupplierInquiryStatus(detail.data, '方案沟通中') }
-            : { label: '转为已转报价', variant: 'primary', onClick: () => handleSupplierInquiryStatus(detail.data, '已转报价') },
+            ? { label: t('转为沟通中', 'Start Discussion'), variant: 'primary', onClick: () => handleSupplierInquiryStatus(detail.data, '方案沟通中') }
+            : { label: t('转为已转报价', 'Send Quote'), variant: 'primary', onClick: () => handleSupplierInquiryStatus(detail.data, '已转报价') },
         ],
       };
     }
 
     if (detail.type === 'quote') {
       return {
-        label: '报价详情',
+        label: t('报价详情', 'Quote Details'),
         title: detail.data.title,
         subtitle: `${detail.data.customer} · ${formatCurrency(detail.data.amount)}`,
         meta: [
-          ['更新于', detail.data.updatedAt],
-          ['有效期至', detail.data.expireDate],
-          ['当前状态', detail.data.status],
+          [t('更新于', 'Updated'), detail.data.updatedAt],
+          [t('有效期至', 'Valid until'), detail.data.expireDate],
+          [t('当前状态', 'Status'), detail.data.status],
         ],
         tags: detail.data.items || [],
-        paragraphs: [detail.data.note || '暂无备注。'],
+        paragraphs: [detail.data.note || t('暂无备注。', 'No notes.')],
         actions: [
           detail.data.status !== '已成交'
-            ? { label: '标记为成交', variant: 'primary', onClick: () => handleQuoteStatus(detail.data, '已成交') }
-            : { label: '转回跟进中', variant: 'secondary', onClick: () => handleQuoteStatus(detail.data, '跟进中') },
+            ? { label: t('标记为成交', 'Mark Closed'), variant: 'primary', onClick: () => handleQuoteStatus(detail.data, '已成交') }
+            : { label: t('转回跟进中', 'Reopen'), variant: 'secondary', onClick: () => handleQuoteStatus(detail.data, '跟进中') },
         ],
       };
     }
 
     if (detail.type === 'task') {
       return {
-        label: '任务详情',
+        label: t('任务详情', 'Task Details'),
         title: detail.data.title,
-        subtitle: `${detail.data.owner} · 截止 ${detail.data.dueDate}`,
-        meta: [['当前状态', detail.data.status]],
-        paragraphs: ['这是一条本地待办，可用于演示供应商团队的日常协同。'],
-        actions: [{ label: detail.data.status === 'done' ? '重新打开' : '标记完成', variant: 'primary', onClick: () => handleTodoStatus(detail.data) }],
+        subtitle: `${detail.data.owner} · ${t('截止', 'Due')} ${detail.data.dueDate}`,
+        meta: [[t('当前状态', 'Status'), detail.data.status]],
+        paragraphs: [t('这是一条本地待办，可用于演示供应商团队的日常协同。', 'A local todo for demonstrating supplier team collaboration.')],
+        actions: [{ label: detail.data.status === 'done' ? t('重新打开', 'Reopen') : t('标记完成', 'Mark Done'), variant: 'primary', onClick: () => handleTodoStatus(detail.data) }],
       };
     }
 
     if (detail.type === 'notification') {
       return {
-        label: '消息详情',
+        label: t('消息详情', 'Message Details'),
         title: detail.data.title,
         subtitle: detail.data.time,
-        meta: [['优先级', detail.data.level]],
+        meta: [[t('优先级', 'Priority'), detail.data.level]],
         paragraphs: [detail.data.content],
         actions: !detail.data.read
-          ? [{ label: '标记为已读', variant: 'primary', onClick: () => handleNotificationRead(detail.section, detail.data) }]
+          ? [{ label: t('标记为已读', 'Mark Read'), variant: 'primary', onClick: () => handleNotificationRead(detail.section, detail.data) }]
           : [],
       };
     }
@@ -741,7 +745,7 @@ const PersonalCenter = () => {
         {config.tags?.length > 0 && (
           <div className="mb-6 flex flex-wrap gap-2">
             {config.tags.map((tag) => (
-              <span key={tag} className="rounded-full bg-blue-50 px-3 py-1 text-xs font-medium text-blue-700">
+              <span key={tag} className="rounded-full bg-slate-50 px-3 py-1 text-xs font-medium text-slate-800">
                 {tag}
               </span>
             ))}
@@ -764,7 +768,7 @@ const PersonalCenter = () => {
                     ? 'rounded-full bg-red-50 px-5 py-2.5 text-sm font-medium text-red-600 hover:bg-red-100'
                     : action.variant === 'secondary'
                       ? 'rounded-full bg-gray-100 px-5 py-2.5 text-sm font-medium text-gray-700 hover:bg-gray-200'
-                      : 'rounded-full bg-blue-600 px-5 py-2.5 text-sm font-medium text-white hover:bg-blue-700'
+                      : 'rounded-full bg-slate-700 px-5 py-2.5 text-sm font-medium text-white hover:bg-slate-800'
                 }
               >
                 {action.label}
@@ -778,25 +782,25 @@ const PersonalCenter = () => {
 
   const renderBuyerOverview = () => (
     <div className="space-y-6">
-      <div className="rounded-[28px] bg-gradient-to-br from-slate-900 via-blue-950 to-cyan-900 p-7 text-white">
+      <div className="rounded-[28px] bg-gradient-to-br from-slate-900 via-slate-950 to-cyan-900 p-7 text-white">
         <div className="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
           <div>
             <div className="inline-flex items-center gap-2 rounded-full bg-white/10 px-3 py-1 text-xs uppercase tracking-[0.28em] text-cyan-100">
               <Sparkles size={14} />
               Buyer Workspace
             </div>
-            <h2 className="mt-4 text-3xl font-bold">{centerData.profile.nickname}，今天继续推进你的采购节奏</h2>
+            <h2 className="mt-4 text-3xl font-bold">{centerData.profile.nickname}{t('，今天继续推进你的采购节奏', ', continue pushing your procurement forward')}</h2>
             <p className="mt-3 max-w-2xl text-sm leading-7 text-cyan-50/85">
-              你在发现页点赞的视频、浏览过的内容和收藏的信息都会自动沉淀到这里，方便随时回看、汇总和继续询价。
+              {t('你在发现页点赞的视频、浏览过的内容和收藏的信息都会自动沉淀到这里，方便随时回看、汇总和继续询价。', 'Videos liked, content viewed, and saved info on the discovery page are automatically collected here for easy review and inquiry.')}
             </p>
           </div>
           <div className="grid grid-cols-2 gap-3 text-sm">
             <div className="rounded-2xl bg-white/10 px-4 py-3">
-              <div className="text-cyan-100">当前职位</div>
+              <div className="text-cyan-100">{t('当前职位', 'Title')}</div>
               <div className="mt-1 font-semibold">{centerData.profile.title}</div>
             </div>
             <div className="rounded-2xl bg-white/10 px-4 py-3">
-              <div className="text-cyan-100">所属城市</div>
+              <div className="text-cyan-100">{t('所属城市', 'City')}</div>
               <div className="mt-1 font-semibold">{centerData.profile.city}</div>
             </div>
           </div>
@@ -804,17 +808,17 @@ const PersonalCenter = () => {
       </div>
 
       <div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-4">
-        <MetricCard icon={Heart} title="点赞视频" value={buyerStats.likedVideos} subtitle="从内容详情页点击点赞后，会同步到这里" accent="bg-rose-50 border-rose-100" onClick={() => setActiveTab('liked-videos')} />
-        <MetricCard icon={Bookmark} title="收藏夹" value={buyerStats.favorites} subtitle="把商品和内容都攒到一个地方" accent="bg-amber-50 border-amber-100" onClick={() => setActiveTab('favorites')} />
-        <MetricCard icon={History} title="浏览足迹" value={buyerStats.viewed} subtitle="最近看过什么，一眼就能找回来" accent="bg-violet-50 border-violet-100" onClick={() => setActiveTab('history')} />
-        <MetricCard icon={ShoppingCart} title="订单进度" value={buyerStats.orders} subtitle="同步查看待发货、待验收的采购单" accent="bg-sky-50 border-sky-100" onClick={() => setActiveTab('orders')} />
+        <MetricCard icon={Heart} title={t('点赞视频', 'Liked Videos')} value={buyerStats.likedVideos} subtitle={t('从内容详情页点击点赞后，会同步到这里', 'Synced after liking content')} accent="bg-rose-50 border-rose-100" onClick={() => setActiveTab('liked-videos')} />
+        <MetricCard icon={Bookmark} title={t('收藏夹', 'Favorites')} value={buyerStats.favorites} subtitle={t('把商品和内容都攒到一个地方', 'Save products and content in one place')} accent="bg-amber-50 border-amber-100" onClick={() => setActiveTab('favorites')} />
+        <MetricCard icon={History} title={t('浏览足迹', 'History')} value={buyerStats.viewed} subtitle={t('最近看过什么，一眼就能找回来', 'Easily find recently viewed content')} accent="bg-violet-50 border-violet-100" onClick={() => setActiveTab('history')} />
+        <MetricCard icon={ShoppingCart} title={t('订单进度', 'Orders')} value={buyerStats.orders} subtitle={t('同步查看待发货、待验收的采购单', 'View pending and receiving orders')} accent="bg-sky-50 border-sky-100" onClick={() => setActiveTab('orders')} />
       </div>
 
       <div className="grid grid-cols-1 gap-6 xl:grid-cols-[1.3fr_0.9fr]">
         <Panel
-          title="重点采购项目"
-          subtitle="把需求梳理、预算、供应商匹配都放在一个面板里"
-          action={<button type="button" onClick={() => setActiveTab('projects')} className="text-sm font-medium text-blue-600 hover:text-blue-700">查看全部</button>}
+          title={t('重点采购项目', 'Key Procurement Projects')}
+          subtitle={t('把需求梳理、预算、供应商匹配都放在一个面板里', 'Consolidate requirements, budget, and supplier matching')}
+          action={<button type="button" onClick={() => setActiveTab('projects')} className="text-sm font-medium text-slate-700 hover:text-slate-800">{t('查看全部', 'View All')}</button>}
         >
           <div className="space-y-4">
             {centerData.buyer.projects.map((project) => (
@@ -822,7 +826,7 @@ const PersonalCenter = () => {
                 type="button"
                 key={project.id}
                 onClick={() => setDetail({ type: 'project', data: project })}
-                className="w-full rounded-2xl border border-gray-200 p-4 text-left hover:border-blue-200 hover:bg-blue-50/40"
+                className="w-full rounded-2xl border border-gray-200 p-4 text-left hover:border-slate-200 hover:bg-slate-50/40"
               >
                 <div className="flex items-start justify-between gap-4">
                   <div>
@@ -837,11 +841,11 @@ const PersonalCenter = () => {
                 </div>
                 <p className="mt-3 text-sm leading-6 text-gray-600">{project.summary}</p>
                 <div className="mt-4 flex items-center justify-between text-sm">
-                  <span className="text-gray-500">已匹配 {project.matches} 家供应商</span>
-                  <span className="font-semibold text-blue-600">{project.progress}%</span>
+                  <span className="text-gray-500">{t('已匹配', 'Matched')} {project.matches} {t('家供应商', 'suppliers')}</span>
+                  <span className="font-semibold text-slate-700">{project.progress}%</span>
                 </div>
                 <div className="mt-2 h-2 rounded-full bg-gray-100">
-                  <div className="h-full rounded-full bg-blue-600" style={{ width: `${project.progress}%` }}></div>
+                  <div className="h-full rounded-full bg-slate-700" style={{ width: `${project.progress}%` }}></div>
                 </div>
               </button>
             ))}
@@ -849,9 +853,9 @@ const PersonalCenter = () => {
         </Panel>
 
         <Panel
-          title="最新消息"
-          subtitle="这里汇总询盘、订单和推荐提醒"
-          action={<button type="button" onClick={() => handleAllNotificationsRead('buyer')} className="text-sm font-medium text-blue-600 hover:text-blue-700">全部已读</button>}
+          title={t('最新消息', 'Latest News')}
+          subtitle={t('这里汇总询盘、订单和推荐提醒', 'Inquiries, orders, and recommendations')}
+          action={<button type="button" onClick={() => handleAllNotificationsRead('buyer')} className="text-sm font-medium text-slate-700 hover:text-slate-800">{t('全部已读', 'Mark All Read')}</button>}
         >
           <div className="space-y-4">
             {centerData.buyer.notifications.map((item) => (
@@ -859,7 +863,7 @@ const PersonalCenter = () => {
                 type="button"
                 key={item.id}
                 onClick={() => setDetail({ type: 'notification', data: item, section: 'buyer' })}
-                className="w-full rounded-2xl border border-gray-200 p-4 text-left hover:border-blue-200 hover:bg-blue-50/40"
+                className="w-full rounded-2xl border border-gray-200 p-4 text-left hover:border-slate-200 hover:bg-slate-50/40"
               >
                 <div className="flex items-start justify-between gap-3">
                   <div>
@@ -881,17 +885,17 @@ const PersonalCenter = () => {
 
   const renderBuyerLikedVideos = () => (
     <Panel
-      title="我点赞的视频"
-      subtitle="从内容详情页点赞后，视频会沉淀到这里，可继续回看或取消点赞"
+      title={t('我点赞的视频', 'Liked Videos')}
+      subtitle={t('从内容详情页点赞后，视频会沉淀到这里，可继续回看或取消点赞', 'Videos liked on the discovery page appear here')}
       action={
         <div className="relative w-64">
           <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
-          <input value={keyword} onChange={(event) => setKeyword(event.target.value)} placeholder="搜索视频标题、作者、标签" className="w-full rounded-full border border-gray-300 py-2 pl-9 pr-4 text-sm focus:border-blue-500 focus:outline-none" />
+          <input value={keyword} onChange={(event) => setKeyword(event.target.value)} placeholder={t('搜索视频标题、作者、标签', 'Search videos, authors, tags')} className="w-full rounded-full border border-gray-300 py-2 pl-9 pr-4 text-sm focus:border-slate-600 focus:outline-none" />
         </div>
       }
     >
       {filteredLikedVideos.length === 0 ? (
-        <EmptyState icon={Heart} title="还没有点赞视频" description="去发现页或内容详情页点个赞，这里就会马上出现你互动过的视频。" actionLabel="去发现页看看" onAction={() => navigate('/discovery')} />
+        <EmptyState icon={Heart} title={t('还没有点赞视频', 'No liked videos yet')} description={t('去发现页或内容详情页点个赞，这里就会马上出现你互动过的视频。', 'Like videos on the discovery page and they will appear here.')} actionLabel={t('去发现页看看', 'Go to Discovery')} onAction={() => navigate(to('/discovery'))} />
       ) : (
         <div className="grid grid-cols-1 gap-5 lg:grid-cols-2 xl:grid-cols-3">
           {filteredLikedVideos.map((item) => (
@@ -907,8 +911,8 @@ const PersonalCenter = () => {
                 </div>
               </button>
               <div className="mt-4 flex gap-3">
-                <button type="button" onClick={() => navigate(`/content/${item.targetId}`)} className="flex-1 rounded-full bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700">去查看</button>
-                <button type="button" onClick={() => handleRemoveLikedVideo(item)} className="rounded-full bg-red-50 px-4 py-2 text-sm font-medium text-red-600 hover:bg-red-100">取消点赞</button>
+                <button type="button" onClick={() => navigate(to(`/content/${item.targetId}`))} className="flex-1 rounded-full bg-slate-700 px-4 py-2 text-sm font-medium text-white hover:bg-slate-800">{t('去查看', 'View')}</button>
+                <button type="button" onClick={() => handleRemoveLikedVideo(item)} className="rounded-full bg-red-50 px-4 py-2 text-sm font-medium text-red-600 hover:bg-red-100">{t('取消点赞', 'Unlike')}</button>
               </div>
             </div>
           ))}
@@ -919,20 +923,20 @@ const PersonalCenter = () => {
 
   const renderBuyerHistory = () => (
     <Panel
-      title="浏览足迹"
-      subtitle="看过的内容会自动保存在本地，方便采购讨论时回溯"
+      title={t('浏览足迹', 'History')}
+      subtitle={t('看过的内容会自动保存在本地，方便采购讨论时回溯', 'Viewed content is saved locally for easy reference')}
       action={
         <div className="flex items-center gap-3">
           <div className="relative w-64">
             <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
-            <input value={keyword} onChange={(event) => setKeyword(event.target.value)} placeholder="搜索浏览记录" className="w-full rounded-full border border-gray-300 py-2 pl-9 pr-4 text-sm focus:border-blue-500 focus:outline-none" />
+            <input value={keyword} onChange={(event) => setKeyword(event.target.value)} placeholder={t('搜索浏览记录', 'Search history')} className="w-full rounded-full border border-gray-300 py-2 pl-9 pr-4 text-sm focus:border-slate-600 focus:outline-none" />
           </div>
-          <button type="button" onClick={handleClearViewHistory} className="rounded-full bg-gray-100 px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-200">清空</button>
+          <button type="button" onClick={handleClearViewHistory} className="rounded-full bg-gray-100 px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-200">{t('清空', 'Clear')}</button>
         </div>
       }
     >
       {filteredViewHistory.length === 0 ? (
-        <EmptyState icon={History} title="还没有浏览足迹" description="打开任意内容详情页后，这里会自动记录你的浏览轨迹。" actionLabel="去发现页浏览" onAction={() => navigate('/discovery')} />
+        <EmptyState icon={History} title={t('还没有浏览足迹', 'No history yet')} description={t('打开任意内容详情页后，这里会自动记录你的浏览轨迹。', 'Browse any content page and your history will be recorded here.')} actionLabel={t('去发现页浏览', 'Browse Discovery')} onAction={() => navigate(to('/discovery'))} />
       ) : (
         <div className="space-y-4">
           {filteredViewHistory.map((item) => (
@@ -940,7 +944,7 @@ const PersonalCenter = () => {
               type="button"
               key={item.targetId}
               onClick={() => setDetail({ type: 'history', data: item })}
-              className="flex w-full flex-col gap-4 rounded-2xl border border-gray-200 p-4 text-left hover:border-blue-200 hover:bg-blue-50/40 md:flex-row md:items-center"
+              className="flex w-full flex-col gap-4 rounded-2xl border border-gray-200 p-4 text-left hover:border-slate-200 hover:bg-slate-50/40 md:flex-row md:items-center"
             >
               <img src={getImagePath(item.cover)} alt={item.title} className="h-28 w-full rounded-2xl object-cover md:w-48" onError={(event) => { event.target.src = '/products/placeholder-content.svg'; }} />
               <div className="flex-1">
@@ -962,17 +966,17 @@ const PersonalCenter = () => {
 
   const renderBuyerFavorites = () => (
     <Panel
-      title="我的收藏夹"
-      subtitle="这里同时放商品收藏和内容收藏，适合做对比、备选和内部分享"
+      title={t('我的收藏夹', 'My Favorites')}
+      subtitle={t('这里同时放商品收藏和内容收藏，适合做对比、备选和内部分享', 'Product and content favorites for comparison and sharing')}
       action={
         <div className="relative w-64">
           <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
-          <input value={keyword} onChange={(event) => setKeyword(event.target.value)} placeholder="搜索收藏内容" className="w-full rounded-full border border-gray-300 py-2 pl-9 pr-4 text-sm focus:border-blue-500 focus:outline-none" />
+          <input value={keyword} onChange={(event) => setKeyword(event.target.value)} placeholder={t('搜索收藏内容', 'Search favorites')} className="w-full rounded-full border border-gray-300 py-2 pl-9 pr-4 text-sm focus:border-slate-600 focus:outline-none" />
         </div>
       }
     >
       {filteredFavorites.length === 0 ? (
-        <EmptyState icon={Bookmark} title="收藏夹还是空的" description="在内容详情页点收藏，或者后续把商品收藏也沉淀到这里。" />
+        <EmptyState icon={Bookmark} title={t('收藏夹还是空的', 'Favorites are empty')} description={t('在内容详情页点收藏，或者后续把商品收藏也沉淀到这里。', 'Save items from content pages and they will appear here.')} />
       ) : (
         <div className="grid grid-cols-1 gap-5 lg:grid-cols-2">
           {filteredFavorites.map((item) => (
@@ -986,8 +990,8 @@ const PersonalCenter = () => {
                 </div>
               </button>
               <div className="mt-4 flex gap-3">
-                <button type="button" onClick={() => openContent(item)} className="flex-1 rounded-full bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700">查看详情</button>
-                <button type="button" onClick={() => handleRemoveFavorite(item)} className="rounded-full bg-red-50 px-4 py-2 text-sm font-medium text-red-600 hover:bg-red-100">删除</button>
+                <button type="button" onClick={() => openContent(item)} className="flex-1 rounded-full bg-slate-700 px-4 py-2 text-sm font-medium text-white hover:bg-slate-800">{t('查看详情', 'View Details')}</button>
+                <button type="button" onClick={() => handleRemoveFavorite(item)} className="rounded-full bg-red-50 px-4 py-2 text-sm font-medium text-red-600 hover:bg-red-100">{t('删除', 'Remove')}</button>
               </div>
             </div>
           ))}
@@ -997,14 +1001,14 @@ const PersonalCenter = () => {
   );
 
   const renderBuyerOrders = () => (
-    <Panel title="我的订单" subtitle="用更细的卡片把采购状态、供应商和履约进度都展开">
+    <Panel title={t('我的订单', 'My Orders')} subtitle={t('用更细的卡片把采购状态、供应商和履约进度都展开', 'Detailed cards showing order status and progress')}>
       <div className="space-y-4">
         {centerData.buyer.orders.map((item) => (
           <button
             type="button"
             key={item.id}
             onClick={() => setDetail({ type: 'order', data: item })}
-            className="w-full rounded-2xl border border-gray-200 p-5 text-left hover:border-blue-200 hover:bg-blue-50/40"
+            className="w-full rounded-2xl border border-gray-200 p-5 text-left hover:border-slate-200 hover:bg-slate-50/40"
           >
             <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
               <div>
@@ -1017,9 +1021,9 @@ const PersonalCenter = () => {
                 </div>
               </div>
               <div className="min-w-48">
-                <div className="text-right text-lg font-semibold text-blue-600">{formatCurrency(item.amount)}</div>
+                <div className="text-right text-lg font-semibold text-slate-700">{formatCurrency(item.amount)}</div>
                 <div className="mt-3 h-2 rounded-full bg-gray-100">
-                  <div className="h-full rounded-full bg-blue-600" style={{ width: `${item.progress}%` }}></div>
+                  <div className="h-full rounded-full bg-slate-700" style={{ width: `${item.progress}%` }}></div>
                 </div>
                 <div className="mt-2 text-right text-xs text-gray-500">{item.stage}</div>
               </div>
@@ -1031,14 +1035,14 @@ const PersonalCenter = () => {
   );
 
   const renderBuyerInquiries = () => (
-    <Panel title="我的询盘" subtitle="把预算、供应商、跟进节奏放在一起，做项目推进会更顺手">
+    <Panel title={t('我的询盘', 'My Inquiries')} subtitle={t('把预算、供应商、跟进节奏放在一起，做项目推进会更顺手', 'Budget, supplier, and follow-up in one place')}>
       <div className="grid grid-cols-1 gap-4 xl:grid-cols-2">
         {centerData.buyer.inquiries.map((item) => (
           <button
             type="button"
             key={item.id}
             onClick={() => setDetail({ type: 'buyer-inquiry', data: item })}
-            className="rounded-2xl border border-gray-200 p-5 text-left hover:border-blue-200 hover:bg-blue-50/40"
+            className="rounded-2xl border border-gray-200 p-5 text-left hover:border-slate-200 hover:bg-slate-50/40"
           >
             <div className="flex items-start justify-between gap-4">
               <div>
@@ -1060,14 +1064,14 @@ const PersonalCenter = () => {
   );
 
   const renderBuyerProjects = () => (
-    <Panel title="采购项目" subtitle="做预算、比价、供应商筛选时，项目面板可以直接拿来演示流程">
+    <Panel title={t('采购项目', 'Procurement')} subtitle={t('做预算、比价、供应商筛选时，项目面板可以直接拿来演示流程', 'Project panel for budgeting and supplier screening')}>
       <div className="grid grid-cols-1 gap-4 xl:grid-cols-2">
         {centerData.buyer.projects.map((item) => (
           <button
             type="button"
             key={item.id}
             onClick={() => setDetail({ type: 'project', data: item })}
-            className="rounded-2xl border border-gray-200 p-5 text-left hover:border-blue-200 hover:bg-blue-50/40"
+            className="rounded-2xl border border-gray-200 p-5 text-left hover:border-slate-200 hover:bg-slate-50/40"
           >
             <div className="flex items-start justify-between gap-4">
               <div>
@@ -1079,10 +1083,10 @@ const PersonalCenter = () => {
             <p className="mt-4 text-sm leading-6 text-gray-600">{item.summary}</p>
             <div className="mt-4 flex items-center justify-between text-sm">
               <span className="text-gray-500">预算 {item.budget}</span>
-              <span className="font-semibold text-blue-600">{item.progress}%</span>
+              <span className="font-semibold text-slate-700">{item.progress}%</span>
             </div>
             <div className="mt-2 h-2 rounded-full bg-gray-100">
-              <div className="h-full rounded-full bg-blue-600" style={{ width: `${item.progress}%` }}></div>
+              <div className="h-full rounded-full bg-slate-700" style={{ width: `${item.progress}%` }}></div>
             </div>
           </button>
         ))}
@@ -1095,9 +1099,9 @@ const PersonalCenter = () => {
 
     return (
       <Panel
-        title="消息中心"
-        subtitle="前端静态存储模式下，也保留了消息流和已读状态"
-        action={<button type="button" onClick={() => handleAllNotificationsRead(section)} className="rounded-full bg-blue-50 px-4 py-2 text-sm font-medium text-blue-700 hover:bg-blue-100">全部已读</button>}
+        title={t('消息中心', 'Messages')}
+        subtitle={t('前端静态存储模式下，也保留了消息流和已读状态', 'Message stream and read status preserved in static mode')}
+        action={<button type="button" onClick={() => handleAllNotificationsRead(section)} className="rounded-full bg-slate-50 px-4 py-2 text-sm font-medium text-slate-800 hover:bg-slate-100">{t('全部已读', 'Mark All Read')}</button>}
       >
         <div className="space-y-4">
           {items.map((item) => (
@@ -1105,12 +1109,12 @@ const PersonalCenter = () => {
               type="button"
               key={item.id}
               onClick={() => setDetail({ type: 'notification', data: item, section })}
-              className={`w-full rounded-2xl border p-5 text-left transition-colors ${item.read ? 'border-gray-200 hover:border-blue-200 hover:bg-blue-50/40' : 'border-blue-200 bg-blue-50/60 hover:bg-blue-50'}`}
+              className={`w-full rounded-2xl border p-5 text-left transition-colors ${item.read ? 'border-gray-200 hover:border-slate-200 hover:bg-slate-50/40' : 'border-slate-200 bg-slate-50/60 hover:bg-slate-50'}`}
             >
               <div className="flex items-start justify-between gap-4">
                 <div>
                   <div className="flex items-center gap-2">
-                    {!item.read && <span className="h-2 w-2 rounded-full bg-blue-600"></span>}
+                    {!item.read && <span className="h-2 w-2 rounded-full bg-slate-700"></span>}
                     <span className="font-semibold text-gray-900">{item.title}</span>
                   </div>
                   <p className="mt-3 text-sm leading-6 text-gray-600">{item.content}</p>
@@ -1126,22 +1130,22 @@ const PersonalCenter = () => {
 
   const renderBuyerSettings = () => (
     <Panel
-      title="个人设置"
-      subtitle="资料只保存在浏览器本地，你可以放心做界面演示和交互测试"
-      action={<button type="button" onClick={handleSaveProfile} className="rounded-full bg-blue-600 px-5 py-2.5 text-sm font-medium text-white hover:bg-blue-700">保存资料</button>}
+      title={t('个人设置', 'Settings')}
+      subtitle={t('资料只保存在浏览器本地，你可以放心做界面演示和交互测试', 'Data is saved locally for demo and testing')}
+      action={<button type="button" onClick={handleSaveProfile} className="rounded-full bg-slate-700 px-5 py-2.5 text-sm font-medium text-white hover:bg-slate-800">{t('保存资料', 'Save Profile')}</button>}
     >
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
         <div className="space-y-5">
-          <input value={settingsForm.nickname || ''} onChange={(event) => setSettingsForm((prev) => ({ ...prev, nickname: event.target.value }))} placeholder="昵称" className="w-full rounded-2xl border border-gray-300 px-4 py-3 text-sm focus:border-blue-500 focus:outline-none" />
-          <input value={settingsForm.avatar || ''} onChange={(event) => setSettingsForm((prev) => ({ ...prev, avatar: event.target.value }))} placeholder="头像链接" className="w-full rounded-2xl border border-gray-300 px-4 py-3 text-sm focus:border-blue-500 focus:outline-none" />
-          <input value={settingsForm.phone || ''} onChange={(event) => setSettingsForm((prev) => ({ ...prev, phone: event.target.value }))} placeholder="手机号" className="w-full rounded-2xl border border-gray-300 px-4 py-3 text-sm focus:border-blue-500 focus:outline-none" />
-          <input value={settingsForm.email || ''} onChange={(event) => setSettingsForm((prev) => ({ ...prev, email: event.target.value }))} placeholder="邮箱" className="w-full rounded-2xl border border-gray-300 px-4 py-3 text-sm focus:border-blue-500 focus:outline-none" />
+          <input value={settingsForm.nickname || ''} onChange={(event) => setSettingsForm((prev) => ({ ...prev, nickname: event.target.value }))} placeholder={t('昵称', 'Nickname')} className="w-full rounded-2xl border border-gray-300 px-4 py-3 text-sm focus:border-slate-600 focus:outline-none" />
+          <input value={settingsForm.avatar || ''} onChange={(event) => setSettingsForm((prev) => ({ ...prev, avatar: event.target.value }))} placeholder={t('头像链接', 'Avatar URL')} className="w-full rounded-2xl border border-gray-300 px-4 py-3 text-sm focus:border-slate-600 focus:outline-none" />
+          <input value={settingsForm.phone || ''} onChange={(event) => setSettingsForm((prev) => ({ ...prev, phone: event.target.value }))} placeholder={t('手机号', 'Phone')} className="w-full rounded-2xl border border-gray-300 px-4 py-3 text-sm focus:border-slate-600 focus:outline-none" />
+          <input value={settingsForm.email || ''} onChange={(event) => setSettingsForm((prev) => ({ ...prev, email: event.target.value }))} placeholder={t('邮箱', 'Email')} className="w-full rounded-2xl border border-gray-300 px-4 py-3 text-sm focus:border-slate-600 focus:outline-none" />
         </div>
         <div className="space-y-5">
-          <input value={settingsForm.company || ''} onChange={(event) => setSettingsForm((prev) => ({ ...prev, company: event.target.value }))} placeholder="公司/部门" className="w-full rounded-2xl border border-gray-300 px-4 py-3 text-sm focus:border-blue-500 focus:outline-none" />
-          <input value={settingsForm.city || ''} onChange={(event) => setSettingsForm((prev) => ({ ...prev, city: event.target.value }))} placeholder="城市" className="w-full rounded-2xl border border-gray-300 px-4 py-3 text-sm focus:border-blue-500 focus:outline-none" />
-          <input value={settingsForm.title || ''} onChange={(event) => setSettingsForm((prev) => ({ ...prev, title: event.target.value }))} placeholder="岗位" className="w-full rounded-2xl border border-gray-300 px-4 py-3 text-sm focus:border-blue-500 focus:outline-none" />
-          <textarea value={settingsForm.bio || ''} onChange={(event) => setSettingsForm((prev) => ({ ...prev, bio: event.target.value }))} rows={5} placeholder="个人简介" className="w-full rounded-2xl border border-gray-300 px-4 py-3 text-sm focus:border-blue-500 focus:outline-none" />
+          <input value={settingsForm.company || ''} onChange={(event) => setSettingsForm((prev) => ({ ...prev, company: event.target.value }))} placeholder={t('公司/部门', 'Company/Dept')} className="w-full rounded-2xl border border-gray-300 px-4 py-3 text-sm focus:border-slate-600 focus:outline-none" />
+          <input value={settingsForm.city || ''} onChange={(event) => setSettingsForm((prev) => ({ ...prev, city: event.target.value }))} placeholder={t('城市', 'City')} className="w-full rounded-2xl border border-gray-300 px-4 py-3 text-sm focus:border-slate-600 focus:outline-none" />
+          <input value={settingsForm.title || ''} onChange={(event) => setSettingsForm((prev) => ({ ...prev, title: event.target.value }))} placeholder={t('岗位', 'Title')} className="w-full rounded-2xl border border-gray-300 px-4 py-3 text-sm focus:border-slate-600 focus:outline-none" />
+          <textarea value={settingsForm.bio || ''} onChange={(event) => setSettingsForm((prev) => ({ ...prev, bio: event.target.value }))} rows={5} placeholder={t('个人简介', 'Bio')} className="w-full rounded-2xl border border-gray-300 px-4 py-3 text-sm focus:border-slate-600 focus:outline-none" />
         </div>
       </div>
     </Panel>
@@ -1161,11 +1165,11 @@ const PersonalCenter = () => {
           </div>
           <div className="grid grid-cols-2 gap-3 text-sm">
             <div className="rounded-2xl bg-white/10 px-4 py-3">
-              <div className="text-cyan-100">响应率</div>
+              <div className="text-cyan-100">{t('响应率', 'Response Rate')}</div>
               <div className="mt-1 font-semibold">{centerData.supplier.shop.responseRate}%</div>
             </div>
             <div className="rounded-2xl bg-white/10 px-4 py-3">
-              <div className="text-cyan-100">平均回复</div>
+              <div className="text-cyan-100">{t('平均回复', 'Avg. Reply')}</div>
               <div className="mt-1 font-semibold">{centerData.supplier.shop.replyTime}</div>
             </div>
           </div>
@@ -1173,30 +1177,30 @@ const PersonalCenter = () => {
       </div>
 
       <div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-4">
-        <MetricCard icon={Package} title="商品总数" value={supplierStats.products} subtitle={`其中 ${supplierStats.activeProducts} 个在售`} accent="bg-emerald-50 border-emerald-100" onClick={() => setActiveTab('products')} />
-        <MetricCard icon={Briefcase} title="租赁待审核" value={supplierStats.leasingReviews} subtitle="客户租赁申请会在这里进入审核流转" accent="bg-indigo-50 border-indigo-100" onClick={() => setActiveTab('leasing-reviews')} />
-        <MetricCard icon={MessageSquare} title="待处理询盘" value={supplierStats.pendingInquiries} subtitle="高优先级客户需要尽快跟进" accent="bg-red-50 border-red-100" onClick={() => setActiveTab('inquiries')} />
-        <MetricCard icon={FileText} title="报价单" value={supplierStats.quotes} subtitle="包含待确认、跟进中和已成交" accent="bg-amber-50 border-amber-100" onClick={() => setActiveTab('quotes')} />
-        <MetricCard icon={Bell} title="消息提醒" value={supplierStats.unread} subtitle={`另有 ${supplierStats.leasingReviews} 条租赁申请待审核`} accent="bg-sky-50 border-sky-100" onClick={() => setActiveTab('leasing-reviews')} />
+        <MetricCard icon={Package} title={t('商品总数', 'Total Products')} value={supplierStats.products} subtitle={`${t('其中', 'Of which')} ${supplierStats.activeProducts} ${t('个在售', 'on sale')}`} accent="bg-emerald-50 border-emerald-100" onClick={() => setActiveTab('products')} />
+        <MetricCard icon={Briefcase} title={t('租赁待审核', 'Leasing Reviews')} value={supplierStats.leasingReviews} subtitle={t('客户租赁申请会在这里进入审核流转', 'Customer leasing applications await review')} accent="bg-amber-50 border-amber-100" onClick={() => setActiveTab('leasing-reviews')} />
+        <MetricCard icon={MessageSquare} title={t('待处理询盘', 'Pending Inquiries')} value={supplierStats.pendingInquiries} subtitle={t('高优先级客户需要尽快跟进', 'High-priority customers need quick follow-up')} accent="bg-red-50 border-red-100" onClick={() => setActiveTab('inquiries')} />
+        <MetricCard icon={FileText} title={t('报价单', 'Quotes')} value={supplierStats.quotes} subtitle={t('包含待确认、跟进中和已成交', 'Pending, following up, and closed')} accent="bg-amber-50 border-amber-100" onClick={() => setActiveTab('quotes')} />
+        <MetricCard icon={Bell} title={t('消息提醒', 'Notifications')} value={supplierStats.unread} subtitle={`${t('另有', 'Plus')} ${supplierStats.leasingReviews} ${t('条租赁申请待审核', 'leasing reviews pending')}`} accent="bg-sky-50 border-sky-100" onClick={() => setActiveTab('leasing-reviews')} />
       </div>
     </div>
   );
 
   const renderSupplierProducts = () => (
-    <Panel title="商品管理" subtitle="支持本地新增、编辑、上下架、删除，适合直接做前端演示" action={<button type="button" onClick={() => navigate('/publish-product')} className="inline-flex items-center gap-2 rounded-full bg-blue-600 px-5 py-2.5 text-sm font-medium text-white hover:bg-blue-700"><Plus size={16} />添加商品</button>}>
+    <Panel title={t('商品管理', 'Products')} subtitle={t('支持本地新增、编辑、上下架、删除，适合直接做前端演示', 'Add, edit, list, and delete products locally')} action={<button type="button" onClick={() => navigate(to('/publish-product'))} className="inline-flex items-center gap-2 rounded-full bg-slate-700 px-5 py-2.5 text-sm font-medium text-white hover:bg-slate-800"><Plus size={16} />{t('添加商品', 'Add Product')}</button>}>
       <div className="mb-5 flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
         <div className="relative w-full max-w-md">
           <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
-          <input value={keyword} onChange={(event) => setKeyword(event.target.value)} placeholder="搜索商品名称、分类、标签" className="w-full rounded-full border border-gray-300 py-2.5 pl-9 pr-4 text-sm focus:border-blue-500 focus:outline-none" />
+          <input value={keyword} onChange={(event) => setKeyword(event.target.value)} placeholder={t('搜索商品名称、分类、标签', 'Search products, categories, tags')} className="w-full rounded-full border border-gray-300 py-2.5 pl-9 pr-4 text-sm focus:border-slate-600 focus:outline-none" />
         </div>
         <div className="flex gap-2">
-          {[['all', '全部'], ['online', '在售'], ['offline', '已下架']].map(([value, label]) => (
-            <button key={value} type="button" onClick={() => setProductStatusFilter(value)} className={`rounded-full px-4 py-2 text-sm font-medium ${productStatusFilter === value ? 'bg-blue-600 text-white' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'}`}>{label}</button>
+          {[['all', t('全部', 'All')], ['online', t('在售', 'Online')], ['offline', t('已下架', 'Offline')]].map(([value, label]) => (
+            <button key={value} type="button" onClick={() => setProductStatusFilter(value)} className={`rounded-full px-4 py-2 text-sm font-medium ${productStatusFilter === value ? 'bg-slate-700 text-white' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'}`}>{label}</button>
           ))}
         </div>
       </div>
       {filteredProducts.length === 0 ? (
-        <EmptyState icon={Package} title="还没有符合条件的商品" description="你可以先新增一条商品，或者切换筛选条件查看其他状态。" actionLabel="发布商品" onAction={() => navigate('/publish-product')} />
+        <EmptyState icon={Package} title={t('还没有符合条件的商品', 'No matching products')} description={t('你可以先新增一条商品，或者切换筛选条件查看其他状态。', 'Add a product or switch filters.')} actionLabel={t('发布商品', 'Publish Product')} onAction={() => navigate(to('/publish-product'))} />
       ) : (
         <div className="space-y-4">
           {filteredProducts.map((item) => (
@@ -1206,13 +1210,13 @@ const PersonalCenter = () => {
                 <div>
                   <div className="font-semibold text-gray-900">{item.name}</div>
                   <div className="mt-2 text-sm text-gray-500">{item.categoryName} · 库存 {item.stock}</div>
-                  <div className="mt-2 text-sm font-medium text-blue-600">{formatCurrency(item.price)}</div>
+                  <div className="mt-2 text-sm font-medium text-slate-700">{formatCurrency(item.price)}</div>
                 </div>
               </button>
               <div className="flex items-center gap-2">
-                <StatusPill status={item.status === 1 ? '在售' : '已下架'} />
-                <button type="button" onClick={() => handleToggleProductStatus(item)} className="rounded-full bg-gray-100 px-3 py-1.5 text-xs font-medium text-gray-700 hover:bg-gray-200">{item.status === 1 ? '下架' : '上架'}</button>
-                <button type="button" onClick={() => navigate(`/publish-product/${item.id}`)} className="rounded-full bg-blue-50 px-3 py-1.5 text-xs font-medium text-blue-700 hover:bg-blue-100">编辑</button>
+                <StatusPill status={item.status === 1 ? t('在售', 'Online') : t('已下架', 'Offline')} />
+                <button type="button" onClick={() => handleToggleProductStatus(item)} className="rounded-full bg-gray-100 px-3 py-1.5 text-xs font-medium text-gray-700 hover:bg-gray-200">{item.status === 1 ? t('下架', 'Delist') : t('上架', 'List')}</button>
+                <button type="button" onClick={() => navigate(to(`/publish-product/${item.id}`))} className="rounded-full bg-slate-50 px-3 py-1.5 text-xs font-medium text-slate-800 hover:bg-slate-100">{t('编辑', 'Edit')}</button>
               </div>
             </div>
           ))}
@@ -1222,19 +1226,19 @@ const PersonalCenter = () => {
   );
 
   const renderSupplierLeasingReviews = () => (
-    <Panel title="租赁审核" subtitle="用户提交租赁申请后，会自动同步到供应商中心，审核通过后设备会直接进入租出状态">
+    <Panel title={t('租赁审核', 'Leasing Review')} subtitle={t('用户提交租赁申请后，会自动同步到供应商中心，审核通过后设备会直接进入租出状态', 'Leasing applications sync here; approval sets device to leased')}>
       <div className="mb-5 flex flex-wrap gap-2">
         {[
-          ['all', '全部'],
-          ['pending', '待审核'],
-          ['approved', '已通过'],
-          ['rejected', '已驳回'],
+          ['all', t('全部', 'All')],
+          ['pending', t('待审核', 'Pending')],
+          ['approved', t('已通过', 'Approved')],
+          ['rejected', t('已驳回', 'Rejected')],
         ].map(([value, label]) => (
           <button
             key={value}
             type="button"
             onClick={() => setSupplierLeasingFilter(value)}
-            className={`rounded-full px-4 py-2 text-sm font-medium ${supplierLeasingFilter === value ? 'bg-blue-600 text-white' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'}`}
+            className={`rounded-full px-4 py-2 text-sm font-medium ${supplierLeasingFilter === value ? 'bg-slate-700 text-white' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'}`}
           >
             {label}
           </button>
@@ -1242,13 +1246,13 @@ const PersonalCenter = () => {
       </div>
 
       {supplierLeasingLoading ? (
-        <div className="rounded-2xl border border-dashed border-gray-300 px-6 py-12 text-center text-sm text-gray-500">正在加载租赁申请...</div>
+        <div className="rounded-2xl border border-dashed border-gray-300 px-6 py-12 text-center text-sm text-gray-500">{t('正在加载租赁申请...', 'Loading leasing applications...')}</div>
       ) : filteredSupplierLeasingRecords.length === 0 ? (
-        <EmptyState icon={Briefcase} title="当前没有租赁申请" description="当采购方提交租赁申请后，这里会显示待审核数据。" />
+        <EmptyState icon={Briefcase} title={t('当前没有租赁申请', 'No leasing applications')} description={t('当采购方提交租赁申请后，这里会显示待审核数据。', 'Leasing applications from buyers will appear here.')} />
       ) : (
         <div className="space-y-4">
           {filteredSupplierLeasingRecords.map((item) => {
-            const statusText = item.status === 0 ? '待审核' : item.status === 1 ? '已通过并租出' : '已驳回';
+            const statusText = item.status === 0 ? t('待审核', 'Pending') : item.status === 1 ? t('已通过并租出', 'Approved & Leased') : t('已驳回', 'Rejected');
             return (
               <div key={item.id} className="rounded-2xl border border-gray-200 bg-white p-5">
                 <div className="flex flex-col gap-4 xl:flex-row xl:items-start xl:justify-between">
@@ -1261,12 +1265,12 @@ const PersonalCenter = () => {
                       </div>
                       <p className="mt-2 text-sm text-gray-500">{item.companyName} · {item.contactName} · {item.contactPhone}</p>
                       <div className="mt-3 grid gap-2 text-sm text-gray-600 md:grid-cols-2">
-                        <div>租赁周期：{item.leasePeriod || '未填写'} / {item.leaseDuration || 0}</div>
-                        <div>预估费用：{formatCurrency(item.estimatedCost)}</div>
-                        <div>期望开始：{item.expectedStartDate || '待确认'}</div>
-                        <div>设备状态：{item.inventoryStatus === 1 ? '已租出' : '待租中'}</div>
-                        <div className="md:col-span-2">配送地址：{item.deliveryAddress || '未填写'}</div>
-                        <div className="md:col-span-2">使用地址：{item.onsiteAddress || '未填写'}</div>
+                        <div>{t('租赁周期：', 'Lease Period:')}{item.leasePeriod || t('未填写', 'N/A')} / {item.leaseDuration || 0}</div>
+                        <div>{t('预估费用：', 'Est. Cost:')}{formatCurrency(item.estimatedCost)}</div>
+                        <div>{t('期望开始：', 'Expected Start:')}{item.expectedStartDate || t('待确认', 'TBD')}</div>
+                        <div>{t('设备状态：', 'Device Status:')}{item.inventoryStatus === 1 ? t('已租出', 'Leased') : t('待租中', 'Available')}</div>
+                        <div className="md:col-span-2">{t('配送地址：', 'Delivery:')}{item.deliveryAddress || t('未填写', 'N/A')}</div>
+                        <div className="md:col-span-2">{t('使用地址：', 'Usage Address:')}{item.onsiteAddress || t('未填写', 'N/A')}</div>
                       </div>
                       {item.remark && <p className="mt-3 rounded-2xl bg-gray-50 px-4 py-3 text-sm leading-6 text-gray-600">{item.remark}</p>}
                     </div>
@@ -1274,8 +1278,8 @@ const PersonalCenter = () => {
 
                   {item.status === 0 && (
                     <div className="flex shrink-0 gap-2">
-                      <button type="button" onClick={() => handleSupplierLeasingReview(item, 2)} className="rounded-full bg-red-50 px-4 py-2 text-sm font-medium text-red-700 hover:bg-red-100">驳回</button>
-                      <button type="button" onClick={() => handleSupplierLeasingReview(item, 1)} className="rounded-full bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700">通过并租出</button>
+                      <button type="button" onClick={() => handleSupplierLeasingReview(item, 2)} className="rounded-full bg-red-50 px-4 py-2 text-sm font-medium text-red-700 hover:bg-red-100">{t('驳回', 'Reject')}</button>
+                      <button type="button" onClick={() => handleSupplierLeasingReview(item, 1)} className="rounded-full bg-slate-700 px-4 py-2 text-sm font-medium text-white hover:bg-slate-800">{t('通过并租出', 'Approve & Lease')}</button>
                     </div>
                   )}
                 </div>
@@ -1288,20 +1292,24 @@ const PersonalCenter = () => {
   );
 
   const renderSupplierInquiries = () => (
-    <Panel title="询盘管理" subtitle="不仅展示列表，还可以直接切换推进状态，模拟真实供应商工作台">
+    <Panel title={t('询盘管理', 'Inquiry Mgmt')} subtitle={t('不仅展示列表，还可以直接切换推进状态，模拟真实供应商工作台', 'Switch statuses to simulate a real supplier workspace')}>
       <div className="grid grid-cols-1 gap-4 xl:grid-cols-3">
-        {['待回复', '方案沟通中', '已转报价'].map((status) => {
-          const items = centerData.supplier.inquiries.filter((item) => item.status === status);
+        {[
+          { key: '待回复', label: t('待回复', 'Pending Reply') },
+          { key: '方案沟通中', label: t('方案沟通中', 'In Discussion') },
+          { key: '已转报价', label: t('已转报价', 'Quoted') },
+        ].map(({ key, label }) => {
+          const items = centerData.supplier.inquiries.filter((item) => item.status === key);
           return (
-            <div key={status} className="rounded-2xl bg-gray-50 p-4">
+            <div key={key} className="rounded-2xl bg-gray-50 p-4">
               <div className="mb-4 flex items-center justify-between">
-                <div className="font-semibold text-gray-900">{status}</div>
-                <div className="rounded-full bg-white px-3 py-1 text-xs text-gray-500">{items.length} 条</div>
+                <div className="font-semibold text-gray-900">{label}</div>
+                <div className="rounded-full bg-white px-3 py-1 text-xs text-gray-500">{items.length} {t('条', '')}</div>
               </div>
               <div className="space-y-3">
-                {items.length === 0 && <div className="rounded-2xl border border-dashed border-gray-300 px-4 py-6 text-center text-sm text-gray-400">暂无内容</div>}
+                {items.length === 0 && <div className="rounded-2xl border border-dashed border-gray-300 px-4 py-6 text-center text-sm text-gray-400">{t('暂无内容', 'No items')}</div>}
                 {items.map((item) => (
-                  <button type="button" key={item.id} onClick={() => setDetail({ type: 'supplier-inquiry', data: item })} className="w-full rounded-2xl border border-gray-200 bg-white p-4 text-left hover:border-blue-200 hover:bg-blue-50/40">
+                  <button type="button" key={item.id} onClick={() => setDetail({ type: 'supplier-inquiry', data: item })} className="w-full rounded-2xl border border-gray-200 bg-white p-4 text-left hover:border-slate-200 hover:bg-slate-50/40">
                     <div className="font-semibold text-gray-900">{item.customer}</div>
                     <div className="mt-2 text-sm text-gray-500">{item.product}</div>
                     <p className="mt-3 text-sm leading-6 text-gray-600">{item.lastMessage}</p>
@@ -1316,10 +1324,10 @@ const PersonalCenter = () => {
   );
 
   const renderSupplierQuotes = () => (
-    <Panel title="报价管理" subtitle="报价项、到期时间和成交状态都可以本地模拟">
+    <Panel title={t('报价管理', 'Quotes')} subtitle={t('报价项、到期时间和成交状态都可以本地模拟', 'Quote items, expiry, and deal status are simulated locally')}>
       <div className="grid grid-cols-1 gap-4 xl:grid-cols-2">
         {centerData.supplier.quotes.map((item) => (
-          <button type="button" key={item.id} onClick={() => setDetail({ type: 'quote', data: item })} className="rounded-2xl border border-gray-200 p-5 text-left hover:border-blue-200 hover:bg-blue-50/40">
+          <button type="button" key={item.id} onClick={() => setDetail({ type: 'quote', data: item })} className="rounded-2xl border border-gray-200 p-5 text-left hover:border-slate-200 hover:bg-slate-50/40">
             <div className="flex items-start justify-between gap-4">
               <div>
                 <div className="font-semibold text-gray-900">{item.title}</div>
@@ -1327,8 +1335,8 @@ const PersonalCenter = () => {
               </div>
               <StatusPill status={item.status} />
             </div>
-            <div className="mt-4 text-2xl font-bold text-blue-600">{formatCurrency(item.amount)}</div>
-            <div className="mt-2 text-xs text-gray-500">有效期至 {item.expireDate}</div>
+            <div className="mt-4 text-2xl font-bold text-slate-700">{formatCurrency(item.amount)}</div>
+            <div className="mt-2 text-xs text-gray-500">{t('有效期至', 'Valid until')} {item.expireDate}</div>
           </button>
         ))}
       </div>
@@ -1336,19 +1344,19 @@ const PersonalCenter = () => {
   );
 
   const renderSupplierShop = () => (
-    <Panel title="店铺管理" subtitle="这里做成了表单 + 预览的方式，演示会更直观" action={<button type="button" onClick={handleSaveShop} className="rounded-full bg-blue-600 px-5 py-2.5 text-sm font-medium text-white hover:bg-blue-700">保存店铺信息</button>}>
+    <Panel title={t('店铺管理', 'Store')} subtitle={t('这里做成了表单 + 预览的方式，演示会更直观', 'Form + preview layout for easier demo')} action={<button type="button" onClick={handleSaveShop} className="rounded-full bg-slate-700 px-5 py-2.5 text-sm font-medium text-white hover:bg-slate-800">{t('保存店铺信息', 'Save Shop Info')}</button>}>
       <div className="grid grid-cols-1 gap-6 xl:grid-cols-[1.05fr_0.95fr]">
         <div className="space-y-5">
-          <input value={shopForm.name || ''} onChange={(event) => setShopForm((prev) => ({ ...prev, name: event.target.value }))} placeholder="店铺名称" className="w-full rounded-2xl border border-gray-300 px-4 py-3 text-sm focus:border-blue-500 focus:outline-none" />
-          <input value={shopForm.slogan || ''} onChange={(event) => setShopForm((prev) => ({ ...prev, slogan: event.target.value }))} placeholder="宣传语" className="w-full rounded-2xl border border-gray-300 px-4 py-3 text-sm focus:border-blue-500 focus:outline-none" />
-          <textarea value={shopForm.description || ''} onChange={(event) => setShopForm((prev) => ({ ...prev, description: event.target.value }))} rows={5} placeholder="店铺介绍" className="w-full rounded-2xl border border-gray-300 px-4 py-3 text-sm focus:border-blue-500 focus:outline-none" />
-          <input value={shopForm.serviceArea || ''} onChange={(event) => setShopForm((prev) => ({ ...prev, serviceArea: event.target.value }))} placeholder="服务区域" className="w-full rounded-2xl border border-gray-300 px-4 py-3 text-sm focus:border-blue-500 focus:outline-none" />
-          <input value={Array.isArray(shopForm.tags) ? shopForm.tags.join('，') : shopForm.tags || ''} onChange={(event) => setShopForm((prev) => ({ ...prev, tags: event.target.value }))} placeholder="服务标签" className="w-full rounded-2xl border border-gray-300 px-4 py-3 text-sm focus:border-blue-500 focus:outline-none" />
+          <input value={shopForm.name || ''} onChange={(event) => setShopForm((prev) => ({ ...prev, name: event.target.value }))} placeholder={t('店铺名称', 'Shop Name')} className="w-full rounded-2xl border border-gray-300 px-4 py-3 text-sm focus:border-slate-600 focus:outline-none" />
+          <input value={shopForm.slogan || ''} onChange={(event) => setShopForm((prev) => ({ ...prev, slogan: event.target.value }))} placeholder={t('宣传语', 'Slogan')} className="w-full rounded-2xl border border-gray-300 px-4 py-3 text-sm focus:border-slate-600 focus:outline-none" />
+          <textarea value={shopForm.description || ''} onChange={(event) => setShopForm((prev) => ({ ...prev, description: event.target.value }))} rows={5} placeholder={t('店铺介绍', 'Description')} className="w-full rounded-2xl border border-gray-300 px-4 py-3 text-sm focus:border-slate-600 focus:outline-none" />
+          <input value={shopForm.serviceArea || ''} onChange={(event) => setShopForm((prev) => ({ ...prev, serviceArea: event.target.value }))} placeholder={t('服务区域', 'Service Area')} className="w-full rounded-2xl border border-gray-300 px-4 py-3 text-sm focus:border-slate-600 focus:outline-none" />
+          <input value={Array.isArray(shopForm.tags) ? shopForm.tags.join('，') : shopForm.tags || ''} onChange={(event) => setShopForm((prev) => ({ ...prev, tags: event.target.value }))} placeholder={t('服务标签', 'Service Tags')} className="w-full rounded-2xl border border-gray-300 px-4 py-3 text-sm focus:border-slate-600 focus:outline-none" />
         </div>
         <div className="rounded-[28px] bg-gradient-to-br from-slate-950 via-cyan-950 to-sky-900 p-6 text-white">
           <div className="inline-flex items-center gap-2 rounded-full bg-white/10 px-3 py-1 text-xs uppercase tracking-[0.24em] text-cyan-100">
             <Building2 size={14} />
-            店铺预览
+            {t('店铺预览', 'Shop Preview')}
           </div>
           <h3 className="mt-4 text-2xl font-bold">{shopForm.name}</h3>
           <p className="mt-3 text-cyan-100">{shopForm.slogan}</p>
@@ -1359,10 +1367,10 @@ const PersonalCenter = () => {
   );
 
   const renderSupplierTasks = () => (
-    <Panel title="今日待办" subtitle="给供应商侧加了一层团队任务感，演示更完整">
+    <Panel title={t('今日待办', 'Tasks')} subtitle={t('给供应商侧加了一层团队任务感，演示更完整', 'Task list for a more complete supplier demo')}>
       <div className="space-y-4">
         {centerData.supplier.todos.map((item) => (
-          <div key={item.id} className="flex w-full items-center justify-between rounded-2xl border border-gray-200 p-5 text-left hover:border-blue-200 hover:bg-blue-50/40">
+          <div key={item.id} className="flex w-full items-center justify-between rounded-2xl border border-gray-200 p-5 text-left hover:border-slate-200 hover:bg-slate-50/40">
             <div>
               <button type="button" onClick={() => setDetail({ type: 'task', data: item })} className="text-left">
                 <div className="flex items-center gap-2">
@@ -1380,17 +1388,17 @@ const PersonalCenter = () => {
   );
 
   const renderSupplierSettings = () => (
-    <Panel title="账号设置" subtitle="供应商侧保留账号信息，和店铺信息做拆分，结构更清晰" action={<button type="button" onClick={handleSaveProfile} className="rounded-full bg-blue-600 px-5 py-2.5 text-sm font-medium text-white hover:bg-blue-700">保存账号资料</button>}>
+    <Panel title={t('账号设置', 'Account')} subtitle={t('供应商侧保留账号信息，和店铺信息做拆分，结构更清晰', 'Account info separated from shop info for clarity')} action={<button type="button" onClick={handleSaveProfile} className="rounded-full bg-slate-700 px-5 py-2.5 text-sm font-medium text-white hover:bg-slate-800">{t('保存账号资料', 'Save Account')}</button>}>
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
         <div className="space-y-5">
-          <input value={settingsForm.nickname || ''} onChange={(event) => setSettingsForm((prev) => ({ ...prev, nickname: event.target.value }))} placeholder="联系人" className="w-full rounded-2xl border border-gray-300 px-4 py-3 text-sm focus:border-blue-500 focus:outline-none" />
-          <input value={settingsForm.avatar || ''} onChange={(event) => setSettingsForm((prev) => ({ ...prev, avatar: event.target.value }))} placeholder="头像链接" className="w-full rounded-2xl border border-gray-300 px-4 py-3 text-sm focus:border-blue-500 focus:outline-none" />
-          <input value={settingsForm.phone || ''} onChange={(event) => setSettingsForm((prev) => ({ ...prev, phone: event.target.value }))} placeholder="手机号" className="w-full rounded-2xl border border-gray-300 px-4 py-3 text-sm focus:border-blue-500 focus:outline-none" />
+          <input value={settingsForm.nickname || ''} onChange={(event) => setSettingsForm((prev) => ({ ...prev, nickname: event.target.value }))} placeholder={t('联系人', 'Contact')} className="w-full rounded-2xl border border-gray-300 px-4 py-3 text-sm focus:border-slate-600 focus:outline-none" />
+          <input value={settingsForm.avatar || ''} onChange={(event) => setSettingsForm((prev) => ({ ...prev, avatar: event.target.value }))} placeholder={t('头像链接', 'Avatar URL')} className="w-full rounded-2xl border border-gray-300 px-4 py-3 text-sm focus:border-slate-600 focus:outline-none" />
+          <input value={settingsForm.phone || ''} onChange={(event) => setSettingsForm((prev) => ({ ...prev, phone: event.target.value }))} placeholder={t('手机号', 'Phone')} className="w-full rounded-2xl border border-gray-300 px-4 py-3 text-sm focus:border-slate-600 focus:outline-none" />
         </div>
         <div className="space-y-5">
-          <input value={settingsForm.email || ''} onChange={(event) => setSettingsForm((prev) => ({ ...prev, email: event.target.value }))} placeholder="邮箱" className="w-full rounded-2xl border border-gray-300 px-4 py-3 text-sm focus:border-blue-500 focus:outline-none" />
-          <input value={settingsForm.city || ''} onChange={(event) => setSettingsForm((prev) => ({ ...prev, city: event.target.value }))} placeholder="所在城市" className="w-full rounded-2xl border border-gray-300 px-4 py-3 text-sm focus:border-blue-500 focus:outline-none" />
-          <textarea value={settingsForm.bio || ''} onChange={(event) => setSettingsForm((prev) => ({ ...prev, bio: event.target.value }))} rows={5} placeholder="个人简介" className="w-full rounded-2xl border border-gray-300 px-4 py-3 text-sm focus:border-blue-500 focus:outline-none" />
+          <input value={settingsForm.email || ''} onChange={(event) => setSettingsForm((prev) => ({ ...prev, email: event.target.value }))} placeholder={t('邮箱', 'Email')} className="w-full rounded-2xl border border-gray-300 px-4 py-3 text-sm focus:border-slate-600 focus:outline-none" />
+          <input value={settingsForm.city || ''} onChange={(event) => setSettingsForm((prev) => ({ ...prev, city: event.target.value }))} placeholder={t('所在城市', 'City')} className="w-full rounded-2xl border border-gray-300 px-4 py-3 text-sm focus:border-slate-600 focus:outline-none" />
+          <textarea value={settingsForm.bio || ''} onChange={(event) => setSettingsForm((prev) => ({ ...prev, bio: event.target.value }))} rows={5} placeholder={t('个人简介', 'Bio')} className="w-full rounded-2xl border border-gray-300 px-4 py-3 text-sm focus:border-slate-600 focus:outline-none" />
         </div>
       </div>
     </Panel>
@@ -1444,7 +1452,7 @@ const PersonalCenter = () => {
                   type="button"
                   key={item.key}
                   onClick={() => setActiveTab(item.key)}
-                  className={`flex shrink-0 items-center gap-2 rounded-full px-4 py-2 text-sm font-medium ${activeTab === item.key ? 'bg-blue-600 text-white' : 'bg-gray-100 text-gray-600'}`}
+                  className={`flex shrink-0 items-center gap-2 rounded-full px-4 py-2 text-sm font-medium ${activeTab === item.key ? 'bg-slate-700 text-white' : 'bg-gray-100 text-gray-600'}`}
                 >
                   <Icon size={16} />
                   {item.label}
@@ -1458,7 +1466,7 @@ const PersonalCenter = () => {
         <div className="flex gap-6">
           <aside className="hidden w-72 shrink-0 md:block">
             <div className="sticky top-20 overflow-hidden rounded-[28px] bg-white shadow-sm">
-              <div className={`p-6 text-white ${isSupplier ? 'bg-gradient-to-br from-cyan-700 to-sky-900' : 'bg-gradient-to-br from-blue-700 to-indigo-900'}`}>
+              <div className={`p-6 text-white ${isSupplier ? 'bg-gradient-to-br from-cyan-700 to-sky-900' : 'bg-gradient-to-br from-slate-800 to-amber-800'}`}>
                 <img
                   src={centerData.profile.avatar || user?.avatar || 'https://api.dicebear.com/7.x/avataaars/svg?seed=default'}
                   alt="Avatar"
@@ -1467,7 +1475,7 @@ const PersonalCenter = () => {
                 <div className="mt-4 text-xl font-bold">{centerData.profile.nickname}</div>
                 <div className="mt-1 text-sm text-white/80">{centerData.profile.title}</div>
                 <div className="mt-3 rounded-2xl bg-white/10 px-4 py-3 text-sm leading-6 text-white/90">
-                  {isSupplier ? '商品、询盘、报价和店铺配置都采用前端本地静态存储。' : '点赞视频、浏览足迹、收藏夹和采购项目全部前端静态保存。'}
+                  {isSupplier ? t('商品、询盘、报价和店铺配置都采用前端本地静态存储。', 'Products, inquiries, quotes, and shop config are stored locally.') : t('点赞视频、浏览足迹、收藏夹和采购项目全部前端静态保存。', 'Likes, history, favorites, and projects are saved locally.')}
                 </div>
               </div>
               <div className="p-3">
@@ -1478,13 +1486,13 @@ const PersonalCenter = () => {
                       type="button"
                       key={item.key}
                       onClick={() => setActiveTab(item.key)}
-                      className={`mb-1 flex w-full items-center justify-between rounded-2xl px-4 py-3 text-left transition-colors ${activeTab === item.key ? 'bg-blue-50 text-blue-700' : 'text-gray-700 hover:bg-gray-50'}`}
+                      className={`mb-1 flex w-full items-center justify-between rounded-2xl px-4 py-3 text-left transition-colors ${activeTab === item.key ? 'bg-slate-50 text-slate-800' : 'text-gray-700 hover:bg-gray-50'}`}
                     >
                       <div className="flex items-center gap-3">
                         <Icon size={18} />
                         <span className="text-sm font-medium">{item.label}</span>
                       </div>
-                      {item.badge ? <span className={`rounded-full px-2.5 py-1 text-xs ${activeTab === item.key ? 'bg-white text-blue-700' : 'bg-gray-100 text-gray-500'}`}>{item.badge}</span> : null}
+                      {item.badge ? <span className={`rounded-full px-2.5 py-1 text-xs ${activeTab === item.key ? 'bg-white text-slate-800' : 'bg-gray-100 text-gray-500'}`}>{item.badge}</span> : null}
                     </button>
                   );
                 })}

@@ -30,25 +30,25 @@ const LayoutEn = () => {
   };
 
   return (
-    <div className="flex flex-col min-h-screen bg-white text-slate-900 font-sans">
-      {/* International Header Style - Cleaner, Less Cluttered */}
+    <div className="flex flex-col min-h-screen bg-gray-50 text-slate-900 font-sans">
       <header className="bg-white border-b border-gray-100 sticky top-0 z-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-20">
             {/* Logo */}
             <div className="flex items-center">
               <Link to="/en" className="flex items-center gap-2">
-                <span className="text-2xl font-bold text-blue-700 tracking-tight">DongShiDi</span>
-                <span className="text-xs font-semibold bg-blue-100 text-blue-700 px-2 py-0.5 rounded-full uppercase tracking-wider">Global</span>
+                <span className="text-2xl font-bold text-slate-800 tracking-tight">DongShiDi</span>
+                <span className="text-xs font-semibold bg-slate-100 text-slate-800 px-2 py-0.5 rounded-full uppercase tracking-wider">Global</span>
               </Link>
             </div>
 
-            {/* Desktop Navigation - Centered & Clean */}
-            <nav className="hidden md:flex space-x-8">
-              <Link to="/en" className={`text-sm font-medium hover:text-blue-600 transition-colors ${isActive('/en') ? 'text-blue-600' : 'text-slate-600'}`}>Home</Link>
-              <Link to="/en/mall" className={`text-sm font-medium hover:text-blue-600 transition-colors ${isActive('/en/mall') ? 'text-blue-600' : 'text-slate-600'}`}>Marketplace</Link>
-              <Link to="/en/leasing" className={`text-sm font-medium hover:text-blue-600 transition-colors ${isActive('/en/leasing') ? 'text-blue-600' : 'text-slate-600'}`}>Leasing</Link>
-              <Link to="/en/discovery" className={`text-sm font-medium hover:text-blue-600 transition-colors ${isActive('/en/discovery') ? 'text-blue-600' : 'text-slate-600'}`}>Insights</Link>
+            {/* Desktop Navigation */}
+            <nav className="hidden md:flex space-x-6">
+              <Link to="/en" className={`text-sm font-medium hover:text-slate-700 transition-colors ${isActive('/en') ? 'text-slate-700 border-b-2 border-slate-700 pb-1' : 'text-slate-600'}`}>Home</Link>
+              <Link to="/en/discovery" className={`text-sm font-medium hover:text-slate-700 transition-colors ${isActive('/en/discovery') ? 'text-slate-700 border-b-2 border-slate-700 pb-1' : 'text-slate-600'}`}>Discovery</Link>
+              <Link to="/en/leasing" className={`text-sm font-medium hover:text-slate-700 transition-colors ${isActive('/en/leasing') ? 'text-slate-700 border-b-2 border-slate-700 pb-1' : 'text-slate-600'}`}>Leasing</Link>
+              <Link to="/en/mall" className={`text-sm font-medium hover:text-slate-700 transition-colors ${isActive('/en/mall') ? 'text-slate-700 border-b-2 border-slate-700 pb-1' : 'text-slate-600'}`}>Marketplace</Link>
+              <Link to="/en/suppliers" className={`text-sm font-medium hover:text-slate-700 transition-colors ${isActive('/en/suppliers') ? 'text-slate-700 border-b-2 border-slate-700 pb-1' : 'text-slate-600'}`}>Suppliers</Link>
             </nav>
 
             {/* Search Bar */}
@@ -57,17 +57,17 @@ const LayoutEn = () => {
                 type="text"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                placeholder="Search..."
-                className="bg-gray-50 border border-gray-200 rounded-full py-1.5 pl-4 pr-10 text-sm focus:outline-none focus:border-blue-500 w-48 transition-all focus:w-64"
+                placeholder="Search products, content..."
+                className="bg-gray-50 border border-gray-200 rounded-full py-1.5 pl-4 pr-10 text-sm focus:outline-none focus:border-slate-600 w-48 transition-all focus:w-64"
               />
-              <button type="submit" className="absolute right-3 text-gray-400 hover:text-blue-600">
+              <button type="submit" className="absolute right-3 text-gray-400 hover:text-slate-700">
                 <Search size={16} />
               </button>
             </form>
 
             {/* Right Side Actions */}
             <div className="hidden md:flex items-center space-x-6">
-              <Link to="/" className="text-slate-500 hover:text-blue-600 flex items-center gap-1 text-sm font-medium">
+              <Link to="/" className="text-slate-500 hover:text-slate-700 flex items-center gap-1 text-sm font-medium">
                 <Globe size={16} />
                 <span>CN</span>
               </Link>
@@ -81,13 +81,18 @@ const LayoutEn = () => {
                       <LayoutDashboard size={16} /> Admin
                     </Link>
                   )}
-                  <span className="text-sm font-medium text-slate-700">{user.name}</span>
+                  <button
+                    onClick={() => handleProtectedNavigation('/en/profile')}
+                    className={`text-sm font-medium hover:text-slate-700 transition-colors ${location.pathname === '/en/profile' ? 'text-slate-700' : 'text-slate-700'}`}
+                  >
+                    {user?.role === 'ADMIN' ? 'Dashboard' : (user?.role === 'SUPPLIER' ? 'Supplier Center' : 'My Account')}
+                  </button>
                   <button onClick={logout} className="text-sm text-slate-500 hover:text-red-600">Logout</button>
                 </div>
               ) : (
                 <div className="flex items-center gap-3">
-                  <Link to="/en/login" className="text-sm font-medium text-slate-600 hover:text-blue-600">Sign In</Link>
-                  <Link to="/en/login" className="bg-blue-600 text-white px-4 py-2 rounded-full text-sm font-medium hover:bg-blue-700 transition-shadow shadow-sm hover:shadow-md">
+                  <Link to="/en/login" className="text-sm font-medium text-slate-600 hover:text-slate-700">Sign In</Link>
+                  <Link to="/en/register" className="bg-slate-700 text-white px-4 py-2 rounded-full text-sm font-medium hover:bg-slate-800 transition-shadow shadow-sm hover:shadow-md">
                     Join Free
                   </Link>
                 </div>
@@ -108,11 +113,15 @@ const LayoutEn = () => {
           <div className="md:hidden bg-white border-t border-gray-100 absolute w-full shadow-lg">
             <div className="px-4 pt-2 pb-6 space-y-1">
               <Link to="/en" className="block px-3 py-3 text-base font-medium text-slate-700 hover:bg-gray-50 rounded-md">Home</Link>
-              <Link to="/en/mall" className="block px-3 py-3 text-base font-medium text-slate-700 hover:bg-gray-50 rounded-md">Marketplace</Link>
+              <Link to="/en/discovery" className="block px-3 py-3 text-base font-medium text-slate-700 hover:bg-gray-50 rounded-md">Discovery</Link>
               <Link to="/en/leasing" className="block px-3 py-3 text-base font-medium text-slate-700 hover:bg-gray-50 rounded-md">Leasing</Link>
-              <Link to="/en/discovery" className="block px-3 py-3 text-base font-medium text-slate-700 hover:bg-gray-50 rounded-md">Insights</Link>
+              <Link to="/en/mall" className="block px-3 py-3 text-base font-medium text-slate-700 hover:bg-gray-50 rounded-md">Marketplace</Link>
+              <Link to="/en/suppliers" className="block px-3 py-3 text-base font-medium text-slate-700 hover:bg-gray-50 rounded-md">Suppliers</Link>
+              {user && (
+                <Link to="/en/profile" className="block px-3 py-3 text-base font-medium text-slate-700 hover:bg-gray-50 rounded-md">My Account</Link>
+              )}
               <div className="border-t border-gray-100 my-2"></div>
-              <Link to="/" className="block px-3 py-3 text-base font-medium text-slate-500 hover:text-blue-600">Switch to Chinese Site</Link>
+              <Link to="/" className="block px-3 py-3 text-base font-medium text-slate-500 hover:text-slate-700">Switch to Chinese Site</Link>
             </div>
           </div>
         )}
@@ -128,4 +137,3 @@ const LayoutEn = () => {
 };
 
 export default LayoutEn;
-

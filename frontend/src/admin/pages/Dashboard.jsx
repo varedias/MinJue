@@ -140,7 +140,7 @@ const Dashboard = () => {
       {/* 互动数据小卡片 */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
         <div className="bg-white rounded-lg p-4 border border-gray-100 flex items-center gap-3">
-          <div className="p-2 bg-blue-50 rounded-lg"><MessageSquare size={20} className="text-blue-600" /></div>
+          <div className="p-2 bg-slate-50 rounded-lg"><MessageSquare size={20} className="text-slate-700" /></div>
           <div><p className="text-2xl font-bold text-gray-900">{interactionStats.totalComments || 0}</p><p className="text-xs text-gray-500">{t('dashboard.comments')}</p></div>
         </div>
         <div className="bg-white rounded-lg p-4 border border-gray-100 flex items-center gap-3">
@@ -204,7 +204,7 @@ const Dashboard = () => {
         <div className="bg-white rounded-lg shadow-sm border border-gray-100">
           <div className="px-6 py-4 border-b border-gray-100 flex items-center justify-between">
             <h3 className="font-semibold text-gray-900">{t('dashboard.recentUsers')}</h3>
-            <button onClick={() => navigate('/admin/users')} className="text-sm text-blue-600 hover:text-blue-700">{t('dashboard.viewAll')}</button>
+            <button onClick={() => navigate('/admin/users')} className="text-sm text-slate-700 hover:text-slate-800">{t('dashboard.viewAll')}</button>
           </div>
           <div className="divide-y divide-gray-100">
             {recentUsers.length === 0 ? (
@@ -213,7 +213,7 @@ const Dashboard = () => {
               recentUsers.map((user) => (
                 <div key={user.id} className="px-6 py-3 flex items-center justify-between">
                   <div className="flex items-center gap-3">
-                    <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center"><Users size={16} className="text-blue-600" /></div>
+                    <div className="w-8 h-8 bg-slate-100 rounded-full flex items-center justify-center"><Users size={16} className="text-slate-700" /></div>
                     <div><p className="font-medium text-gray-900">{user.username}</p><p className="text-xs text-gray-500">{user.email || '-'}</p></div>
                   </div>
                   <span className="text-xs text-gray-400">{user.createTime ? new Date(user.createTime).toLocaleDateString() : '-'}</span>
@@ -227,7 +227,7 @@ const Dashboard = () => {
         <div className="bg-white rounded-lg shadow-sm border border-gray-100">
           <div className="px-6 py-4 border-b border-gray-100 flex items-center justify-between">
             <h3 className="font-semibold text-gray-900">{t('dashboard.recentProducts')}</h3>
-            <button onClick={() => navigate('/admin/products')} className="text-sm text-blue-600 hover:text-blue-700">{t('dashboard.viewAll')}</button>
+            <button onClick={() => navigate('/admin/products')} className="text-sm text-slate-700 hover:text-slate-800">{t('dashboard.viewAll')}</button>
           </div>
           <div className="divide-y divide-gray-100">
             {recentProducts.length === 0 ? (

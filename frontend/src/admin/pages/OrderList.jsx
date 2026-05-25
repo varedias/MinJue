@@ -180,7 +180,7 @@ const OrderList = () => {
       <div className="bg-white rounded-lg shadow-sm border border-gray-100 p-4">
         <div className="flex items-center gap-4 flex-wrap">
           <div className="flex items-center gap-2">
-            <ShoppingCart size={20} className="text-blue-600" />
+            <ShoppingCart size={20} className="text-slate-700" />
             <span className="font-medium">订单管理</span>
           </div>
           <select

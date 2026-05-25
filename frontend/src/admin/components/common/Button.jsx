@@ -23,7 +23,7 @@ const Button = ({
 }) => {
   // 类型对应的样式
   const typeClasses = {
-    primary: 'bg-blue-600 text-white hover:bg-blue-700 focus:ring-blue-500',
+    primary: 'bg-slate-700 text-white hover:bg-slate-800 focus:ring-slate-600',
     danger: 'bg-red-600 text-white hover:bg-red-700 focus:ring-red-500',
     secondary: 'bg-gray-200 text-gray-700 hover:bg-gray-300 focus:ring-gray-500',
     outline: 'bg-white text-gray-700 border border-gray-300 hover:bg-gray-50 focus:ring-gray-500',

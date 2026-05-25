@@ -87,7 +87,6 @@ const ContentDetail = () => {
       if (data) {
         setContent({
           ...data,
-          content: data.content || data.contentUrl || '',
           authorAvatar:
             data.authorAvatar ||
             `https://ui-avatars.com/api/?name=${encodeURIComponent(data.author?.charAt(0) || 'U')}&background=0D8ABC&color=fff`,
@@ -221,7 +220,7 @@ const ContentDetail = () => {
         </div>
         <div className="max-w-4xl mx-auto px-4 py-16 text-center">
           <p className="text-gray-500">内容不存在或已删除</p>
-          <button onClick={() => navigate('/discovery')} className="mt-4 text-blue-600 hover:underline">
+          <button onClick={() => navigate('/discovery')} className="mt-4 text-slate-700 hover:underline">
             浏览更多内容
           </button>
         </div>
@@ -231,8 +230,6 @@ const ContentDetail = () => {
 
   const isVideo = content.type === 'video' || content.type === 'vlog';
   const isArticle = content.type === 'article';
-  const articleVideoUrl = isArticle && content.videoUrl ? getImagePath(content.videoUrl) : '';
-  const articleVideoPoster = isArticle ? getImagePath(content.thumbnail || content.cover) : '';
   const articlePages = isArticle
     ? (Array.isArray(content.articlePages) && content.articlePages.length > 0
       ? content.articlePages
@@ -249,7 +246,7 @@ const ContentDetail = () => {
         <div className={`${contentContainerClassName} mx-auto px-4 py-3`}>
           <button
             onClick={() => navigate(-1)}
-            className="flex items-center gap-2 text-gray-600 hover:text-blue-600 transition-colors"
+            className="flex items-center gap-2 text-gray-600 hover:text-slate-700 transition-colors"
           >
             <ArrowLeft size={20} />
             <span>返回</span>
@@ -305,7 +302,7 @@ const ContentDetail = () => {
                   className="absolute inset-0 flex items-center justify-center bg-black/30 hover:bg-black/40 transition-colors"
                 >
                   <div className="bg-white/90 rounded-full p-4 hover:bg-white transition-colors">
-                    <Play size={48} className="text-blue-600 ml-1" />
+                    <Play size={48} className="text-slate-700 ml-1" />
                   </div>
                 </button>
                 {content.duration && (
@@ -324,30 +321,18 @@ const ContentDetail = () => {
             )}
           </div>
         ) : (
-          <div className="mb-8 space-y-4">
-            {articleVideoUrl && (
-              <div className="overflow-hidden rounded-2xl bg-black shadow-sm">
-                <video
-                  src={articleVideoUrl}
-                  poster={articleVideoPoster}
-                  controls
-                  className="aspect-video w-full bg-black"
-                />
-              </div>
-            )}
-            <div className="relative rounded-xl overflow-hidden">
-              <img
-                src={getImagePath(content.thumbnail)}
-                alt={content.title}
-                className="w-full max-h-96 object-cover"
-                onError={(event) => {
-                  event.target.src = '/products/placeholder-content.svg';
-                }}
-              />
-              <div className="absolute top-4 left-4 bg-green-500 text-white px-3 py-1 rounded-full text-sm flex items-center gap-1">
-                <FileText size={14} />
-                文章
-              </div>
+          <div className="relative rounded-xl overflow-hidden mb-8">
+            <img
+              src={getImagePath(content.thumbnail)}
+              alt={content.title}
+              className="w-full max-h-96 object-cover"
+              onError={(event) => {
+                event.target.src = '/products/placeholder-content.svg';
+              }}
+            />
+            <div className="absolute top-4 left-4 bg-green-500 text-white px-3 py-1 rounded-full text-sm flex items-center gap-1">
+              <FileText size={14} />
+              文章
             </div>
           </div>
         )}
@@ -363,7 +348,7 @@ const ContentDetail = () => {
           <div className="grid grid-cols-1 xl:grid-cols-[minmax(0,1fr)_280px] gap-6 mb-6">
             <article className="bg-white rounded-2xl shadow-sm border border-slate-200 px-6 py-8 lg:px-12 lg:py-10">
               <div className="flex flex-wrap items-center gap-2 text-xs font-medium mb-6">
-                <span className="inline-flex items-center rounded-full bg-blue-600 px-3 py-1 text-white">
+                <span className="inline-flex items-center rounded-full bg-slate-700 px-3 py-1 text-white">
                   第 {articlePageIndex + 1} / {articlePages.length} 页
                 </span>
                 <span className="inline-flex items-center rounded-full bg-slate-100 px-3 py-1 text-slate-600">
@@ -397,7 +382,7 @@ const ContentDetail = () => {
                         <div className="space-y-4">
                           {section.bullets.map((bullet) => (
                             <div key={bullet} className="flex items-start gap-3 text-slate-700">
-                              <span className="mt-3 h-2 w-2 shrink-0 rounded-full bg-blue-600"></span>
+                              <span className="mt-3 h-2 w-2 shrink-0 rounded-full bg-slate-700"></span>
                               <span className="text-[16px] lg:text-[17px] leading-8">{bullet}</span>
                             </div>
                           ))}
@@ -422,7 +407,7 @@ const ContentDetail = () => {
                         type="button"
                         onClick={() => setArticlePageIndex((page) => Math.max(page - 1, 0))}
                         disabled={articlePageIndex === 0}
-                        className="min-h-11 rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm font-medium text-slate-600 transition-colors hover:border-blue-200 hover:text-blue-600 disabled:cursor-not-allowed disabled:opacity-50"
+                        className="min-h-11 rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm font-medium text-slate-600 transition-colors hover:border-slate-200 hover:text-slate-700 disabled:cursor-not-allowed disabled:opacity-50"
                       >
                         <span className="flex items-center justify-center gap-2">
                           <ChevronLeft size={16} />
@@ -433,7 +418,7 @@ const ContentDetail = () => {
                         type="button"
                         onClick={() => setArticlePageIndex((page) => Math.min(page + 1, articlePages.length - 1))}
                         disabled={articlePageIndex === articlePages.length - 1}
-                        className="min-h-11 rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm font-medium text-slate-600 transition-colors hover:border-blue-200 hover:text-blue-600 disabled:cursor-not-allowed disabled:opacity-50"
+                        className="min-h-11 rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm font-medium text-slate-600 transition-colors hover:border-slate-200 hover:text-slate-700 disabled:cursor-not-allowed disabled:opacity-50"
                       >
                         <span className="flex items-center justify-center gap-2">
                           下一页
@@ -451,12 +436,12 @@ const ContentDetail = () => {
                       onClick={() => setArticlePageIndex(index)}
                       className={`w-full rounded-2xl border px-4 py-3 text-left transition-colors ${
                         articlePageIndex === index
-                          ? 'border-blue-200 bg-blue-50'
-                          : 'border-slate-200 bg-white hover:border-blue-200 hover:bg-slate-50'
+                          ? 'border-slate-200 bg-slate-50'
+                          : 'border-slate-200 bg-white hover:border-slate-200 hover:bg-slate-50'
                       }`}
                     >
                       <div className="flex items-center justify-between gap-3 mb-2">
-                        <span className={`text-sm font-semibold ${articlePageIndex === index ? 'text-blue-700' : 'text-slate-700'}`}>
+                        <span className={`text-sm font-semibold ${articlePageIndex === index ? 'text-slate-800' : 'text-slate-700'}`}>
                           {page.title}
                         </span>
                         <span className="text-xs text-slate-400">{page.sections.length} 节</span>
@@ -469,8 +454,8 @@ const ContentDetail = () => {
                 </div>
               </div>
 
-              <div className="bg-blue-50 rounded-2xl border border-blue-100 p-5">
-                <h4 className="text-sm font-semibold text-blue-900 mb-3">本页章节</h4>
+              <div className="bg-slate-50 rounded-2xl border border-slate-100 p-5">
+                <h4 className="text-sm font-semibold text-slate-950 mb-3">本页章节</h4>
                 <div className="space-y-2">
                   {currentArticlePage?.sections.map((section) => (
                     <div key={section.title} className="rounded-xl bg-white/80 px-3 py-2 text-sm text-slate-600">
@@ -497,7 +482,7 @@ const ContentDetail = () => {
                   <div className="space-y-2">
                     {section.bullets.map((bullet) => (
                       <div key={bullet} className="flex items-start gap-2 text-gray-600">
-                        <span className="mt-1 h-1.5 w-1.5 rounded-full bg-blue-500"></span>
+                        <span className="mt-1 h-1.5 w-1.5 rounded-full bg-slate-600"></span>
                         <span>{bullet}</span>
                       </div>
                     ))}
@@ -521,7 +506,7 @@ const ContentDetail = () => {
           <button
             onClick={handleLike}
             className={`flex items-center justify-center gap-2 py-3 rounded-lg transition-colors ${
-              liked ? 'bg-rose-500 text-white hover:bg-rose-600' : 'bg-blue-600 text-white hover:bg-blue-700'
+              liked ? 'bg-rose-500 text-white hover:bg-rose-600' : 'bg-slate-700 text-white hover:bg-slate-800'
             }`}
           >
             <ThumbsUp size={20} />

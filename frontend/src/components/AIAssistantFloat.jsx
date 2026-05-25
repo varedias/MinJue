@@ -90,14 +90,14 @@ const AIAssistantFloat = ({ isOpen, onClose, isInline = false }) => {
               <div className={`max-w-[70%] ${msg.role === 'user' ? 'order-2' : 'order-1'}`}>
                 {msg.role === 'assistant' && (
                   <div className="flex items-center gap-2 mb-1">
-                    <Bot size={14} className="text-blue-600" />
+                    <Bot size={14} className="text-slate-700" />
                     <span className="text-xs text-gray-500">AI助手</span>
                   </div>
                 )}
                 <div 
                   className={`rounded-2xl px-6 py-4 ${
                     msg.role === 'user' 
-                      ? 'bg-blue-600 text-white rounded-br-none' 
+                      ? 'bg-slate-700 text-white rounded-br-none' 
                       : 'bg-white text-gray-900 rounded-bl-none shadow-sm'
                   }`}
                 >
@@ -120,7 +120,7 @@ const AIAssistantFloat = ({ isOpen, onClose, isInline = false }) => {
           {isLoading && (
             <div className="flex justify-start">
               <div className="bg-white rounded-2xl rounded-bl-none px-6 py-4 flex items-center gap-2 shadow-sm">
-                <Loader size={16} className="animate-spin text-blue-600" />
+                <Loader size={16} className="animate-spin text-slate-700" />
                 <span className="text-sm text-gray-600">正在思考...</span>
               </div>
             </div>
@@ -137,13 +137,13 @@ const AIAssistantFloat = ({ isOpen, onClose, isInline = false }) => {
               onChange={(e) => setInputValue(e.target.value)}
               onKeyPress={handleKeyPress}
               placeholder="描述您的设备需求，例如：我需要检测PCB板缺陷的设备..."
-              className="flex-1 px-6 py-3 text-sm border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              className="flex-1 px-6 py-3 text-sm border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-slate-600 focus:border-transparent"
               disabled={isLoading}
             />
             <button 
               onClick={handleSendMessage}
               disabled={!inputValue.trim() || isLoading}
-              className="bg-blue-600 text-white px-8 py-3 rounded-full hover:bg-blue-700 transition-colors disabled:bg-gray-300 disabled:cursor-not-allowed font-medium"
+              className="bg-slate-700 text-white px-8 py-3 rounded-full hover:bg-slate-800 transition-colors disabled:bg-gray-300 disabled:cursor-not-allowed font-medium"
             >
               <Send size={18} />
             </button>
@@ -166,15 +166,15 @@ const AIAssistantFloat = ({ isOpen, onClose, isInline = false }) => {
         style={{ maxHeight: 'calc(100vh - 100px)' }}
       >
         {/* 标题栏 */}
-        <div className="bg-gradient-to-r from-blue-600 to-indigo-700 text-white p-4 rounded-t-2xl flex items-center justify-between cursor-move">
+        <div className="bg-gradient-to-r from-slate-700 to-amber-600 text-white p-4 rounded-t-2xl flex items-center justify-between cursor-move">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 bg-white rounded-full flex items-center justify-center">
-              <Bot size={24} className="text-blue-600" />
+              <Bot size={24} className="text-slate-700" />
             </div>
             {!isMinimized && (
               <div>
                 <h3 className="font-bold text-sm">AI 设备选型助手</h3>
-                <p className="text-xs text-blue-100">在线为您服务</p>
+                <p className="text-xs text-slate-100">在线为您服务</p>
               </div>
             )}
           </div>
@@ -208,14 +208,14 @@ const AIAssistantFloat = ({ isOpen, onClose, isInline = false }) => {
                   <div className={`max-w-[85%] ${msg.role === 'user' ? 'order-2' : 'order-1'}`}>
                     {msg.role === 'assistant' && (
                       <div className="flex items-center gap-2 mb-1">
-                        <Bot size={14} className="text-blue-600" />
+                        <Bot size={14} className="text-slate-700" />
                         <span className="text-xs text-gray-500">AI助手</span>
                       </div>
                     )}
                     <div 
                       className={`rounded-2xl px-4 py-3 ${
                         msg.role === 'user' 
-                          ? 'bg-blue-600 text-white rounded-br-none' 
+                          ? 'bg-slate-700 text-white rounded-br-none' 
                           : 'bg-white text-gray-900 rounded-bl-none shadow-sm'
                       }`}
                     >
@@ -238,7 +238,7 @@ const AIAssistantFloat = ({ isOpen, onClose, isInline = false }) => {
               {isLoading && (
                 <div className="flex justify-start">
                   <div className="bg-white rounded-2xl rounded-bl-none px-4 py-3 flex items-center gap-2 shadow-sm">
-                    <Loader size={16} className="animate-spin text-blue-600" />
+                    <Loader size={16} className="animate-spin text-slate-700" />
                     <span className="text-sm text-gray-600">正在思考...</span>
                   </div>
                 </div>
@@ -255,13 +255,13 @@ const AIAssistantFloat = ({ isOpen, onClose, isInline = false }) => {
                   onChange={(e) => setInputValue(e.target.value)}
                   onKeyPress={handleKeyPress}
                   placeholder="描述您的设备需求..."
-                  className="flex-1 px-4 py-2 text-sm border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="flex-1 px-4 py-2 text-sm border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-slate-600 focus:border-transparent"
                   disabled={isLoading}
                 />
                 <button 
                   onClick={handleSendMessage}
                   disabled={!inputValue.trim() || isLoading}
-                  className="bg-blue-600 text-white px-4 py-2 rounded-full hover:bg-blue-700 transition-colors disabled:bg-gray-300 disabled:cursor-not-allowed"
+                  className="bg-slate-700 text-white px-4 py-2 rounded-full hover:bg-slate-800 transition-colors disabled:bg-gray-300 disabled:cursor-not-allowed"
                 >
                   <Send size={16} />
                 </button>
@@ -279,7 +279,7 @@ export const AIAssistantButton = ({ onClick }) => {
   return (
     <button
       onClick={onClick}
-      className="fixed bottom-6 right-6 z-40 bg-gradient-to-r from-blue-600 to-indigo-700 text-white rounded-full p-4 shadow-2xl hover:shadow-3xl hover:scale-110 transition-all duration-300 group"
+      className="fixed bottom-6 right-6 z-40 bg-gradient-to-r from-slate-700 to-amber-600 text-white rounded-full p-4 shadow-2xl hover:shadow-3xl hover:scale-110 transition-all duration-300 group"
       title="打开AI助手"
     >
       <div className="relative">

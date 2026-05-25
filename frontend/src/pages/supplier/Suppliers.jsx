@@ -56,16 +56,7 @@ const Suppliers = () => {
 
   return (
     <div className="min-h-screen bg-gray-50 py-8">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="mb-8">
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">
-            {isEnglish ? 'Quality Suppliers' : '优质供应商'}
-          </h1>
-          <p className="text-gray-500">
-            {isEnglish ? 'Verified manufacturers and verified suppliers' : '经过严格认证的优质制造厂商'}
-          </p>
-        </div>
-
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-4">
         {/* 搜索栏 */}
         <div className="mb-6 flex gap-3">
           <div className="relative flex-grow">
@@ -76,10 +67,10 @@ const Suppliers = () => {
               onChange={(e) => setSearchKeyword(e.target.value)}
               onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
               placeholder={isEnglish ? 'Search suppliers...' : '搜索供应商名称...'}
-              className="w-full bg-white rounded-lg py-3 pl-11 pr-4 border border-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full bg-white rounded-lg py-3 pl-11 pr-4 border border-gray-200 focus:outline-none focus:ring-2 focus:ring-slate-600"
             />
           </div>
-          <button onClick={handleSearch} className="bg-blue-600 text-white px-6 rounded-lg hover:bg-blue-700">
+          <button onClick={handleSearch} className="bg-slate-700 text-white px-6 rounded-lg hover:bg-slate-800">
             {isEnglish ? 'Search' : '搜索'}
           </button>
         </div>
@@ -103,7 +94,7 @@ const Suppliers = () => {
             <div
               key={supplier.id}
               onClick={() => navigate(isEnglish ? `/en/supplier/${supplier.id}` : `/supplier/${supplier.id}`)}
-              className="bg-white border border-gray-200 rounded-xl p-6 hover:shadow-xl hover:border-blue-300 transition-all cursor-pointer group flex flex-col md:flex-row gap-6"
+              className="bg-white border border-gray-200 rounded-xl p-6 hover:shadow-xl hover:border-slate-300 transition-all cursor-pointer group flex flex-col md:flex-row gap-6"
             >
               <div className="w-full md:w-48 h-48 flex-shrink-0 bg-gray-100 rounded-xl flex items-center justify-center overflow-hidden border border-gray-100">
                 {supplier.logo ? (
@@ -115,12 +106,12 @@ const Suppliers = () => {
 
               <div className="flex-grow">
                 <div className="flex flex-col md:flex-row md:items-center justify-between mb-4">
-                  <h2 className="text-xl font-bold text-gray-900 group-hover:text-blue-600 transition-colors">
+                  <h2 className="text-xl font-bold text-gray-900 group-hover:text-slate-700 transition-colors">
                     {supplier.name}
                   </h2>
                   <div className="flex items-center gap-2 mt-2 md:mt-0">
                     {supplier.isVerified === 1 && (
-                      <span className="bg-blue-50 text-blue-600 px-3 py-1 rounded-full text-xs font-medium flex items-center gap-1">
+                      <span className="bg-slate-50 text-slate-700 px-3 py-1 rounded-full text-xs font-medium flex items-center gap-1">
                         <ShieldCheck size={14} />
                         {isEnglish ? 'Verified' : '已认证'}
                       </span>
@@ -134,7 +125,7 @@ const Suppliers = () => {
 
                 <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mb-4">
                   <div className="flex items-center gap-2 text-sm text-gray-600">
-                    <Building2 size={16} className="text-blue-500" />
+                    <Building2 size={16} className="text-slate-600" />
                     <span className="truncate">{supplier.name}</span>
                   </div>
                   {supplier.contactInfo && (
@@ -163,7 +154,7 @@ const Suppliers = () => {
                     });
                     setIsChatOpen(true);
                   }}
-                  className="w-full bg-blue-600 text-white py-2 rounded-lg font-medium hover:bg-blue-700 transition-colors shadow-sm"
+                  className="w-full bg-slate-700 text-white py-2 rounded-lg font-medium hover:bg-slate-800 transition-colors shadow-sm"
                 >
                   {isEnglish ? 'Contact Now' : '立即联系'}
                 </button>
@@ -172,7 +163,7 @@ const Suppliers = () => {
                     e.stopPropagation();
                     navigate(isEnglish ? `/en/supplier/${supplier.id}` : `/supplier/${supplier.id}`);
                   }}
-                  className="w-full border border-gray-300 text-gray-700 py-2 rounded-lg font-medium hover:border-blue-600 hover:text-blue-600 hover:bg-blue-50 transition-colors"
+                  className="w-full border border-gray-300 text-gray-700 py-2 rounded-lg font-medium hover:border-slate-700 hover:text-slate-700 hover:bg-slate-50 transition-colors"
                 >
                   {isEnglish ? 'View Profile' : '查看详情'}
                 </button>

@@ -45,14 +45,14 @@ const ToastItem = ({ id, message, type, onClose }) => {
     success: <CheckCircle size={20} className="text-green-500" />,
     error: <XCircle size={20} className="text-red-500" />,
     warning: <AlertCircle size={20} className="text-orange-500" />,
-    info: <AlertCircle size={20} className="text-blue-500" />,
+    info: <AlertCircle size={20} className="text-slate-600" />,
   };
 
   const bgColors = {
     success: 'bg-green-50 border-green-200',
     error: 'bg-red-50 border-red-200',
     warning: 'bg-orange-50 border-orange-200',
-    info: 'bg-blue-50 border-blue-200',
+    info: 'bg-slate-50 border-slate-200',
   };
 
   return (

@@ -131,7 +131,7 @@ const Register = () => {
         .register-container {
           min-height: 100vh;
           display: flex;
-          background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+          background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
         }
         .register-card {
           width: 100%;
@@ -175,11 +175,11 @@ const Register = () => {
           font-weight: 500;
         }
         .role-btn:hover {
-          border-color: #a5b4fc;
+          border-color: #d97706;
         }
         .role-btn.active {
-          border-color: #1e3c72;
-          background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+          border-color: #1e293b;
+          background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
           color: white;
         }
         .form-group {
@@ -213,7 +213,7 @@ const Register = () => {
         }
         .form-input:focus {
           outline: none;
-          border-color: #667eea;
+          border-color: #64748b;
           box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
         }
         .email-wrapper {
@@ -225,7 +225,7 @@ const Register = () => {
         }
         .send-btn {
           padding: 0.75rem 1rem;
-          background: #667eea;
+          background: #64748b;
           color: white;
           border: none;
           border-radius: 8px;
@@ -261,7 +261,7 @@ const Register = () => {
         .captcha-refresh {
           padding: 0.5rem;
           cursor: pointer;
-          color: #667eea;
+          color: #64748b;
           transition: transform 0.3s;
         }
         .captcha-refresh:hover {
@@ -288,7 +288,7 @@ const Register = () => {
         .submit-btn {
           width: 100%;
           padding: 0.875rem;
-          background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+          background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
           color: white;
           border: none;
           border-radius: 8px;
@@ -312,7 +312,7 @@ const Register = () => {
           font-size: 0.875rem;
         }
         .login-link a {
-          color: #667eea;
+          color: #64748b;
           text-decoration: none;
           font-weight: 500;
         }
@@ -332,7 +332,7 @@ const Register = () => {
           transition: color 0.2s;
         }
         .lang-switch:hover {
-          color: #1e3c72;
+          color: #1e293b;
         }
       `}</style>
 
@@ -342,7 +342,7 @@ const Register = () => {
           <span>English</span>
         </Link>
         <div className="register-header">
-          <h1>👁️ 注册账号</h1>
+          <h1>注册账号</h1>
           <p>加入懂视帝平台</p>
         </div>
 

@@ -1,5 +1,5 @@
 import React, { lazy, Suspense } from 'react';
-import { HashRouter as Router, Routes, Route } from 'react-router-dom';
+import { HashRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider } from './context/AuthContext';
 import Layout from './components/Layout';
 // Auth
@@ -13,7 +13,7 @@ import ForgotPasswordEn from './pages/auth/ForgotPasswordEn';
 // Home
 import Home from './pages/home/Home';
 import HomeEn from './pages/home/HomeEn';
-import CrossBorder from './pages/home/CrossBorder';
+
 
 // Product
 import Mall from './pages/product/Mall';
@@ -66,7 +66,7 @@ function App() {
           <Route path="/en/login" element={<LoginEn />} />
           <Route path="/en/register" element={<RegisterEn />} />
           <Route path="/en/forgot-password" element={<ForgotPasswordEn />} />
-          <Route path="/cross-border" element={<CrossBorder />} />
+          <Route path="/cross-border" element={<Navigate to="/en" replace />} />
 
           {/* English Site Routes */}
           <Route path="/en" element={<LayoutEn />}>

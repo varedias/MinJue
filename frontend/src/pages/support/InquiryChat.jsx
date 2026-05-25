@@ -52,11 +52,11 @@ const InquiryChat = () => {
             <div key={msg.id} className={`flex ${msg.sender === 'me' ? 'justify-end' : 'justify-start'}`}>
               <div className={`max-w-[70%] rounded-2xl px-4 py-3 ${
                 msg.sender === 'me' 
-                  ? 'bg-blue-600 text-white rounded-tr-none' 
+                  ? 'bg-slate-700 text-white rounded-tr-none' 
                   : 'bg-white text-gray-900 shadow-sm rounded-tl-none'
               }`}>
                 <p className="text-sm">{msg.text}</p>
-                <p className={`text-xs mt-1 text-right ${msg.sender === 'me' ? 'text-blue-100' : 'text-gray-400'}`}>
+                <p className={`text-xs mt-1 text-right ${msg.sender === 'me' ? 'text-slate-100' : 'text-gray-400'}`}>
                   {msg.time}
                 </p>
               </div>
@@ -79,11 +79,11 @@ const InquiryChat = () => {
             value={message}
             onChange={(e) => setMessage(e.target.value)}
             placeholder="输入消息..."
-            className="flex-grow px-4 py-2 bg-gray-100 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="flex-grow px-4 py-2 bg-gray-100 rounded-full focus:outline-none focus:ring-2 focus:ring-slate-600"
           />
           <button 
             type="submit" 
-            className="bg-blue-600 text-white p-2 rounded-full hover:bg-blue-700 transition-colors"
+            className="bg-slate-700 text-white p-2 rounded-full hover:bg-slate-800 transition-colors"
           >
             <Send size={20} />
           </button>

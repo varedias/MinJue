@@ -48,7 +48,7 @@ const Header = () => {
         <h1 className="text-xl font-semibold text-gray-800">{getPageTitle()}</h1>
         <button
           onClick={handleGoHome}
-          className="flex items-center gap-1.5 px-3 py-1.5 text-sm text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
+          className="flex items-center gap-1.5 px-3 py-1.5 text-sm text-slate-700 hover:bg-slate-50 rounded-lg transition-colors"
           title={t('header.backHome')}
         >
           <Home size={16} />
@@ -74,7 +74,7 @@ const Header = () => {
         {/* 用户信息 */}
         <div className="flex items-center gap-3">
           {/* 头像 */}
-          <div className="w-9 h-9 bg-blue-600 rounded-full flex items-center justify-center text-white font-medium">
+          <div className="w-9 h-9 bg-slate-700 rounded-full flex items-center justify-center text-white font-medium">
             {user?.username?.charAt(0).toUpperCase() || <User size={18} />}
           </div>
           

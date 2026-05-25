@@ -14,9 +14,9 @@ const Card = ({ title, value, icon, color = 'blue', onClick, subText }) => {
   // 颜色配置
   const colorClasses = {
     blue: {
-      bg: 'bg-blue-50',
-      icon: 'text-blue-600',
-      border: 'border-blue-100',
+      bg: 'bg-slate-50',
+      icon: 'text-slate-700',
+      border: 'border-slate-100',
     },
     green: {
       bg: 'bg-green-50',

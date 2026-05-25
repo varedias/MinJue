@@ -62,7 +62,7 @@ const SupplierDetail = () => {
   if (loading) {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-slate-700"></div>
       </div>
     );
   }
@@ -73,7 +73,7 @@ const SupplierDetail = () => {
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
           <h2 className="text-2xl font-bold text-gray-900 mb-4">{isEnglish ? 'Supplier Not Found' : '供应商不存在'}</h2>
-          <button onClick={() => navigate('/suppliers')} className="text-blue-600 hover:text-blue-700">
+          <button onClick={() => navigate('/suppliers')} className="text-slate-700 hover:text-slate-800">
             {isEnglish ? 'Back to Suppliers' : '返回供应商列表'}
           </button>
         </div>
@@ -139,7 +139,7 @@ const SupplierDetail = () => {
   return (
     <div className="pb-20 md:pb-0 bg-gray-50 min-h-screen">
       {/* Banner */}
-      <div className="relative h-64 bg-gradient-to-r from-blue-600 to-blue-700 overflow-hidden">
+      <div className="relative h-64 bg-gradient-to-r from-slate-700 to-slate-800 overflow-hidden">
         <img
           src={supplier.banner}
           alt=""
@@ -155,19 +155,19 @@ const SupplierDetail = () => {
               />
               <div className="text-white pb-2">
                 <h1 className="text-3xl font-bold mb-2">{supplier.name}</h1>
-                <p className="text-blue-100 mb-3">{supplier.description}</p>
+                <p className="text-slate-100 mb-3">{supplier.description}</p>
                 <div className="flex items-center gap-4 text-sm">
                   <div className="flex items-center gap-1">
                     <Star className="text-yellow-400 fill-yellow-400" size={18} />
                     <span className="font-medium">{supplier.rating}</span>
-                    <span className="text-blue-200">({supplier.reviewCount}{isEnglish ? ' reviews' : '评价'})</span>
+                    <span className="text-slate-200">({supplier.reviewCount}{isEnglish ? ' reviews' : '评价'})</span>
                   </div>
-                  <span className="text-blue-200">|</span>
+                  <span className="text-slate-200">|</span>
                   <div className="flex items-center gap-1">
                     <Calendar size={16} />
                     <span>{isEnglish ? `${supplier.years} years` : `经营${supplier.years}年`}</span>
                   </div>
-                  <span className="text-blue-200">|</span>
+                  <span className="text-slate-200">|</span>
                   <div className="flex items-center gap-1">
                     <MapPin size={16} />
                     <span>{supplier.location}</span>
@@ -183,7 +183,7 @@ const SupplierDetail = () => {
       <div className="max-w-7xl mx-auto px-4 py-4">
         <button
           onClick={() => navigate(-1)}
-          className="flex items-center gap-2 text-gray-600 hover:text-blue-600"
+          className="flex items-center gap-2 text-gray-600 hover:text-slate-700"
         >
           <ArrowLeft size={20} />
           返回
@@ -199,19 +199,19 @@ const SupplierDetail = () => {
               <h3 className="font-bold text-gray-900 mb-4">{isEnglish ? 'Company Stats' : '企业数据'}</h3>
               <div className="grid grid-cols-2 gap-4">
                 <div className="text-center">
-                  <div className="text-2xl font-bold text-blue-600">{supplier.stats.products}</div>
+                  <div className="text-2xl font-bold text-slate-700">{supplier.stats.products}</div>
                   <div className="text-sm text-gray-600">{isEnglish ? 'Products' : '在售商品'}</div>
                 </div>
                 <div className="text-center">
-                  <div className="text-2xl font-bold text-blue-600">{supplier.stats.followers.toLocaleString()}</div>
+                  <div className="text-2xl font-bold text-slate-700">{supplier.stats.followers.toLocaleString()}</div>
                   <div className="text-sm text-gray-600">{isEnglish ? 'Followers' : '关注人数'}</div>
                 </div>
                 <div className="text-center">
-                  <div className="text-2xl font-bold text-blue-600">{supplier.stats.sales.toLocaleString()}</div>
+                  <div className="text-2xl font-bold text-slate-700">{supplier.stats.sales.toLocaleString()}</div>
                   <div className="text-sm text-gray-600">{isEnglish ? 'Total Sales' : '累计销量'}</div>
                 </div>
                 <div className="text-center">
-                  <div className="text-2xl font-bold text-blue-600">{supplier.stats.satisfaction}%</div>
+                  <div className="text-2xl font-bold text-slate-700">{supplier.stats.satisfaction}%</div>
                   <div className="text-sm text-gray-600">{isEnglish ? 'Satisfaction' : '好评率'}</div>
                 </div>
               </div>
@@ -222,28 +222,28 @@ const SupplierDetail = () => {
               <h3 className="font-bold text-gray-900 mb-4">{isEnglish ? 'Contact' : '联系方式'}</h3>
               <div className="space-y-3">
                 <div className="flex items-center gap-3 text-gray-700">
-                  <Phone size={18} className="text-blue-600" />
+                  <Phone size={18} className="text-slate-700" />
                   <div>
                     <div className="text-sm text-gray-500">{isEnglish ? 'Phone' : '联系电话'}</div>
                     <div className="font-medium">{supplier.contact.phone}</div>
                   </div>
                 </div>
                 <div className="flex items-center gap-3 text-gray-700">
-                  <Mail size={18} className="text-blue-600" />
+                  <Mail size={18} className="text-slate-700" />
                   <div>
                     <div className="text-sm text-gray-500">{isEnglish ? 'Email' : '电子邮箱'}</div>
                     <div className="font-medium">{supplier.contact.email}</div>
                   </div>
                 </div>
                 <div className="flex items-center gap-3 text-gray-700">
-                  <MessageCircle size={18} className="text-blue-600" />
+                  <MessageCircle size={18} className="text-slate-700" />
                   <div>
                     <div className="text-sm text-gray-500">{isEnglish ? 'WeChat' : '微信号'}</div>
                     <div className="font-medium">{supplier.contact.wechat}</div>
                   </div>
                 </div>
                 <div className="flex items-center gap-3 text-gray-700">
-                  <MapPin size={18} className="text-blue-600" />
+                  <MapPin size={18} className="text-slate-700" />
                   <div>
                     <div className="text-sm text-gray-500">{isEnglish ? 'Address' : '公司地址'}</div>
                     <div className="font-medium">{supplier.contact.address}</div>
@@ -253,12 +253,12 @@ const SupplierDetail = () => {
               <div className="mt-6 space-y-2">
                 <button
                   onClick={() => setIsChatOpen(true)}
-                  className="w-full bg-blue-600 text-white py-3 rounded-lg hover:bg-blue-700 font-medium flex items-center justify-center gap-2 transition-colors"
+                  className="w-full bg-slate-700 text-white py-3 rounded-lg hover:bg-slate-800 font-medium flex items-center justify-center gap-2 transition-colors"
                 >
                   <MessageCircle size={18} />
                   {isEnglish ? 'Chat Now' : '在线咨询'}
                 </button>
-                <button className="w-full border-2 border-blue-600 text-blue-600 py-3 rounded-lg hover:bg-blue-50 font-medium flex items-center justify-center gap-2 transition-colors">
+                <button className="w-full border-2 border-slate-700 text-slate-700 py-3 rounded-lg hover:bg-slate-50 font-medium flex items-center justify-center gap-2 transition-colors">
                   <Heart size={18} />
                   {isEnglish ? 'Follow' : '关注店铺'}
                 </button>
@@ -302,8 +302,8 @@ const SupplierDetail = () => {
               <div className="space-y-4">
                 {supplier.advantages.map((adv, idx) => (
                   <div key={idx} className="flex items-start gap-3">
-                    <div className="p-2 bg-blue-50 rounded-lg">
-                      <adv.icon className="text-blue-600" size={20} />
+                    <div className="p-2 bg-slate-50 rounded-lg">
+                      <adv.icon className="text-slate-700" size={20} />
                     </div>
                     <div>
                       <div className="font-medium text-gray-900">{adv.title}</div>
@@ -331,7 +331,7 @@ const SupplierDetail = () => {
                       key={tab.id}
                       onClick={() => setActiveTab(tab.id)}
                       className={`px-6 py-4 font-medium transition-all ${activeTab === tab.id
-                          ? 'text-blue-600 border-b-2 border-blue-600'
+                          ? 'text-slate-700 border-b-2 border-slate-700'
                           : 'text-gray-600 hover:text-gray-900'
                         }`}
                     >
@@ -359,7 +359,7 @@ const SupplierDetail = () => {
                           />
                         </div>
                         <div className="p-4">
-                          <h3 className="text-sm font-medium text-gray-900 line-clamp-2 mb-2 group-hover:text-blue-600">
+                          <h3 className="text-sm font-medium text-gray-900 line-clamp-2 mb-2 group-hover:text-slate-700">
                             {product.name}
                           </h3>
                           <div className="flex items-center gap-2 mb-3 text-xs text-gray-500">
@@ -437,8 +437,8 @@ const SupplierDetail = () => {
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         {supplier.advantages.map((adv, idx) => (
                           <div key={idx} className="flex items-start gap-3 p-4 bg-gray-50 rounded-lg">
-                            <div className="p-2 bg-blue-50 rounded-lg">
-                              <adv.icon className="text-blue-600" size={20} />
+                            <div className="p-2 bg-slate-50 rounded-lg">
+                              <adv.icon className="text-slate-700" size={20} />
                             </div>
                             <div>
                               <div className="font-medium text-gray-900">{adv.title}</div>
@@ -465,13 +465,13 @@ const SupplierDetail = () => {
                         <div key={news.id} className="flex gap-4 border-b pb-6 last:border-b-0">
                           <img src={news.image} alt={news.title} className="w-48 h-32 rounded-lg object-cover" />
                           <div className="flex-grow">
-                            <h3 className="text-lg font-bold text-gray-900 mb-2 hover:text-blue-600 cursor-pointer">
+                            <h3 className="text-lg font-bold text-gray-900 mb-2 hover:text-slate-700 cursor-pointer">
                               {news.title}
                             </h3>
                             <p className="text-gray-600 mb-3">{news.summary}</p>
                             <div className="flex items-center justify-between">
                               <span className="text-sm text-gray-500">{news.date}</span>
-                              <button className="text-blue-600 text-sm hover:underline flex items-center gap-1">
+                              <button className="text-slate-700 text-sm hover:underline flex items-center gap-1">
                                 {isEnglish ? 'Read More' : '查看详情'}
                                 <ChevronRight size={16} />
                               </button>

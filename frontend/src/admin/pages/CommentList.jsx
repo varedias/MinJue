@@ -197,7 +197,7 @@ const CommentList = () => {
       <div className="bg-white rounded-lg shadow-sm border border-gray-100 p-4">
         <div className="flex items-center gap-4 flex-wrap">
           <div className="flex items-center gap-2">
-            <MessageSquare size={20} className="text-blue-600" />
+            <MessageSquare size={20} className="text-slate-700" />
             <span className="font-medium">{t('comments.title')}</span>
           </div>
           <select

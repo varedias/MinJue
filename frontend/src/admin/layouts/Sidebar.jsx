@@ -31,11 +31,11 @@ const Sidebar = () => {
       {/* Logo 区域 */}
       <div className="h-16 flex items-center px-6 border-b border-slate-800">
         <Link to="/admin/dashboard" className="flex items-center gap-2">
-          <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center font-bold text-sm">
+          <div className="w-8 h-8 bg-slate-700 rounded-lg flex items-center justify-center font-bold text-sm">
             MJ
           </div>
           <span className="text-lg font-bold">
-            <span className="text-blue-400">懂视帝</span> Admin
+            <span className="text-slate-400">懂视帝</span> Admin
           </span>
         </Link>
       </div>
@@ -53,7 +53,7 @@ const Sidebar = () => {
                   to={item.path}
                   className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-all ${
                     active
-                      ? 'bg-blue-600 text-white shadow-lg shadow-blue-600/30'
+                      ? 'bg-slate-700 text-white shadow-lg shadow-slate-700/30'
                       : 'text-slate-400 hover:bg-slate-800 hover:text-white'
                   }`}
                 >

@@ -131,7 +131,7 @@ const RegisterEn = () => {
         .register-container {
           min-height: 100vh;
           display: flex;
-          background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+          background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
         }
         .register-card {
           width: 100%;
@@ -176,11 +176,11 @@ const RegisterEn = () => {
           font-weight: 500;
         }
         .role-btn:hover {
-          border-color: #a5b4fc;
+          border-color: #d97706;
         }
         .role-btn.active {
-          border-color: #1e3c72;
-          background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+          border-color: #1e293b;
+          background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
           color: white;
         }
         .form-group {
@@ -214,7 +214,7 @@ const RegisterEn = () => {
         }
         .form-input:focus {
           outline: none;
-          border-color: #667eea;
+          border-color: #64748b;
           box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
         }
         .email-wrapper {
@@ -226,7 +226,7 @@ const RegisterEn = () => {
         }
         .send-btn {
           padding: 0.75rem 1rem;
-          background: #667eea;
+          background: #64748b;
           color: white;
           border: none;
           border-radius: 8px;
@@ -262,7 +262,7 @@ const RegisterEn = () => {
         .captcha-refresh {
           padding: 0.5rem;
           cursor: pointer;
-          color: #667eea;
+          color: #64748b;
           transition: transform 0.3s;
         }
         .captcha-refresh:hover {
@@ -289,7 +289,7 @@ const RegisterEn = () => {
         .submit-btn {
           width: 100%;
           padding: 0.875rem;
-          background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+          background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
           color: white;
           border: none;
           border-radius: 8px;
@@ -313,7 +313,7 @@ const RegisterEn = () => {
           font-size: 0.875rem;
         }
         .login-link a {
-          color: #667eea;
+          color: #64748b;
           text-decoration: none;
           font-weight: 500;
         }
@@ -333,7 +333,7 @@ const RegisterEn = () => {
           transition: color 0.2s;
         }
         .lang-switch:hover {
-          color: #667eea;
+          color: #64748b;
         }
       `}</style>
 
@@ -344,7 +344,7 @@ const RegisterEn = () => {
         </Link>
 
         <div className="register-header">
-          <h1>👁️ Create Account</h1>
+          <h1>Create Account</h1>
           <p>Join DongShiDi Platform</p>
         </div>
 
