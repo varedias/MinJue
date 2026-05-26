@@ -12,6 +12,7 @@ const Home = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isAIAssistantOpen, setIsAIAssistantOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
+  const heroBackgroundImage = '/products/equipment/equipment-06-minjue-ai-appearance-inspection.png';
 
   // 真实数据状态
   const [featuredProducts, setFeaturedProducts] = useState([]);
@@ -295,26 +296,88 @@ const Home = () => {
   return (
     <div className="pb-20 md:pb-0 bg-gray-50 min-h-screen">
       {/* 搜索栏 */}
-      <div className="bg-white shadow-sm">
-        <div className="max-w-7xl mx-auto px-4 py-6">
-          <div className="flex gap-3">
-            <div className="relative flex-grow">
-              <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400" size={20} />
-              <input
-                type="text"
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                onKeyDown={handleKeyDown}
-                placeholder="搜索设备分类、产品型号、供应商..."
-                className="w-full bg-gray-50 text-gray-900 rounded-lg py-4 pl-12 pr-4 border border-gray-200 focus:outline-none focus:ring-2 focus:ring-slate-600 focus:border-transparent"
+      <div className="bg-transparent">
+        <div className="max-w-7xl mx-auto px-4 pt-6">
+          <div className="relative overflow-hidden rounded-[2rem] border border-white/70 bg-white shadow-[0_24px_80px_rgba(15,23,42,0.08)]">
+            <div className="absolute inset-0">
+              <img
+                src={heroBackgroundImage}
+                alt=""
+                aria-hidden="true"
+                className="absolute inset-0 h-full w-full object-cover object-right opacity-85"
               />
+              <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(255,255,255,0.99)_0%,rgba(255,255,255,0.96)_42%,rgba(255,255,255,0.78)_64%,rgba(255,255,255,0.20)_100%)]" />
+              <div className="absolute inset-0 bg-[radial-gradient(circle_at_78%_26%,rgba(96,165,250,0.20),transparent_28%)]" />
             </div>
-            <button
-              onClick={handleSearch}
-              className="bg-gradient-to-r from-slate-700 to-slate-800 text-white px-10 py-4 rounded-lg font-medium hover:from-slate-800 hover:to-slate-900 transition-all shadow-md"
-            >
-              搜索
-            </button>
+
+            <div className="relative z-10 px-6 py-10 lg:px-10 lg:py-14">
+              <div className="grid items-center gap-8 lg:grid-cols-[minmax(0,1.1fr)_minmax(360px,0.9fr)]">
+                <div className="space-y-6 max-w-2xl">
+                  <div className="space-y-3">
+                    <p className="text-sm font-semibold uppercase tracking-[0.24em] text-slate-500">AI视觉设备选型平台</p>
+                    <h1 className="text-4xl leading-tight font-extrabold tracking-tight text-slate-900 lg:text-6xl">
+                      更懂工业检测<br />
+                      <span className="text-slate-700">更懂你的选择</span>
+                    </h1>
+                    <p className="max-w-xl text-lg leading-8 text-slate-600 lg:text-xl">
+                      AI 视觉检测设备选型平台，助力企业智能化升级
+                    </p>
+                  </div>
+
+                  <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
+                    {[
+                      { icon: Building2, title: '设备对比', desc: '多维参数对比' },
+                      { icon: Search, title: '智能选型', desc: 'AI匹配推荐' },
+                      { icon: Eye, title: '真实评测', desc: '行业专家把关' },
+                      { icon: CheckCircle2, title: '交易信任', desc: '透明·可靠·安心' },
+                    ].map((item) => {
+                      const Icon = item.icon;
+                      return (
+                        <div key={item.title} className="rounded-2xl border border-white/80 bg-white/70 px-4 py-4 shadow-[0_8px_24px_rgba(15,23,42,0.04)] backdrop-blur-sm">
+                          <div className="mb-3 flex h-12 w-12 items-center justify-center rounded-full bg-slate-100 text-slate-700">
+                            <Icon size={24} />
+                          </div>
+                          <div className="text-sm font-semibold text-slate-900">{item.title}</div>
+                          <div className="mt-1 text-xs text-slate-500">{item.desc}</div>
+                        </div>
+                      );
+                    })}
+                  </div>
+
+                  <form onSubmit={handleSearch} className="flex flex-col gap-3 pt-2 sm:flex-row">
+                    <div className="relative flex-grow">
+                      <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" size={20} />
+                      <input
+                        type="text"
+                        value={searchQuery}
+                        onChange={(e) => setSearchQuery(e.target.value)}
+                        onKeyDown={handleKeyDown}
+                        placeholder="搜索设备分类、产品型号、供应商..."
+                        className="w-full rounded-full border border-slate-200 bg-white/90 py-4 pl-12 pr-4 text-gray-900 shadow-sm backdrop-blur-sm focus:border-slate-600 focus:outline-none focus:ring-2 focus:ring-slate-600/20"
+                      />
+                    </div>
+                    <button
+                      type="submit"
+                      className="rounded-full bg-gradient-to-r from-slate-700 to-slate-800 px-10 py-4 font-medium text-white shadow-lg transition-all hover:from-slate-800 hover:to-slate-900"
+                    >
+                      搜索
+                    </button>
+                  </form>
+                </div>
+
+                <div className="relative hidden min-h-[360px] lg:block">
+                  <div className="absolute inset-0 rounded-[1.75rem] border border-white/50 bg-white/10 shadow-2xl backdrop-blur-[2px]" />
+                  <div className="relative h-full min-h-[360px] overflow-hidden rounded-[1.75rem]">
+                    <img
+                      src={heroBackgroundImage}
+                      alt="AI视觉检测设备"
+                      className="h-full w-full object-cover object-center"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-tr from-slate-900/10 via-transparent to-blue-100/30" />
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
